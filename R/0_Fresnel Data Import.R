@@ -14,12 +14,14 @@ if(file.exists("Intermediate/AlberyPredicted.rds")){
   
 }
 
-if(file.exists("Data/CarlsonPredicted.rds")){
+
+CarlsonPredicted <- fread("Data/CarlsonPredicted.csv")
+
+
+BeckerPredicted <- fread("Data/PhylofactorPredicted.csv")
+
+BeckerPredicted %>% arrange(desc(preds_allbetacov)) %>%
+  mutate(BeckerRank = rank(preds_allbetacov)) %>% 
+  mutate_at("BeckerRank", ~max(.x) - .x + 1) ->
   
-  CarlsonPredicted <- fread("Data/CarlsonPredicted.csv")
-  
-}else{
-  
-  source("R/02_Carlson Predicted.R")  
-  
-}
+  BeckerPredicted
