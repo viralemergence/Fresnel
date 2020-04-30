@@ -1,0 +1,124 @@
+
+# 01_Albery Predictions ####
+
+# Prediction ####
+
+library(ggrepel); library(tidyverse); library(SpRanger); library(cowplot); library(patchwork)
+library(ggregplot)
+
+theme_set(theme_cowplot())
+
+Panth1 <- read.delim("Data/PanTHERIA_1-0_WR05_Aug2008.txt") %>%
+  dplyr::rename_all(~str_replace(.x, "MSW05_", "h")) %>%
+  rename(Sp = hBinomial)
+
+Panth1$Sp <- Panth1$Sp %>% str_replace(" ", "_")
+
+# load("~/LargeFiles/MammalStackFullMercator.Rdata")
+
+PredictedNetwork <- readRDS("Data/AlberyPredicted.rds")
+
+NetworkPredict(c("Rhinolophus_affinis"), as.matrix(PredictedNetwork)) %>%
+  as.data.frame() %>% left_join(Panth1, by = "Sp") %>%
+  #filter(!hOrder == "Chiroptera") %>% 
+  dplyr::select(1:3, Sp, hOrder, hFamily, hGenus) ->
+  affinisPredictedBats
+
+affinisPredictedBats %>% nrow
+
+NetworkPredict(c("Rhinolophus_affinis"), as.matrix(PredictedNetwork)) %>%
+  as.data.frame() %>% left_join(Panth1, by = "Sp") %>%
+  filter(!hOrder == "Chiroptera") %>%
+  dplyr::select(1:3, Sp, hOrder, hFamily, hGenus) ->
+  
+  affinisPredicted
+
+affinisPredicted %>% nrow
+
+MammalStackFull[["Rhinolophus_affinis"]] %>% plot
+
+MammalStackFull[[affinisPredicted[1,"Sp"]]] %>% plot
+MammalStackFull[[affinisPredicted[2,"Sp"]]] %>% plot
+MammalStackFull[[affinisPredicted[3,"Sp"]]] %>% plot
+MammalStackFull[[affinisPredicted[4,"Sp"]]] %>% plot
+MammalStackFull[[affinisPredicted[5,"Sp"]]] %>% plot
+
+affinisPredicted %>% ggplot(aes(1, Count)) + geom_text(aes(label = Sp))
+
+affinisPredictedBats %>%
+  ggplot(aes(Rank, Count)) +
+  labs(y = "Sharing Probability") +
+  geom_point() +
+  geom_label_repel(data = affinisPredictedBats %>% filter(Count>0.65),
+                   aes(label = Sp), xlim = c(-4000, -500)) +
+  #lims(y = c(0, 1)) +
+  scale_x_reverse(limits = c(4200, -250)) -> 
+  
+  BatPredictions
+
+affinisPredicted %>%
+  ggplot(aes(Rank, Count)) +
+  labs(y = "Sharing Probability") +
+  geom_point() +
+  geom_label_repel(data = affinisPredicted %>% filter(Count>0.27),
+                   aes(label = Sp), #xlim = c(-4000, -500), #direction = "x", 
+                   force = 10) +
+  scale_x_reverse(limits = c(4200, -250)) ->
+  
+  NonBatPredictions
+
+BatPredictions/NonBatPredictions
+
+NonBatPredictions + geom_vline(xintercept = 200)
+NonBatPredictions + geom_vline(xintercept = 400)
+
+affinisPredicted %>% 
+  #  filter(Rank<400) %>%
+  SinaGraph("hFamily", "Count", Order = T, Just = T, Scale = "width") + 
+  labs(y = "Mean probability") +
+  theme(legend.position = "none")
+
+affinisPredicted %>% 
+  #  filter(Rank<400) %>%
+  SinaGraph("hOrder", "Count", Order = T, Just = T, Scale = "width") + 
+  labs(y = "Mean probability") +
+  theme(legend.position = "none")
+
+affinisPredicted %>% 
+  filter(Rank<400) %>%
+  group_by(hFamily) %>% 
+  summarise(SumProbs = sum(Count), MeanProbs = mean(Count)) %>%
+  arrange(desc(MeanProbs))
+
+affinisPredicted %>% 
+  filter(Rank<200) %>%
+  group_by(hFamily) %>% 
+  summarise(N = n(),
+            SumProbs = sum(Count), 
+            MeanProbs = mean(Count)) %>%
+  arrange(desc(MeanProbs))
+
+
+affinisPredicted %>% filter(hFamily == "Mustelidae") %>%
+  SinaGraph("hGenus", "Count", Order = T, Just = T, Scale = "width")
+
+
+# Adding the Damas dataset for ####
+# https://www.biorxiv.org/content/10.1101/2020.04.16.045302v1.supplementary-material
+
+Damas <- read.csv("media-2.csv", header = T)
+
+Damas %>% 
+  rename(DamasRank = Sort.by.predicted.susceptibility) %>%
+  arrange(DamasRank) %>% 
+  mutate_at("Species", ~.x %>% str_trim %>% str_replace_all(" ", "_")) ->
+  
+  Damas
+
+affinisPredicted %>% left_join(Damas, by = c("Sp" = "Species")) %>%
+  ggplot(aes(Rank, DamasRank)) + geom_point() + 
+  geom_label_repel(aes(label = Sp))
+
+
+
+
