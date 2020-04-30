@@ -16,9 +16,16 @@ Panth1$Sp <- Panth1$Sp %>% str_replace(" ", "_")
 
 # load("~/LargeFiles/MammalStackFullMercator.Rdata")
 
-PredictedNetwork <- readRDS("Data/AlberyPredicted.rds")
+PredictedNetwork <- fread("Data/AlberyPredicted.csv")
 
-NetworkPredict(c("Rhinolophus_affinis"), as.matrix(PredictedNetwork)) %>%
+PredictedNetwork %>% as.matrix -> PredictedNetwork
+
+PredictedNetwork <- 
+  PredictedNetwork[,-1]
+
+rownames(PredictedNetwork) <- colnames(PredictedNetwork)
+
+NetworkPredict(c("Rhinolophus_affinis"), (PredictedNetwork)) %>%
   as.data.frame() %>% left_join(Panth1, by = "Sp") %>%
   #filter(!hOrder == "Chiroptera") %>% 
   dplyr::select(1:3, Sp, hOrder, hFamily, hGenus) ->
@@ -33,15 +40,10 @@ NetworkPredict(c("Rhinolophus_affinis"), as.matrix(PredictedNetwork)) %>%
   
   affinisPredicted
 
+saveRDS(affinisPredicted, file = "Intermediate/AlberyPredicted.rds")
+saveRDS(affinisPredictedBats, file = "Intermediate/AlberyPredictedBats.rds")
+
 affinisPredicted %>% nrow
-
-MammalStackFull[["Rhinolophus_affinis"]] %>% plot
-
-MammalStackFull[[affinisPredicted[1,"Sp"]]] %>% plot
-MammalStackFull[[affinisPredicted[2,"Sp"]]] %>% plot
-MammalStackFull[[affinisPredicted[3,"Sp"]]] %>% plot
-MammalStackFull[[affinisPredicted[4,"Sp"]]] %>% plot
-MammalStackFull[[affinisPredicted[5,"Sp"]]] %>% plot
 
 affinisPredicted %>% ggplot(aes(1, Count)) + geom_text(aes(label = Sp))
 

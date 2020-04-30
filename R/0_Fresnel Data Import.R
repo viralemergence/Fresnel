@@ -3,13 +3,14 @@
 
 library(tidyverse); library(data.table); library(fs)
 
-if(file.exists("Data/AlberyPredicted.rds")){
+if(file.exists("Intermediate/AlberyPredicted.rds")){
   
-  AlberyPredicted <- readRDS("Data/AlberyPredicted.rds")
+  AlberyPredicted <- readRDS("Intermediate/AlberyPredicted.rds")
+  AlberyPredictedBats <- readRDS("Intermediate/AlberyPredictedBats.rds")
   
 }else{
   
-  AlberyPredicted <- readRDS("https://github.com/gfalbery/PredictedNetwork.rds")
+  source("R/01_Albery Predictions.R")
   
 }
 
@@ -19,6 +20,6 @@ if(file.exists("Data/CarlsonPredicted.rds")){
   
 }else{
   
-  ("Data/AlberyPredicted.rds")
+  source("R/02_Carlson Predicted.R")  
   
 }
