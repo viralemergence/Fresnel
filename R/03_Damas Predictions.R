@@ -7,11 +7,9 @@ Damas <- read.csv("Data/Damas_Ace2.csv", header = T)
 
 Damas %>% 
   rename(DamasRank = Sort.by.predicted.susceptibility) %>%
-  arrange(DamasRank) %>% 
+  arrange(DamasRank) -> DamasRank
+
+DamasRank %>% 
   mutate_at("Species", ~.x %>% str_trim %>% str_replace_all(" ", "_")) ->
   
   Damas
-
-affinisPredicted %>% left_join(Damas, by = c("Sp" = "Species")) %>%
-  ggplot(aes(Rank, DamasRank)) + geom_point() + 
-  geom_label_repel(aes(label = Sp))
