@@ -3,6 +3,14 @@
 
 library(tidyverse); library(data.table); library(fs); library(ggregplot)
 
+rm(list = ls())
+
+Panth1 <- read.delim("Data/PanTHERIA_1-0_WR05_Aug2008.txt") %>%
+  dplyr::rename_all(~str_replace(.x, "MSW05_", "h")) %>%
+  rename(Sp = hBinomial)
+
+Panth1$Sp <- Panth1$Sp %>% str_replace(" ", "_")
+
 if(file.exists("Intermediate/AlberyPredicted.rds")){
   
   AlberyPredicted <- readRDS("Intermediate/AlberyPredicted.rds")
@@ -57,7 +65,7 @@ PoisotPredicted %>%
 
 FarrellPredicted <- 
   #read_csv("https://github.com/ViromeNet/farrell-betacov/blob/master/results/batcov_elmasri_phylo_pred_betacovsOnly.csv")
-  read_csv("https://raw.githubusercontent.com/ViromeNet/farrell-betacov/master/results/batcov_elmasri_phylo_pred_betacovsOnly.csv?token=ADQWUG7DMRONOQL4HC24BSC6VMEKU")
+  read_csv("Data/FarrellPredicted.csv")
 
 #FarrellPredicted %>% write.csv("Data/FarrellPredicted.csv")
 
