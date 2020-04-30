@@ -36,7 +36,7 @@ FullPredictions %>%
   geom_smooth(method = lm)
 
 
-FullPredictions %>% 
+OutsetPredictionPlot <- FullPredictions %>% 
   filter(hOrder == "Chiroptera") %>%
   ggplot(aes(GregCube(AlberyRank), CarlsonRank)) + 
   geom_point(aes(size = DamasRank, alpha = DamasRank, colour = as.factor(Betacov))) +
@@ -45,19 +45,26 @@ FullPredictions %>%
   geom_smooth(method = lm, colour = AlberColours[[1]], fill = NA) +
   stat_smooth(geom = "ribbon", method = lm, 
               colour = AlberColours[[1]], fill = NA, lty = 2) +
-  #facet_wrap(~Betacov)
+  # scale_x_continuous(breaks = c(1:16), labels = c(1:16)^3) +
   scale_colour_manual(values = c(AlberColours[[1]], AlberColours[[3]]))
 
-
-FullPredictions %>% 
+InsetPredictionPlot <- FullPredictions %>% 
   filter(AlberyRank<(6^3)&CarlsonRank<300) %>%
   filter(hOrder == "Chiroptera") %>%
   ggplot(aes(GregCube(AlberyRank), CarlsonRank))+
-  ggpubr::stat_cor() + 
+  # ggpubr::stat_cor() + 
   labs(x = expression(AlberyRank^{3})) +
-  geom_smooth(method = lm, colour = AlberColours[[1]], fill = NA) +
-  stat_smooth(geom = "ribbon", method = lm, 
-              colour = AlberColours[[1]], fill = NA, lty = 2) +
+  #geom_smooth(method = lm, colour = AlberColours[[1]], fill = NA) +
+  #stat_smooth(geom = "ribbon", method = lm, 
+  #            colour = AlberColours[[1]], fill = NA, lty = 2) +
   #facet_wrap(~Betacov)
   scale_colour_manual(values = c(AlberColours[[1]], AlberColours[[3]])) + 
+  scale_alpha_manual(values = c(0.6, 0.8, 1)) + 
+  scale_size_manual(values = c(0.6, 0.8, 1)*5) + 
   geom_text(aes(label = Sp, size = DamasRank, alpha = DamasRank, colour = as.factor(Betacov))) 
+
+OutsetPredictionPlot + ggsave("Shot.jpeg")
+InsetPredictionPlot + ggsave("Chaser.jpeg")
+
+(OutsetPredictionPlot/InsetPredictionPlot) +
+  ggsave()
