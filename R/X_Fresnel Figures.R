@@ -83,11 +83,15 @@ Models %>%
   scale_x_continuous(breaks = 1:length(ModelLimits), 
                      labels = ModelLimits) +
   scale_y_reverse() +
-  labs(x = "Model", y = "Proportional rank", colour = "Top 10") ->
+  labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
   
   BumpPlot
 
-TilePlot/BumpPlot
+(TilePlot/BumpPlot) + 
+  plot_layout(widths = c(1)) +
+  ggsave("Model_Prediction_Correlations.jpeg", 
+         units = "mm", width = 200, height = 250)
+
 
 Models %>% group_by(Betacov) %>% 
   slice(1:10) %>% 
