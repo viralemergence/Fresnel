@@ -12,16 +12,20 @@ Repos <- c(
   "guth-betacov",
   "poisot-betacov")
 
-GithubDir <- "Github"
+GithubDir <- "Github/CSVs/"
 
-albery <- read_csv(paste0(GithubDir, "/albery-betacov/AlberyPredictions.csv"))
-becker <- read_csv(paste0(GithubDir, "/becker-betacov/PhylofactorPredictions.csv"))
-carlson <- read_csv(paste0(GithubDir, "/carlson-betacov/batcov-bart.csv"))
-dallas <- read_csv(paste0(GithubDir, "/dallas-betacov/batz/DallasPredictions.csv"))
-farrell <- read_csv(paste0(GithubDir, "/farrell-betacov/results/batcov_elmasri_full_pred_betacovsOnly.csv"))
-guth <- read_csv(paste0(GithubDir, "/guth-betacov/GuthPredictions.csv"))
-poisot1 <- read_csv(paste0(GithubDir, "/poisot-betacov/predictions/knn/PoisotTanimotoChiropteraToChiropteraPredictions.csv"), col_names = FALSE)
-poisot2 <- read_csv(paste0(GithubDir, "/poisot-betacov/predictions/linearfilter/PoisotLinearFilterChiropteraToChiropteraPredictions.csv"), col_names = FALSE)
+albery <- read_csv(paste0(GithubDir, "AlberyPredicted.csv"))
+becker <- read_csv(paste0(GithubDir, "PhylofactorPredictions.csv"))
+carlson <- read_csv(paste0(GithubDir, "batcov-bart.csv"))
+dallas <- read_csv(paste0(GithubDir, "DallasPredictions.csv"))
+farrell <- read_csv(paste0(GithubDir, "batcov_elmasri_full_pred_betacovsOnly.csv"))
+guth <- read_csv(paste0(GithubDir, "GuthPredictions.csv"))
+poisot1 <- read_csv(paste0(GithubDir, "PoisotTanimotoChiropteraToChiropteraPredictions.csv"), col_names = FALSE)
+poisot2 <- read_csv(paste0(GithubDir, "PoisotLinearFilterChiropteraToChiropteraPredictions.csv"), col_names = FALSE)
+
+list(albery, becker, carlson, dallas, farrell, guth, poisot1, poisot2) -> 
+  
+  ModelList
 
 albery %>% select(-X1) %>% rename(P.Alb = Count) -> albery
 becker %>% select(X1, Prediction) %>% rename(Sp = X1, P.Bec = Prediction) -> becker

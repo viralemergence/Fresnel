@@ -13,7 +13,23 @@ Models %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
   facet_wrap(~Key, nrow = 2) +
   ggpubr::stat_cor() +
   lims(y = c(0, 1)) + coord_fixed() +
-  labs(x = "Proportional rank")
+  scale_x_continuous(breaks = c(0, 0.5, 1)) +
+  labs(x = "Proportional rank") -> 
+  
+  ModelCorrelations
+
+Models %>% 
+  ggplot(aes(PropRank, Betacov)) + 
+  geom_point() + geom_smooth(method = lm) +
+  coord_fixed() + lims(x = c(0, 1), y = c(0, 1)) +
+  ggpubr::stat_cor()  ->
+  
+  OverallCorrelations
+
+(ModelCorrelations|OverallCorrelations) + 
+  plot_layout(widths = c(3.5, 2)) +
+  ggsave("Obs_Pred_Correlations.jpeg", 
+         units = "mm", width = 250, height = 150)
 
 
 # Figure 2: Tile plot correlations ####
