@@ -3,6 +3,8 @@
 
 library(tidyverse); library(fs)
 
+user <- 'Colin'
+
 Repos <- c(
   "albery-betacov",
   "becker-betacov",
@@ -12,7 +14,11 @@ Repos <- c(
   "guth-betacov",
   "poisot-betacov")
 
-GithubDir <- "Github/CSVs/"
+if(user=='Colin') {
+  GithubDir <- "~/Github/Fresnel/Github/CSVs/"
+} else if (user=='Greg') {
+  GithubDir <- "Github/CSVs/"
+}
 
 albery <- read_csv(paste0(GithubDir, "AlberyPredicted.csv"))
 becker <- read_csv(paste0(GithubDir, "PhylofactorPredictions.csv"))
@@ -65,8 +71,15 @@ full_join(albery, becker) %>% full_join(carlson) %>% full_join(dallas) %>%
 
 Models %>% select(Sp, R.Alb, R.Bec, R.Car, R.Dal, R.Far, R.Gut, R.Po1, R.Po2)  -> Models
 
-read_csv(paste0(GithubDir, "/becker-betacov/PhylofactorPredictions.csv")) %>% select(X1, betacov) %>%
-  rename(Sp = X1, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> truth
+
+if(user=='Colin') {
+  read_csv("~/Github/becker-betacov/PhylofactorPredictions.csv") %>% select(X1, betacov) %>%
+    rename(Sp = X1, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> truth
+} else if (user=='Greg') {
+  read_csv(paste0(GithubDir, "/becker-betacov/PhylofactorPredictions.csv")) %>% select(X1, betacov) %>%
+    rename(Sp = X1, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> truth
+}
+
 
 left_join(truth, Models) -> Models
 
