@@ -17,7 +17,6 @@ Models %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
 
 # Figure 2: Tile plot correlations ####
 
-
 Models %>% select(R.Alb:R.Po2) %>% cor(use = "complete.obs") -> CorDF
 
 CorDF %>% reshape2::melt() %>% #slice(which(lower.tri(CorDF)))
@@ -39,7 +38,29 @@ CorDF %>% reshape2::melt() %>% #slice(which(lower.tri(CorDF)))
 
 # Figure 3: Bump and agreements ####
 
-Models %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank))
+Models %>% slice(1:10) %>% 
+  gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
+  mutate_at("Value", ~.x*100) %>%
+  mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
+  filter(!is.na(Value)) -> TopPredictions
+
+CorDF %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
+
+Models %>% 
+  gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
+  mutate_at("Value", ~.x*100) %>%
+  mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
+  filter(!is.na(Value)) %>%
+  ggplot(aes(as.numeric(as.factor(Key)), (Value))) + 
+  geom_point(alpha = 0.3) + 
+  geom_line(aes(group = Sp), alpha = 0.1) +
+  #gghighlight(PropRank<0.05) +
+  geom_line(data = TopPredictions, aes(group = Sp, colour = Sp)) +
+  # theme(legend.position = "none") +
+  scale_x_continuous(breaks = 1:length(ModelLimits), 
+                     labels = ModelLimits) +
+  scale_y_reverse() +
+  labs(x = "Model", y = "Proportional rank", colour = "Top 10")
 
 
 

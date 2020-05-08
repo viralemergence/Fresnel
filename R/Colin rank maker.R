@@ -51,26 +51,28 @@ poisot1 %>% mutate(Sp = gsub("_"," ",Sp)) -> poisot1
 poisot2 %>% mutate(Sp = gsub("_"," ",Sp)) -> poisot2
 
 full_join(albery, becker) %>% full_join(carlson) %>% full_join(dallas) %>% 
-  full_join(farrell) %>% full_join(guth) %>% full_join(poisot1) %>% full_join(poisot2) -> models
+  full_join(farrell) %>% full_join(guth) %>% full_join(poisot1) %>% full_join(poisot2) -> Models
 
-models %>% select(Sp, R.Alb, R.Bec, R.Car, R.Dal, R.Far, R.Gut, R.Po1, R.Po2)  -> models
+Models %>% select(Sp, R.Alb, R.Bec, R.Car, R.Dal, R.Far, R.Gut, R.Po1, R.Po2)  -> Models
 
 read_csv(paste0(GithubDir, "/becker-betacov/PhylofactorPredictions.csv")) %>% select(X1, betacov) %>%
   rename(Sp = X1, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> truth
 
-left_join(truth, models) -> models
+left_join(truth, Models) -> Models
 
-models %>%  mutate(Rank = rowMeans(select(models, starts_with("R.")), na.rm = TRUE)) -> models
+Models %>%  mutate(Rank = rowMeans(select(Models, starts_with("R.")), na.rm = TRUE)) -> Models
 
-models %>% arrange(Rank)
+Models %>% arrange(Rank)
 
-models %>% select(starts_with("R.")) %>% names -> RankNames
+Models %>% select(starts_with("R.")) %>% names -> RankNames
 
-models %>% 
+Models %>% 
   #mutate_at(RankNames, ~.x/max(.x, na.rm = T)) %>%  
   mutate_at(RankNames, ~.x/max(.x, na.rm = T)) %>%  
-  mutate(PropRank = rowMeans(select(models, starts_with("R.")) %>% 
+  mutate(PropRank = rowMeans(select(Models, starts_with("R.")) %>% 
                                mutate_at(RankNames, ~.x/max(.x, na.rm = T)), 
                              na.rm = TRUE)) %>% 
-  arrange(PropRank)
+  arrange(PropRank) -> 
+  
+  Models
 
