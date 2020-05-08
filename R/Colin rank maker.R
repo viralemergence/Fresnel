@@ -1,14 +1,27 @@
 
-library(tidyverse)
+# Importing predictions and creating ranked predictions ####
 
-albery <- read_csv("~/Github/albery-betacov/AlberyPredictions.csv")
-becker <- read_csv("~/Github/becker-betacov/PhylofactorPredictions.csv")
-carlson <- read_csv("~/Github/carlson-batcov/batcov-bart.csv")
-dallas <- read_csv("~/Github/dallas-betacov/batz/DallasPredictions.csv")
-farrell <- read_csv("~/Github/farrell-betacov/results/batcov_elmasri_full_pred_betacovsOnly.csv")
-guth <- read_csv("~/Github/guth-betacov/GuthPredictions.csv")
-poisot1 <- read_csv("~/Github/poisot-betacov/predictions/knn/PoisotTanimotoChiropteraToChiropteraPredictions.csv", col_names = FALSE)
-poisot2 <- read_csv("~/Github/poisot-betacov/predictions/linearfilter/PoisotLinearFilterChiropteraToChiropteraPredictions.csv", col_names = FALSE)
+library(tidyverse); library(fs)
+
+Repos <- c(
+  "albery-betacov",
+  "becker-betacov",
+  "carlson-batcov",
+  "dallas-betacov",
+  "farrell-betacov",
+  "guth-betacov",
+  "poisot-betacov")
+
+GithubDir <- "Github"
+
+albery <- read_csv(paste0(GithubDir, "/albery-betacov/AlberyPredictions.csv"))
+becker <- read_csv(paste0(GithubDir, "/becker-betacov/PhylofactorPredictions.csv"))
+carlson <- read_csv(paste0(GithubDir, "/carlson-betacov/batcov-bart.csv"))
+dallas <- read_csv(paste0(GithubDir, "/dallas-betacov/batz/DallasPredictions.csv"))
+farrell <- read_csv(paste0(GithubDir, "/farrell-betacov/results/batcov_elmasri_full_pred_betacovsOnly.csv"))
+guth <- read_csv(paste0(GithubDir, "/guth-betacov/GuthPredictions.csv"))
+poisot1 <- read_csv(paste0(GithubDir, "/poisot-betacov/predictions/knn/PoisotTanimotoChiropteraToChiropteraPredictions.csv"), col_names = FALSE)
+poisot2 <- read_csv(paste0(GithubDir, "/poisot-betacov/predictions/linearfilter/PoisotLinearFilterChiropteraToChiropteraPredictions.csv"), col_names = FALSE)
 
 albery %>% select(-X1) %>% rename(P.Alb = Count) -> albery
 becker %>% select(X1, Prediction) %>% rename(Sp = X1, P.Bec = Prediction) -> becker
@@ -42,10 +55,22 @@ full_join(albery, becker) %>% full_join(carlson) %>% full_join(dallas) %>%
 
 models %>% select(Sp, R.Alb, R.Bec, R.Car, R.Dal, R.Far, R.Gut, R.Po1, R.Po2)  -> models
 
-read_csv("~/Github/becker-betacov/PhylofactorPredictions.csv") %>% select(X1, betacov) %>%
+read_csv(paste0(GithubDir, "/becker-betacov/PhylofactorPredictions.csv")) %>% select(X1, betacov) %>%
   rename(Sp = X1, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> truth
 
 left_join(truth, models) -> models
 
 models %>%  mutate(Rank = rowMeans(select(models, starts_with("R.")), na.rm = TRUE)) -> models
+
+models %>% arrange(Rank)
+
+models %>% select(starts_with("R.")) %>% names -> RankNames
+
+models %>% 
+  #mutate_at(RankNames, ~.x/max(.x, na.rm = T)) %>%  
+  mutate_at(RankNames, ~.x/max(.x, na.rm = T)) %>%  
+  mutate(PropRank = rowMeans(select(models, starts_with("R.")) %>% 
+                               mutate_at(RankNames, ~.x/max(.x, na.rm = T)), 
+                             na.rm = TRUE)) %>% 
+  arrange(PropRank)
 
