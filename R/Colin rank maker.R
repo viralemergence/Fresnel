@@ -45,6 +45,7 @@ models %>% select(Sp, R.Alb, R.Bec, R.Car, R.Dal, R.Far, R.Gut, R.Po1, R.Po2)  -
 read_csv("~/Github/becker-betacov/PhylofactorPredictions.csv") %>% select(X1, betacov) %>%
   rename(Sp = X1, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> truth
 
-left_join(truth, models) %>%
-  mutate(Rank = rowMeans(select(models, starts_with("R.")), na.rm = TRUE)) -> models
+left_join(truth, models) -> models
+
+models %>%  mutate(Rank = rowMeans(select(models, starts_with("R.")), na.rm = TRUE)) -> models
 
