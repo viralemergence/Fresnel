@@ -10,18 +10,22 @@ theme_set(theme_cowplot() + theme(strip.background = element_rect(fill = "white"
 Models %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
   ggplot(aes(Value, Betacov)) + geom_point() + 
   geom_smooth(method = lm) +
-  facet_wrap(~Key) +
+  facet_wrap(~Key, nrow = 2) +
   ggpubr::stat_cor() +
-  lims(y = c(0, 1))
+  lims(y = c(0, 1)) + coord_fixed() +
+  labs(x = "Proportional rank")
 
 
 # Figure 2: Tile plot correlations ####
 
 Models %>% select(R.Alb:R.Po2) %>% cor(use = "complete.obs") -> CorDF
 
+CorDF %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
+
 CorDF %>% reshape2::melt() %>% #slice(which(lower.tri(CorDF)))
 
-  mutate_at("Var1", ~factor(.x, levels = rev(levels(.x)))) %>%
+  mutate_at("Var1", ~factor(.x, levels = c(ModelLimits))) %>%
+  mutate_at("Var2", ~factor(.x, levels = rev(ModelLimits))) %>%
   ggplot(aes(Var1, Var2)) + geom_tile(aes(fill = value)) + #scale_y_reverse()
   
   coord_fixed() + 
@@ -32,36 +36,72 @@ CorDF %>% reshape2::melt() %>% #slice(which(lower.tri(CorDF)))
   
   labs(x = NULL, y = NULL) +
   
-  NULL
+  NULL -> TilePlot
 
 
 
 # Figure 3: Bump and agreements ####
 
-Models %>% slice(1:10) %>% 
+CorDF %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
+
+Models %>%
+  filter(Betacov == 0) %>%
+  slice(1:10) %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
-  mutate_at("Value", ~.x*100) %>%
+  mutate_at("Value", ~.x*1) %>%
   mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
   filter(!is.na(Value)) -> TopPredictions
 
-CorDF %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
+Models %>% 
+  gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
+  mutate_at("Value", ~.x*1) %>%
+  mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
+  filter(!is.na(Value)) %>%
+  ggplot(aes(as.numeric(as.factor(Key)), (Value))) + 
+  #geom_point(alpha = 0.3) + 
+  geom_line(aes(group = Sp), alpha = 0.025) +
+  #gghighlight(PropRank<0.05) +
+  geom_line(data = TopPredictions, aes(group = Sp, colour = Sp), size = 1.5) +
+  # theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_continuous(breaks = 1:length(ModelLimits), 
+                     labels = ModelLimits) +
+  scale_y_reverse() +
+  labs(x = "Model", y = "Proportional rank", colour = "Top 10") ->
+  
+  BumpPlot
+
+TilePlot/BumpPlot
+
+Models %>% group_by(Betacov) %>% 
+  slice(1:10) %>% 
+  gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
+  mutate_at("Value", ~.x*1) %>%
+  mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
+  filter(!is.na(Value)) -> TopPredictions2
 
 Models %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
-  mutate_at("Value", ~.x*100) %>%
+  mutate_at("Value", ~.x*1) %>%
   mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
   filter(!is.na(Value)) %>%
   ggplot(aes(as.numeric(as.factor(Key)), (Value))) + 
   geom_point(alpha = 0.3) + 
-  geom_line(aes(group = Sp), alpha = 0.1) +
+  geom_line(aes(group = Sp), alpha = 0.05) +
   #gghighlight(PropRank<0.05) +
-  geom_line(data = TopPredictions, aes(group = Sp, colour = Sp)) +
+  geom_line(data = TopPredictions2, aes(group = Sp, colour = Sp), size = 2) +
   # theme(legend.position = "none") +
   scale_x_continuous(breaks = 1:length(ModelLimits), 
                      labels = ModelLimits) +
   scale_y_reverse() +
-  labs(x = "Model", y = "Proportional rank", colour = "Top 10")
+  labs(x = "Model", y = "Proportional rank", colour = "Top 10") +
+  facet_wrap(~Betacov)
 
+Models %>% 
+  gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
+  mutate_at("Sp", ~.x %>% fct_reorder(Value, median)) %>%
+  ggplot(aes(Sp, Value)) + geom_point(alpha = 0.1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 2))
 
 
 # Figure 4: GGtree ####

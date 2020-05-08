@@ -35,7 +35,13 @@ poisot2 %>% rename(Sp = X1, P.Po2 = X2) -> poisot2
 albery %>% mutate(R.Alb = rank(P.Alb)) %>% mutate(R.Alb = (max(R.Alb) - R.Alb + 1)) -> albery
 becker %>% mutate(R.Bec = rank(P.Bec)) %>% mutate(R.Bec = (max(R.Bec) - R.Bec + 1)) -> becker
 carlson %>% mutate(R.Car = rank(P.Car)) %>% mutate(R.Car = (max(R.Car) - R.Car + 1)) -> carlson
-dallas %>% mutate(R.Dal = rank(P.Dal)) %>% mutate(R.Dal = (max(R.Dal) - R.Dal + 1)) -> dallas
+
+dallas %>% 
+  mutate(R.Dal = rank(P.Dal)) %>% 
+  mutate(R.Dal = (max(R.Dal) - R.Dal + 1)) -> 
+  
+  dallas
+
 # No Farrell as he returned ranks
 guth %>% mutate(R.Gut = rank(P.Gut)) %>% mutate(R.Gut = (max(R.Gut) - R.Gut + 1)) -> guth
 poisot1 %>% mutate(R.Po1 = rank(P.Po1)) %>% mutate(R.Po1 = (max(R.Po1) - R.Po1 + 1)) -> poisot1
