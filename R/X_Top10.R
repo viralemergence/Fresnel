@@ -1,5 +1,5 @@
 
-assoc <- read_csv('./cleanbats_betacov/clean data/BatCoV-assoc_compatible.csv')
+assoc <- read_csv('~/Github/cleanbats_betacov/clean data/BatCoV-assoc_compatible.csv')
 
 Models %>% mutate(InAssoc = (Sp %in% assoc$host_species)) -> Models
 
@@ -14,7 +14,7 @@ library(sf)
 
 iucn <- st_read(dsn = "C:/Users/cjcar/Desktop/TERRESTRIAL_MAMMALS", layer='TERRESTRIAL_MAMMALS')
 
-r <- getData("worldclim",var="alt",res=2.5)*0 # Make a blank raster
+r <- disaggregate(getData("worldclim",var="alt",res=2.5)*0,2) # Make a blank raster
 
 #### TOP 50 DE NOVO BETACOV-
 
@@ -78,17 +78,23 @@ library(RColorBrewer)
 
 par(mfrow=c(3,1))
 
-plot(true1.map)
-plot(sampled50.map)
-plot(unsampled50.map)
+true1.map <- sum(true1.map,r,na.rm=TRUE)
+true1.map <- true1.map + r
+
+sampled50.map <- sum(sampled50.map,r,na.rm=TRUE)
+sampled50.map <- sampled50.map + r
+
+unsampled50.map <- sum(unsampled50.map, r, na.rm=TRUE)
+unsampled50.map <- sum(unsampled50.map, r)
 
 maps <- stack(true1.map,
               sampled50.map,
               unsampled50.map)
 
-outline <- rasterToPolygons(r, dissolve=TRUE)
+#outline <- rasterToPolygons(r, dissolve=TRUE)
 
 mycolors <- colorRampPalette(rev(brewer.pal(10,"Spectral")))(21)
+mycolors[1] <- "#C0C0C0"
 
 levelplot(maps,  
           col.regions = mycolors,
@@ -96,7 +102,8 @@ levelplot(maps,
           alpha = 0.5, 
           scales=list(alternating=FALSE),
           par.strip.text=list(cex=0),
-          xlab = NULL, ylab = NULL) +
-  layer(sp.polygons(outline, col = 'black'))
+          xlab = NULL, ylab = NULL,
+          maxpixels = 5e6) #+
+  #layer(sp.polygons(outline, col = 'black'))
   
 
