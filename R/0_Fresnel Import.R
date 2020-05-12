@@ -37,7 +37,7 @@ list(albery, becker, carlson, dallas, farrell, guth, poisot1, poisot2) ->
   
   ModelList
 
-albery %>% select(-X1) %>% rename(P.Alb = Count) -> albery
+albery %>% rename(P.Alb = Count) -> albery
 becker %>% select(X1, Prediction) %>% rename(Sp = X1, P.Bec = Prediction) -> becker
 carlson %>% select(host_species, pred) %>% rename(Sp = host_species, P.Car = pred) -> carlson
 dallas %>% select(host, suitability) %>% rename(Sp = host, P.Dal = suitability) -> dallas
@@ -114,3 +114,5 @@ Models %>%
   Models
 
 Models %>% filter(!Betacov)
+
+Models %>% select(Sp, Betacov, starts_with("R."), Rank, PropRank) %>% as.data.frame -> Models

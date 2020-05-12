@@ -34,7 +34,7 @@ Models %>%
   filter(str_detect(Key, "Alb|Car|Dal|Gut")) %>%
   mutate_at("Key", ~.x %>% recode(!!!Relabel)) %>%
   ggplot(aes(Value, Betacov)) + 
-  geom_point(alpha = 0.3, colour = AlberColours[[3]], position = position_jitter(h = 0.1)) + 
+  geom_point(alpha = 0.3, colour = AlberColours[[3]]) + 
   #geom_smooth(method = lm, fill = NA, colour = "black") +
   geom_smooth(fill = NA, colour = "black") +
   facet_wrap(~Key, nrow = 2) +
@@ -64,7 +64,6 @@ Models %>%
   OverallCorrelations
 
 (ModelCorrelations|OverallCorrelations) + 
-  #plot_layout(widths = c(3.5, 2.5)) +
   ggsave("Figures/Obs_Pred_CorrelationsHorizontal.jpeg", 
          units = "mm", width = 250, height = 150)
 
@@ -132,7 +131,7 @@ Models %>%
   scale_x_continuous(breaks = 1:length(ModelLimits), 
                      labels = ModelLimits) +
   scale_y_reverse() +
-  scale_colour_discrete_sequential(palette = AlberPalettes[[3]]) +
+  scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12) +
   labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
   
   BumpPlot
