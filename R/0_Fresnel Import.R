@@ -5,8 +5,6 @@ library(tidyverse); library(fs)
 
 rm(list = ls())
 
-user <- 'Greg'
-
 Repos <- c(
   "albery-betacov",
   "becker-betacov",
@@ -16,15 +14,7 @@ Repos <- c(
   "guth-betacov",
   "poisot-betacov")
 
-if(user=='Colin') {
-  
-  GithubDir <- "~/Github/Fresnel/Github/CSVs/"
-  
-} else if (user=='Greg') {
-  
-  GithubDir <- "Github/CSVs/"
-  
-}
+GithubDir <- "Github/CSVs/"
 
 albery <- read_csv(paste0(GithubDir, "AlberyPredicted.csv"))
 becker <- read_csv(paste0(GithubDir, "PhylofactorPredictions.csv"))
@@ -34,10 +24,6 @@ farrell <- read_csv(paste0(GithubDir, "FarrellPredicted.csv"))
 guth <- read_csv(paste0(GithubDir, "GuthPredictions.csv"))
 poisot1 <- read_csv(paste0(GithubDir, "PoisotTanimotoChiropteraToChiropteraPredictions.csv"), col_names = FALSE)
 poisot2 <- read_csv(paste0(GithubDir, "PoisotLinearFilterChiropteraToChiropteraPredictions.csv"), col_names = FALSE)
-
-list(albery, becker, carlson, dallas, farrell, guth, poisot1, poisot2) -> 
-  
-  ModelList
 
 albery %>% rename(P.Alb = Count) -> albery
 becker %>% select(X1, Prediction) %>% rename(Sp = X1, P.Bec = Prediction) -> becker
@@ -67,51 +53,29 @@ guth %>% mutate(R.Gut = rank(P.Gut)) %>% mutate(R.Gut = (max(R.Gut) - R.Gut + 1)
 poisot1 %>% mutate(R.Po1 = rank(P.Po1)) %>% mutate(R.Po1 = (max(R.Po1) - R.Po1 + 1)) -> poisot1
 poisot2 %>% mutate(R.Po2 = rank(P.Po2)) %>% mutate(R.Po2 = (max(R.Po2) - R.Po2 + 1)) -> poisot2
 
-albery %>% mutate(Sp = gsub("_"," ",Sp)) -> albery
-becker %>% mutate(Sp = gsub("_"," ",Sp)) -> becker
-carlson %>% mutate(Sp = gsub("_"," ",Sp)) -> carlson
-dallas %>% mutate(Sp = gsub("_"," ",Sp)) -> dallas
-farrell %>% mutate(Sp = gsub("_"," ",Sp)) -> farrell
-guth %>% mutate(Sp = gsub("_"," ",Sp)) -> guth
-poisot1 %>% mutate(Sp = gsub("_"," ",Sp)) -> poisot1
-poisot2 %>% mutate(Sp = gsub("_"," ",Sp)) -> poisot2
-
-full_join(albery, becker) %>% full_join(carlson) %>% full_join(dallas) %>% 
-  full_join(farrell) %>% full_join(guth) %>% full_join(poisot1) %>% full_join(poisot2) -> Models
+list(albery, becker, carlson, dallas, farrell, guth, poisot1, poisot2) %>%
+  reduce(full_join) %>% 
+  mutate_at("Sp", ~.x %>% 
+              str_trim %>% 
+              str_replace("_", " ")) -> Models
 
 Models %>% select(Sp, R.Alb, R.Bec, R.Car, R.Dal, R.Far, R.Gut, R.Po1, R.Po2)  -> Models
 
-
-if(user=='Colin') {
+read_csv(paste0(GithubDir, "PhylofactorPredictions.csv")) %>% select(X1, betacov) %>%
   
-  read_csv("~/Github/becker-betacov/PhylofactorPredictions.csv") %>% select(X1, betacov) %>%
-    
-    rename(Sp = X1, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> 
-    
-    truth
+  rename(Sp = X1, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> 
   
-} else if (user=='Greg') {
-  
-  read_csv(paste0(GithubDir, "PhylofactorPredictions.csv")) %>% select(X1, betacov) %>%
-    
-    rename(Sp = X1, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> 
-    
-    truth
-  
-}
+  truth
 
 left_join(truth, Models) -> Models
 
 # Models %>% dplyr::select(-R.Bec) -> Models
 
-Models %>%  mutate(Rank = rowMeans(select(Models, starts_with("R.")), na.rm = TRUE)) -> Models
-
-Models %>% arrange(Rank)
+Models %>% mutate(Rank = rowMeans(select(Models, starts_with("R.")), na.rm = TRUE)) -> Models
 
 Models %>% select(starts_with("R.")) %>% names -> RankNames
 
 Models %>% 
-  #mutate_at(RankNames, ~.x/max(.x, na.rm = T)) %>%  
   mutate_at(RankNames, ~.x/max(.x, na.rm = T)) %>%  
   mutate(PropRank = rowMeans(select(Models, starts_with("R.")) %>% 
                                mutate_at(RankNames, ~.x/max(.x, na.rm = T)), 
@@ -123,5 +87,8 @@ Models %>%
 Models %>% filter(!Betacov)
 Models %>% filter(!(!Betacov))
 
-Models %>% select(Sp, Betacov, starts_with("R."), Rank, PropRank) %>%
-  as.data.frame -> Models
+Models %>% 
+  select(Sp, Betacov, starts_with("R."), Rank, PropRank) %>%
+  as.data.frame -> 
+  
+  Models
