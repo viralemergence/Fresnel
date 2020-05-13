@@ -102,6 +102,8 @@ if(user=='Colin') {
 
 left_join(truth, Models) -> Models
 
+# Models %>% dplyr::select(-R.Bec) -> Models
+
 Models %>%  mutate(Rank = rowMeans(select(Models, starts_with("R.")), na.rm = TRUE)) -> Models
 
 Models %>% arrange(Rank)
@@ -121,4 +123,5 @@ Models %>%
 Models %>% filter(!Betacov)
 Models %>% filter(!(!Betacov))
 
-Models %>% select(Sp, Betacov, starts_with("R."), Rank, PropRank) %>% as.data.frame -> Models
+Models %>% select(Sp, Betacov, starts_with("R."), Rank, PropRank) %>%
+  as.data.frame -> Models

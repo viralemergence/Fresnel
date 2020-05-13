@@ -39,6 +39,10 @@ names(Relabel) <- c("R.Po1", "R.Po2",
                     "R.Bec", "R.Alb", "R.Far",
                     "R.Gut", "R.Car", "R.Dal")
 
+Relabel[intersect(names(Relabel), names(Models))] ->
+  
+  Relabel
+
 # Figure 1: Observed v Predicted panels ####
 
 Models %>% 
@@ -196,13 +200,7 @@ Models %>%
   ggplot(aes(Sp, Value)) + geom_point(alpha = 0.1) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 2))
 
-
-# Figure 4: GGtree ####
-
-
-
 # Auxiliary plots ####
-
 
 # Comparative density ####
 
