@@ -1,7 +1,7 @@
 
 # Importing predictions and creating ranked predictions ####
 
-library(tidyverse); library(fs)
+library(tidyverse); library(fs); library(magrittr)
 
 rm(list = ls())
 
@@ -40,36 +40,70 @@ poisot2 %>% rename(Sp = X1, P.Po2 = X2) -> poisot2
 
 # Mutating ####
 
-albery %>% mutate(R.Alb = rank(P.Alb)) %>% 
+list(albery, becker, carlson, dallas, farrell, guth, poisot1, poisot2) %>%
+  map(~.x %>%  mutate_at("Sp", ~.x %>% 
+                           str_trim %>% 
+                           str_replace("_", " ")))
+
+albery %>% 
+  mutate_at("Sp", ~.x %>% 
+              str_trim %>% 
+              str_replace("_", " ")) %>% 
+  mutate(R.Alb = rank(P.Alb)) %>% 
   mutate(R.Alb = (max(R.Alb) - R.Alb + 1)) -> albery
 
-becker %>% mutate(R.Bec = rank(P.Bec)) %>% 
+becker %>% 
+  mutate_at("Sp", ~.x %>% 
+              str_trim %>% 
+              str_replace("_", " ")) %>% 
+  mutate(R.Bec = rank(P.Bec)) %>% 
   mutate(R.Bec = (max(R.Bec) - R.Bec + 1)) -> becker
 
-carlson %>% mutate(R.Car = rank(P.Car)) %>% 
+carlson %>% 
+  mutate_at("Sp", ~.x %>% 
+              str_trim %>% 
+              str_replace("_", " ")) %>% 
+  mutate(R.Car = rank(P.Car)) %>% 
   mutate(R.Car = (max(R.Car) - R.Car + 1)) -> carlson
 
-dallas %>% mutate(R.Dal = rank(P.Dal)) %>% 
+dallas %>% 
+  mutate_at("Sp", ~.x %>% 
+              str_trim %>% 
+              str_replace("_", " ")) %>% 
+  mutate(R.Dal = rank(P.Dal)) %>% 
   mutate(R.Dal = (max(R.Dal) - R.Dal + 1)) -> dallas
 
-farrell %>% filter(!is.na(P.Far)) %>% 
+farrell %>% 
+  mutate_at("Sp", ~.x %>% 
+              str_trim %>% 
+              str_replace("_", " ")) %>% 
+  filter(!is.na(P.Far)) %>% 
   mutate(R.Far = rank(P.Far)) %>% 
   mutate(R.Far = (max(R.Far) - R.Far + 1)) -> farrell
 
-guth %>% mutate(R.Gut = rank(P.Gut)) %>% 
+guth %>% 
+  mutate_at("Sp", ~.x %>% 
+              str_trim %>% 
+              str_replace("_", " ")) %>% 
+  mutate(R.Gut = rank(P.Gut)) %>% 
   mutate(R.Gut = (max(R.Gut) - R.Gut + 1)) -> guth
 
-poisot1 %>% mutate(R.Po1 = rank(P.Po1)) %>% 
+poisot1 %>% 
+  mutate_at("Sp", ~.x %>% 
+              str_trim %>% 
+              str_replace("_", " ")) %>% 
+  mutate(R.Po1 = rank(P.Po1)) %>% 
   mutate(R.Po1 = (max(R.Po1) - R.Po1 + 1)) -> poisot1
 
-poisot2 %>% mutate(R.Po2 = rank(P.Po2)) %>% 
+poisot2 %>% 
+  mutate_at("Sp", ~.x %>% 
+              str_trim %>% 
+              str_replace("_", " ")) %>% 
+  mutate(R.Po2 = rank(P.Po2)) %>% 
   mutate(R.Po2 = (max(R.Po2) - R.Po2 + 1)) -> poisot2
 
 list(albery, becker, carlson, dallas, farrell, guth, poisot1, poisot2) %>%
   reduce(full_join) %>% 
-  mutate_at("Sp", ~.x %>% 
-              str_trim %>% 
-              str_replace("_", " ")) %>% 
   select(Sp, starts_with("R.")) ->
   
   Models
@@ -105,19 +139,14 @@ Models %>%
 
 GithubDir <- "Github/MammalCSVs/"
 
-albery <- read_csv(paste0(GithubDir, "AlberyNonBats.csv"))[,-1]
-dallas1 <- (read_csv(paste0(GithubDir, "DallasMammalsCitations.csv"))[,-1] %>% 
-              mutate(host = gsub(" ","_",host)))
-dallas2 <- (read_csv(paste0(GithubDir, "DallasMammalsUncorrected.csv"))[,-1] %>% 
-              mutate(host = gsub(" ","_",host)))
+albery <- read_csv(paste0(GithubDir, "AlberyNonBats.csv"))
+dallas1 <- read_csv(paste0(GithubDir, "DallasMammalsCitations.csv"))
+dallas2 <- read_csv(paste0(GithubDir, "DallasMammalsUncorrected.csv"))
 farrell1 <- read_csv(paste0(GithubDir, "FarrellMammalsFull.csv"))
 farrell2 <- read_csv(paste0(GithubDir, "FarrellMammalsPhylogeny.csv"))
-poisot1 <- (read_csv(paste0(GithubDir, "PoisotKnn1Mammal.csv"), col_names = FALSE) %>% 
-              mutate(X1 = gsub(" ","_",X1)))
-poisot2 <- (read_csv(paste0(GithubDir, "PoisotKnn2Mammal.csv"), col_names = FALSE) %>% 
-              mutate(X1 = gsub(" ","_",X1)))
-poisot3 <- (read_csv(paste0(GithubDir, "PoisotLfMammal.csv"), col_names = FALSE) %>% 
-              mutate(X1 = gsub(" ","_",X1)))
+poisot1 <- read_csv(paste0(GithubDir, "PoisotKnn1Mammal.csv"), col_names = FALSE)
+poisot2 <- read_csv(paste0(GithubDir, "PoisotKnn2Mammal.csv"), col_names = FALSE)
+poisot3 <- read_csv(paste0(GithubDir, "PoisotLfMammal.csv"), col_names = FALSE)
 
 # Triaging column names ####
 
@@ -132,33 +161,15 @@ poisot3 %>% rename(Sp = X1, P.Po3 = X2) -> poisot3
 
 # Mutating ####
 
-albery %>% mutate(R.Alb = rank(P.Alb)) %>% 
-  mutate(R.Alb = (max(R.Alb) - R.Alb + 1)) -> albery
+ModelList <- list(albery, dallas1, dallas2, farrell1, farrell2, poisot1, poisot2, poisot3) 
 
-dallas1 %>% mutate(R.Dal1 = rank(P.Dal1)) %>% 
-  mutate(R.Dal1 = (max(R.Dal1) - R.Dal1 + 1)) -> dallas1
-
-dallas2 %>% mutate(R.Dal2 = rank(P.Dal2)) %>% 
-  mutate(R.Dal2 = (max(R.Dal2) - R.Dal2 + 1)) -> dallas2
-
-farrell1 %>% filter(!is.na(P.Far1)) %>% 
-  mutate(R.Far1 = rank(P.Far1)) %>% 
-  mutate(R.Far1 = (max(R.Far1) - R.Far1 + 1)) -> farrell1
-
-farrell2 %>% filter(!is.na(P.Far2)) %>% 
-  mutate(R.Far2 = rank(P.Far2)) %>% 
-  mutate(R.Far2 = (max(R.Far2) - R.Far2 + 1)) -> farrell2
-
-poisot1 %>% mutate(R.Po1 = rank(P.Po1)) %>% 
-  mutate(R.Po1 = (max(R.Po1) - R.Po1 + 1)) -> poisot1
-
-poisot2 %>% mutate(R.Po2 = rank(P.Po2)) %>% 
-  mutate(R.Po2 = (max(R.Po2) - R.Po2 + 1)) -> poisot2
-
-poisot3 %>% mutate(R.Po3 = rank(P.Po3)) %>% 
-  mutate(R.Po3 = (max(R.Po3) - R.Po3 + 1)) -> poisot3
-
-list(albery, dallas1, dallas2, farrell1, farrell2, poisot1, poisot2, poisot3) %>%
+ModelList %>%
+  map(~.x %>% mutate_at("Sp", function(a) a %>% 
+                          str_trim %>% 
+                          str_replace("_", " ")) %>%
+        mutate_at(vars(starts_with("P.")), function(a) rank(a)) %>%
+        mutate_at(vars(starts_with("P.")), function(a) max(a) - a + 1) %>%
+        rename_all(function(a) str_replace_all(a, "^P.", "R."))) %>%
   reduce(full_join) %>% 
   mutate_at("Sp", ~.x %>% 
               str_trim %>% 
@@ -176,6 +187,8 @@ read_csv(paste0(GithubDir, "DallasMammalsUncorrected.csv")) %>% select(host, pre
 Models %>% 
   left_join(truth) %>% 
   mutate(Betacov = replace_na(Betacov, 0)) -> Models
+
+# Models %>% filter(!is.na(R.Dal1)) -> Models
 
 Models %<>% 
   mutate(Rank = rowMeans(select(Models, starts_with("R.")), na.rm = TRUE))
