@@ -5,6 +5,8 @@ library(tidyverse); library(fs); library(magrittr)
 
 rm(list = ls())
 
+Virionette <- read.delim("Data/virionette.txt", sep = ",")
+
 Repos <- c(
   "albery-betacov",
   "becker-betacov",
@@ -98,12 +100,14 @@ Models %<>%
   mutate(PropRank = rowMeans(select(Models, starts_with("R.")) %>% 
                                mutate_at(RankNames, ~.x/max(.x, na.rm = T)), 
                              na.rm = TRUE)) %>% 
-  arrange(PropRank)
+  arrange(Rank)
 
 Models %>% 
   select(Sp, Betacov, starts_with("R."), Rank, PropRank) %>%
   as.data.frame -> 
   BatModels
+
+BatModels %<>% mutate(InSample = as.numeric(Sp %in% Virionette$host_species))
 
 # ~~~~~ NonBats ####
 
@@ -184,11 +188,4 @@ Models %>%
   as.data.frame -> 
   NonBatModels
 
-# Limit to HP3 (probably good for some downstream analyses?)
-
-assoc <- read.csv("~/Github/virionette/03_interaction_data/virionette.csv")
-assoc %>% select(host_order, host_species) %>% 
-  rename(Sp = host_species) %>%
-  unique() %>% left_join(NonBatModels) %>% 
-  filter(!(host_order == 'Chiroptera')) -> 
-  NonBatHP3
+NonBatModels %<>% mutate(InSample = as.numeric(Sp %in% Virionette$host_species))
