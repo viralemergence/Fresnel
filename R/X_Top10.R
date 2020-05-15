@@ -1,10 +1,20 @@
 
-assoc <- read_csv('~/Github/cleanbats_betacov/clean data/BatCoV-assoc_compatible.csv')
+assoc <- read_csv('~/Github/virionette/03_interaction_data/virionette.csv')
 
-Models %>% mutate(InAssoc = (Sp %in% assoc$host_species)) -> Models
+BatModels %>% as_tibble %>% mutate(InAssoc = (Sp %in% assoc$host_species)) -> BatModels
+BatModels %>% filter(Betacov==0) %>% filter(InAssoc==TRUE) %>% arrange(PropRank)
+BatModels %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank)
 
-Models %>% filter(Betacov==0) %>% filter(InAssoc==TRUE) %>% arrange(PropRank)
-Models %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank)
+read_csv("~/Github/virionette/04_predictors/Han-BatTraits.csv") %>%
+  mutate(Pan = gsub("_"," ",Pan)) %>% dplyr::select(Pan) -> batnames
+
+NonBatModels %>% as_tibble %>% mutate(InAssoc = (Sp %in% assoc$host_species)) -> NonBatModels
+NonBatModels %>% filter(Betacov==0) %>% filter(InAssoc==TRUE) %>% arrange(PropRank)
+NonBatModels %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank)
+
+
+
+
 
 #
 library(fasterize)
@@ -18,7 +28,7 @@ r <- disaggregate(getData("worldclim",var="alt",res=2.5)*0,2) # Make a blank ras
 
 #### TOP 50 DE NOVO BETACOV-
 
-Models %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank) %>% dplyr::pull(Sp)-> unsampled.0
+BatModels %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank) %>% dplyr::pull(Sp)-> unsampled.0
 unsampled.0 <- unsampled.0[1:50] # Top 50 predictions
 
 ### Some manual fixes
@@ -36,7 +46,7 @@ unsampled50.map <- fasterize(iucn.sub, r, fun="sum")
 
 #### TOP 50 IN-SAMPLE BETACOV-
 
-Models %>% filter(Betacov==0) %>% filter(InAssoc==TRUE) %>% arrange(PropRank) %>% dplyr::pull(Sp)-> sampled.0
+BatModels %>% filter(Betacov==0) %>% filter(InAssoc==TRUE) %>% arrange(PropRank) %>% dplyr::pull(Sp)-> sampled.0
 sampled.0 <- sampled.0[1:50] # Top 50 predictions
 
 ### Some manual fixes
@@ -53,7 +63,7 @@ sampled50.map <- fasterize(iucn.sub, r, fun="sum")
 
 #### KNOWN BETACOV+
 
-Models %>% filter(Betacov == 1) %>% dplyr::pull(Sp)-> true.1
+BatModels %>% filter(Betacov == 1) %>% dplyr::pull(Sp)-> true.1
 
 ### Some manual fixes
 true.1[true.1=='Myotis ricketti'] <- 'Myotis pilosus'
