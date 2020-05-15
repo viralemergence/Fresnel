@@ -29,7 +29,6 @@ Rhinolophus sinicus,1.0
 Rhinopoma hardwickii,1.0
 Scotophilus dinganii,1.0
 Scotophilus leucogaster,1.0
-Sus scrofa,1.0
 Triaenops persicus,1.0
 Vicugna vicugna,1.0
 Artibeus obscurus,1.0
@@ -82,18 +81,17 @@ Rousettus amplexicaudatus,1.0
 Tylonycteris pachypus,1.0
 Vespertilio sinensis,1.0
 Hipposideros armiger,0.8
-Homo sapiens,0.8
 Oryctolagus cuniculus,0.8
 Pipistrellus abramus,0.8
 Rousettus aegyptiacus,0.8
 Rousettus leschenaultii,0.8
+Sus scrofa,0.8
 Cynopterus brachyotis,0.8
 Epomops franqueti,0.8
 Erinaceus europaeus,0.8
 Lama glama,0.8
 Pteronotus parnellii,0.8
 Pteropus alecto,0.8
-Delphinapterus leucas,0.8
 Artibeus lituratus,0.6
 Camelus dromedarius,0.6
 Carollia perspicillata,0.6
@@ -105,10 +103,10 @@ Bos taurus,0.6
 Chlorocebus aethiops,0.6
 Equus caballus,0.6
 Taphozous perforatus,0.6
+Delphinapterus leucas,0.6
 Apodemus sylvaticus,0.6
 Phacochoerus africanus,0.6
 Potamochoerus porcus,0.6
-Saguinus labiatus,0.6
 Spermophilus citellus,0.6
 Felis catus,0.4
 Microtus agrestis,0.4
@@ -119,6 +117,7 @@ Phocoena spinipinnis,0.4
 Cephalophus callipygus,0.4
 Mus setulosus,0.4
 Myonycteris torquata,0.4
+Saguinus labiatus,0.4
 Mus spretus,0.4
 Artibeus jamaicensis,0.2
 Hipposideros abae,0.2
