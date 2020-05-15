@@ -2,8 +2,11 @@
 assoc <- read_csv('~/Github/virionette/03_interaction_data/virionette.csv')
 
 BatModels %>% as_tibble %>% mutate(InAssoc = (Sp %in% assoc$host_species)) -> BatModels
-BatModels %>% filter(Betacov==0) %>% filter(InAssoc==TRUE) %>% arrange(PropRank)
-BatModels %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank)
+BatModels %>% filter(Betacov==0) %>% filter(InAssoc==TRUE) %>% arrange(PropRank) %>% View()
+BatModels %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank) %>% View()
+
+
+
 
 read_csv("~/Github/virionette/04_predictors/Han-BatTraits.csv") %>%
   mutate(Pan = gsub("_"," ",Pan)) %>% dplyr::select(Pan) -> batnames
