@@ -7,6 +7,10 @@ rm(list = ls())
 
 Virionette <- read.delim("Data/virionette.txt", sep = ",")
 
+BatsVsOther <- read.csv("Data/BatsVsOther.csv") %>%
+  rename_all(CamelConvert) %>% 
+  mutate_at("Bats", ~.x %>% as.character %>% CamelConvert)
+
 Repos <- c(
   "albery-betacov",
   "becker-betacov",
@@ -174,7 +178,8 @@ ModelList %>%
 
 # Add in betacov true/false
 
-read_csv(paste0(GithubDir, "DallasMammalsUncorrected.csv"))[,-1] %>% select(host, presence) %>%
+read_csv(paste0(GithubDir, "DallasMammalsUncorrected.csv"))[,-1] %>% 
+  select(host, presence) %>%
   rename(Sp = host, Betacov = presence) %>% mutate(Sp = gsub("_"," ",Sp)) -> 
   truth
 
@@ -182,6 +187,15 @@ Models %>%
   left_join(truth) %>% 
   mutate(Betacov = replace_na(Betacov, 0)) ->
   Models
+
+Models %<>% left_join(BatsVsOther %>%
+                       mutate_at("Tree", ~.x %>% 
+                                   str_trim %>% 
+                                   str_replace_all("_", " ")) %>%
+                       dplyr::select(Tree, Bats), 
+                     by = c("Sp" = "Tree")) %>%
+  filter(Bats == "Other") %>%
+  as.data.frame()
 
 # Generate proportional rankings
 
@@ -203,5 +217,20 @@ Models %>%
   as.data.frame -> 
   NonBatModels
 
+# Splitting in-sample 
+
 NonBatModels %<>% mutate(InSample = as.numeric(Sp %in% Virionette$host_species))
 
+NonBatModels_IS <- NonBatModels %>% filter(!(!InSample))
+NonBatModels_OS <- NonBatModels #%>% filter(!(InSample))
+
+NACols <- NonBatModels_OS %>% is.na %>% colSums
+
+NACols[NACols >= (nrow(NonBatModels_OS) - nrow(NonBatModels_IS))] %>% 
+  names %>% setdiff(names(NonBatModels_OS), .) %>%
+  select(NonBatModels_OS, .) ->
+  
+  NonBatModels_OS
+
+NonBatModels_OS %<>% arrange(PropRank)
+NonBatModels_IS %<>% arrange(PropRank)
