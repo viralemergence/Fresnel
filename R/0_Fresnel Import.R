@@ -29,8 +29,9 @@ carlson1 <- read_csv(paste0(GithubDir, "CarlsonBartCitations.csv"))
 carlson2 <- read_csv(paste0(GithubDir, "CarlsonBartUncorrected.csv"))
 carlson3 <- read_csv(paste0(GithubDir, "CarlsonDartCitations.csv"))
 carlson4 <- read_csv(paste0(GithubDir, "CarlsonDartUncorrected.csv"))
-dallas1 <- read_csv(paste0(GithubDir, "DallasBatsCitations.csv"))
-dallas2 <- read_csv(paste0(GithubDir, "DallasBatsUncorrected.csv"))
+#dallas1 <- read_csv(paste0(GithubDir, "DallasBatsCitations.csv"))
+#dallas2 <- read_csv(paste0(GithubDir, "DallasBatsUncorrected.csv"))
+dallas1 <- read_csv("Github/MammalCSVs/DallasMammalsCitations.csv")
 farrell1 <- read_csv(paste0(GithubDir, "FarrellBatFull.csv"))
 farrell2 <- read_csv(paste0(GithubDir, "FarrellBatPhylogeny.csv"))
 guth1 <- read_csv(paste0(GithubDir, "GuthCitations.csv"))
@@ -47,7 +48,6 @@ carlson2 %>% select(host_species, pred) %>% rename(Sp = host_species, P.Car2 = p
 carlson3 %>% select(host_species, pred) %>% rename(Sp = host_species, P.Car3 = pred) -> carlson3
 carlson4 %>% select(host_species, pred) %>% rename(Sp = host_species, P.Car4 = pred) -> carlson4
 dallas1 %>% select(host, suitability) %>% rename(Sp = host, P.Dal1 = suitability) -> dallas1
-dallas2 %>% select(host, suitability) %>% rename(Sp = host, P.Dal2 = suitability) -> dallas2
 farrell1 %>% select(Host, p.interaction) %>% rename(Sp = Host, P.Far1 = p.interaction) -> farrell1
 farrell2 %>% select(Host, p.interaction) %>% rename(Sp = Host, P.Far2 = p.interaction) -> farrell2
 guth1 %>% select(host_species, pred_med) %>% rename(Sp = host_species, P.Gut1 = pred_med) -> guth1
@@ -55,6 +55,14 @@ guth2 %>% select(host_species, pred_med) %>% rename(Sp = host_species, P.Gut2 = 
 poisot1 %>% rename(Sp = X1, P.Po1 = X2) -> poisot1
 poisot2 %>% rename(Sp = X1, P.Po2 = X2) -> poisot2
 poisot3 %>% rename(Sp = X1, P.Po3 = X2) -> poisot3
+
+# Specifically subset Tad ####
+
+assoc <- (read_csv('~/Github/virionette/03_interaction_data/virionette.csv') %>% 
+            filter(host_order == 'Chiroptera'))
+
+dallas1 %>% as_tibble %>% mutate(InAssocBats = (Sp %in% assoc$host_species)) %>%
+   filter(InAssocBats==1) -> dallas1
 
 # Drops or not ####
 
