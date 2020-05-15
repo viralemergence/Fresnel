@@ -107,7 +107,22 @@ Models %>%
   as.data.frame -> 
   BatModels
 
+# Splitting in-sample 
+
 BatModels %<>% mutate(InSample = as.numeric(Sp %in% Virionette$host_species))
+
+BatModels_IS <- BatModels %>% filter(!(!InSample))
+BatModels_OS <- BatModels #%>% filter(!(InSample))
+
+NACols <- BatModels_OS %>% is.na %>% colSums
+
+NACols[NACols >= (nrow(BatModels_OS) - nrow(BatModels_IS))] %>% names %>% setdiff(names(BatModels_OS), .) %>%
+  select(BatModels_OS, .) ->
+  
+  BatModels_OS
+
+BatModels_OS %<>% arrange(PropRank)
+BatModels_IS %<>% arrange(PropRank)
 
 # ~~~~~ NonBats ####
 
@@ -189,3 +204,4 @@ Models %>%
   NonBatModels
 
 NonBatModels %<>% mutate(InSample = as.numeric(Sp %in% Virionette$host_species))
+
