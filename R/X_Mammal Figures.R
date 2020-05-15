@@ -18,7 +18,7 @@ Relabel <- c(
   "Phylogenetic.3",
   "Trait-based.1",
   "Trait-based.2",
-  "Trait-based.3"
+  "Network-based.3"
   
 )
 
@@ -31,13 +31,13 @@ Relabel <- c(
   "Phylog.3",
   "Trait.1",
   "Trait.2",
-  "Trait.3"
+  "Network.3"
   
-)[-c(3, 5, 6)]
+)[-3]
 
 names(Relabel) <- c("R.Po2", "R.Po3",
                     "R.Bec", "R.Alb", "R.Far1",
-                    "R.Gut1", "R.Car3", "R.Dal1")[-c(3, 5, 6)]
+                    "R.Gut1", "R.Car3", "R.Dal1")[-3]
 
 Relabel[intersect(names(Relabel), names(NonBatModels_IS))] ->
   
