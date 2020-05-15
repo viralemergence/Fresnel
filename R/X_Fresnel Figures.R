@@ -1,7 +1,7 @@
 
 # Fresnel Figures ####
 
-library(tidyverse); library(cowplot); library(colorspace); library(patchwork); library(ggpubr)
+library(tidyverse); library(cowplot); library(colorspace); library(patchwork); library(ggpubr); library(ggregplot)
 
 theme_set(theme_cowplot() + theme(strip.background = element_rect(fill = "white")))
 
@@ -18,7 +18,7 @@ Relabel <- c(
   "Phylogenetic.3",
   "Trait-based.1",
   "Trait-based.2",
-  "Trait-based.3"
+  "Network-based.3"
   
 )
 
@@ -31,7 +31,7 @@ Relabel <- c(
   "Phylog.3",
   "Trait.1",
   "Trait.2",
-  "Trait.3"
+  "Network.3"
   
 )[-3]
 
