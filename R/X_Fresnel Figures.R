@@ -33,19 +33,19 @@ Relabel <- c(
   "Trait.2",
   "Trait.3"
   
-)
+)[-3]
 
-names(Relabel) <- c("R.Po1", "R.Po2",
-                    "R.Bec", "R.Alb", "R.Far",
-                    "R.Gut", "R.Car", "R.Dal")
+names(Relabel) <- c("R.Po2", "R.Po3",
+                    "R.Bec", "R.Alb", "R.Far1",
+                    "R.Gut1", "R.Car3", "R.Dal1")[-3]
 
-Relabel[intersect(names(Relabel), names(Models))] ->
+Relabel[intersect(names(Relabel), names(BatModels))] ->
   
   Relabel
 
 # Figure 1: Observed v Predicted panels ####
 
-Models %>% 
+BatModels %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
   #filter(str_detect(Key, "Alb|Car|Dal|Gut")) %>%
   #mutate_at("Key", ~.x %>% recode(!!!Relabel)) %>%
@@ -62,7 +62,7 @@ Models %>%
   
   SingleCorrelations
 
-Models %>% 
+BatModels %>% 
   mutate(Key = "Multi-model ensemble") %>%
   ggplot(aes(PropRank, Betacov)) + 
   #ggtitle("Model assemblage") +
@@ -91,9 +91,11 @@ Models %>%
 
 # Figure 2: Tile plot correlations ####
 
-Models %>% 
+BatModels %>% 
   rename_all(~ifelse(.x %in% names(Relabel), recode(.x, !!!Relabel), .x)) %>% 
-  select(as.character(Relabel)) %>% cor(use = "complete.obs", method = "spearman") -> CorDF
+  select(as.character(Relabel)) %>% cor(use = "complete.obs", method = "spearman") -> 
+  
+  CorDF
 
 CorDF %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
 
@@ -122,29 +124,31 @@ TilePlot
 
 CorDF %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
 
-Models %>%
+BatModels %>%
   rename_all(~ifelse(.x %in% names(Relabel), recode(.x, !!!Relabel), .x)) %>% 
   filter(Betacov == 0) %>%
   slice(1:10) %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
   mutate_at("Value", ~.x*1) %>%
   mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
+  mutate_at("Sp", ~factor(.x, levels = unique(.x))) %>%
   filter(!is.na(Value)) %>% 
   mutate(KeyJitter = as.numeric(as.factor(Key)) + runif(n(), -0.05, 0.05)) -> 
   TopPredictions
 
-Models %>% 
+BatModels %>% 
   rename_all(~ifelse(.x %in% names(Relabel), recode(.x, !!!Relabel), .x)) %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
   mutate_at("Value", ~.x*1) %>%
   mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
   mutate_at("Key", ~.x %>% recode(!!!Relabel)) %>%
-  filter(!is.na(Value)) -> LongModels
+  filter(!is.na(Value)) -> 
+  LongBatModels
 
-LongModels %<>% mutate(KeyJitter = as.numeric(as.factor(Key)) + runif(n(), -0.05, 0.05)) %>%
+LongBatModels %<>% mutate(KeyJitter = as.numeric(as.factor(Key)) + runif(n(), -0.05, 0.05)) %>%
   anti_join(TopPredictions %>% dplyr::select(Sp), by = "Sp")
 
-LongModels %>%
+LongBatModels %>%
   ggplot(aes(KeyJitter, (Value))) + 
   #geom_point(alpha = 0.3) + 
   geom_line(aes(group = Sp), alpha = 0.025) +
@@ -170,14 +174,14 @@ LongModels %>%
 
 # Not sure what this is #####
 
-Models %>% group_by(Betacov) %>% 
+BatModels %>% group_by(Betacov) %>% 
   slice(1:10) %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
   mutate_at("Value", ~.x*1) %>%
   mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
   filter(!is.na(Value)) -> TopPredictions2
 
-Models %>% 
+BatModels %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
   mutate_at("Value", ~.x*1) %>%
   mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
@@ -194,7 +198,7 @@ Models %>%
   labs(x = "Model", y = "Proportional rank", colour = "Top 10") +
   facet_wrap(~Betacov)
 
-Models %>% 
+BatModels %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
   mutate_at("Sp", ~.x %>% fct_reorder(Value, median)) %>%
   ggplot(aes(Sp, Value)) + geom_point(alpha = 0.1) +
@@ -204,11 +208,11 @@ Models %>%
 
 # Comparative density ####
 
-Models %>% 
+BatModels %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank)) %>%
   filter(str_detect(Key, "Alb|Car|Dal|Gut")) %>%
   mutate_at("Key", ~.x %>% recode(!!!Relabel)) %>%
   ggplot(aes(Value)) + 
-  geom_density(data = Models, inherit.aes = F, aes(x = PropRank), colour = "black", size = 3) +
+  geom_density(data = BatModels, inherit.aes = F, aes(x = PropRank), colour = "black", size = 3) +
   geom_density(aes(colour = Key)) +
   scale_colour_discrete_sequential(palette = AlberPalettes[[1]], nmax = 6, rev = F)
