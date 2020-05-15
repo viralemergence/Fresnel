@@ -1,7 +1,7 @@
 
 # Importing predictions and creating ranked predictions ####
 
-library(tidyverse); library(fs); library(magrittr)
+library(tidyverse); library(fs); library(magrittr); library(ggregplot)
 
 rm(list = ls())
 
@@ -197,11 +197,11 @@ Models %>%
   Models
 
 Models %<>% left_join(BatsVsOther %>%
-                        mutate_at("Tree", ~.x %>% 
+                        mutate_at("Name", ~.x %>% 
                                     str_trim %>% 
                                     str_replace_all("_", " ")) %>%
-                        dplyr::select(Tree, Bats), 
-                      by = c("Sp" = "Tree")) %>%
+                        dplyr::select(Name, Bats), 
+                      by = c("Sp" = "Name")) %>%
   filter(Bats == "Other") %>%
   as.data.frame()
 
