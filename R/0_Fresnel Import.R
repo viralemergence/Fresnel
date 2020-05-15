@@ -62,7 +62,7 @@ assoc <- (read_csv('~/Github/virionette/03_interaction_data/virionette.csv') %>%
             filter(host_order == 'Chiroptera'))
 
 dallas1 %>% as_tibble %>% mutate(InAssocBats = (Sp %in% assoc$host_species)) %>%
-   filter(InAssocBats==1) -> dallas1
+  filter(InAssocBats==1) -> dallas1
 
 # Drops or not ####
 
@@ -169,8 +169,8 @@ ModelList <- list(albery, dallas1, farrell1, poisot2, poisot3)
 ModelList %>%
   map(~.x %>% 
         mutate_at("Sp", function(a) a %>% 
-                          str_trim %>% 
-                          str_replace("_", " ")) %>%
+                    str_trim %>% 
+                    str_replace("_", " ")) %>%
         #filter(!(Sp = 'Homo sapiens'))  %>% 
         mutate_at(vars(starts_with("P.")), function(a) rank(a, na.last = "keep")) %>%
         mutate_at(vars(starts_with("P.")), function(a) max(na.omit(a)) - a + 1) %>%
@@ -197,11 +197,11 @@ Models %>%
   Models
 
 Models %<>% left_join(BatsVsOther %>%
-                       mutate_at("Tree", ~.x %>% 
-                                   str_trim %>% 
-                                   str_replace_all("_", " ")) %>%
-                       dplyr::select(Tree, Bats), 
-                     by = c("Sp" = "Tree")) %>%
+                        mutate_at("Tree", ~.x %>% 
+                                    str_trim %>% 
+                                    str_replace_all("_", " ")) %>%
+                        dplyr::select(Tree, Bats), 
+                      by = c("Sp" = "Tree")) %>%
   filter(Bats == "Other") %>%
   as.data.frame()
 
@@ -234,11 +234,7 @@ NonBatModels_OS <- NonBatModels #%>% filter(!(InSample))
 
 NACols <- NonBatModels_OS %>% is.na %>% colSums
 
-NACols[NACols >= (nrow(NonBatModels_OS) - nrow(NonBatModels_IS))] %>% 
-  names %>% setdiff(names(NonBatModels_OS), .) %>%
-  select(NonBatModels_OS, .) ->
-  
-  NonBatModels_OS
+NonBatModels_OS %<>% select(Sp, Betacov, R.Alb, Rank, PropRank, InSample)
 
 NonBatModels_OS %<>% arrange(PropRank)
 NonBatModels_IS %<>% arrange(PropRank)
