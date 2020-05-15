@@ -8,9 +8,11 @@ BatModels %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank
 read_csv("~/Github/virionette/04_predictors/Han-BatTraits.csv") %>%
   mutate(Pan = gsub("_"," ",Pan)) %>% dplyr::select(Pan) -> batnames
 
-NonBatModels %>% as_tibble %>% mutate(InAssoc = (Sp %in% assoc$host_species)) -> NonBatModels
-NonBatModels %>% filter(Betacov==0) %>% filter(InAssoc==TRUE) %>% arrange(PropRank)
-NonBatModels %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank)
+NonBatModels %>% as_tibble %>% 
+  mutate(InAssoc = (Sp %in% assoc$host_species)) %>%
+  mutate(NonBat = !(Sp %in% batnames$Pan)) -> NonBatModels
+NonBatModels %>% filter(Betacov==0) %>% filter(NonBat==1) %>% filter(InAssoc==TRUE) %>% arrange(PropRank)
+NonBatModels %>% filter(Betacov==0) %>% filter(NonBat==1) %>% filter(InAssoc==FALSE) %>% arrange(PropRank)
 
 
 
@@ -26,7 +28,7 @@ iucn <- st_read(dsn = "C:/Users/cjcar/Desktop/TERRESTRIAL_MAMMALS", layer='TERRE
 
 r <- disaggregate(getData("worldclim",var="alt",res=2.5)*0,2) # Make a blank raster
 
-#### TOP 50 DE NOVO BETACOV-
+######################################################## TOP 50 DE NOVO BETACOV-
 
 BatModels %>% filter(Betacov==0) %>% filter(InAssoc==FALSE) %>% arrange(PropRank) %>% dplyr::pull(Sp)-> unsampled.0
 unsampled.0 <- unsampled.0[1:50] # Top 50 predictions
@@ -44,7 +46,7 @@ unsampled.0[!(unsampled.0 %in% iucn$binomial)] # Which names are bonked?
 
 unsampled50.map <- fasterize(iucn.sub, r, fun="sum")
 
-#### TOP 50 IN-SAMPLE BETACOV-
+######################################################## TOP 50 IN-SAMPLE BETACOV-
 
 BatModels %>% filter(Betacov==0) %>% filter(InAssoc==TRUE) %>% arrange(PropRank) %>% dplyr::pull(Sp)-> sampled.0
 sampled.0 <- sampled.0[1:50] # Top 50 predictions
@@ -61,7 +63,7 @@ sampled.0[!(sampled.0 %in% iucn$binomial)] # Which names are bonked?
 
 sampled50.map <- fasterize(iucn.sub, r, fun="sum")
 
-#### KNOWN BETACOV+
+######################################################## KNOWN BETACOV+
 
 BatModels %>% filter(Betacov == 1) %>% dplyr::pull(Sp)-> true.1
 
