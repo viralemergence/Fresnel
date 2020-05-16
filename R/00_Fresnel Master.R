@@ -1,7 +1,13 @@
 
 # 00_Fresnel Master Code ####
 
+rm(list = ls())
+
 library(tidyverse); library(fs)
+
+here::here() %>% setwd()
+
+getwd()
 
 Repos <- c(
   "albery-betacov",
@@ -26,14 +32,15 @@ SourceScripts <- list(
 
 names(SourceScripts) <- Repos
 
-
 # 0_Sourcing Models ####
 
-r <- 1
+r <- 2
 
 for(r in seq_along(Repos)){
   
-  setwd(paste0("Github/Repos/", Repos[r]))
+  print(Repos[r])
+  
+  setwd(paste0(here::here(),"/Github/Repos/", Repos[r]))
   
   source(SourceScripts[[r]])
   
