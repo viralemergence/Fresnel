@@ -58,7 +58,7 @@ poisot3 %>% rename(Sp = X1, P.Po3 = X2) -> poisot3
 
 # Specifically subset Tad ####
 
-assoc <- (read_csv('~/Github/virionette/03_interaction_data/virionette.csv') %>% 
+assoc <- (read.delim("Data/virionette.txt", sep = ",") %>% 
             filter(host_order == 'Chiroptera'))
 
 dallas1 %>% as_tibble %>% mutate(InAssocBats = (Sp %in% assoc$host_species)) %>%
