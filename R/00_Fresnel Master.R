@@ -45,6 +45,30 @@ SourceScripts <- list(
 
 names(SourceScripts) <- Repos
 
+# 0_Downloading repos ####
+
+if(Download){
+  
+  r <- 1
+  
+  for(r in r:length(Repos)){
+    
+   FocalRepo <- Repos[[r]] 
+   
+   download.file(url = paste0("https://github.com/gfalbery/", FocalRepo, "/archive/master.zip"),
+                 destfile = paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
+   
+   unzip(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"),
+         exdir = paste0(here::here(), "/Github/Repos"))
+   
+   file.rename(paste0(here::here(), "/Github/Repos/", FocalRepo, "-master"),
+               paste0(here::here(), "/Github/Repos/", FocalRepo))
+   
+   file_delete(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
+   
+  }
+}
+
 # 0_Sourcing Models ####
 
 r <- 1
@@ -155,14 +179,14 @@ for(i in i:length(Repos)){
     file_copy(
       
       path = paste0("Github/Repos/", Repos[i], "/", 
-             OutputCSVs[[Repos[i]]][[j]]),
+                    OutputCSVs[[Repos[i]]][[j]]),
       
       new_path = 
         paste0("Github/", "CSVs", "/", 
                OutputCSVs[[Repos[i]]][[j]] %>%
                  str_split("/") %>% map_chr(last)
-             
-      ),
+               
+        ),
       
       overwrite = T
     )
