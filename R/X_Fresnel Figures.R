@@ -179,6 +179,8 @@ BatModels_IS %>%
   
   CorDF_OS %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
   
+  Relabel -> ModelLimits
+  
   CorDF_OS %>% reshape2::melt() %>% #slice(which(lower.tri(CorDF_OS)))
     
     mutate_at("Var1", ~factor(.x, levels = c(ModelLimits))) %>%
