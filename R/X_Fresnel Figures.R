@@ -15,34 +15,13 @@ AlberColours[length(AlberColours)+1:2] <-
 
 AlberColours <- c(AlberColours, Pink = "#FD6396", Blue = "#3C78D8")
 
-Relabel <- c(
-  
-  "Network-based.1", 
-  "Network-based.2",
-  "Phylogenetic.1",
-  "Phylogenetic.2",
-  "Trait-based.1",
-  "Trait-based.2",
-  "Network-based.3"
-  
-)
-
-Relabel <- c(
-  
-  "Network.1", 
-  "Network.2",
-  "Phylog.1",
-  "Phylog.2",
-  "Trait.1",
-  "Trait.2",
-  "Network.3"
-  
-)
+Relabel <- c(glue::glue("Network.{1:4}"), 
+             glue::glue("Trait.{1:3}"))
 
 names(Relabel) <- c("R.Po2", "R.Po3",
-                    "R.Alb", "R.Far1",
-                    "R.Gut1", "R.Car3", 
-                    "R.Dal1")
+                    "R.Dal1","R.Far1",
+                    "R.Gut1", "R.Car3",
+                    "R.Alb")
 
 Relabel[intersect(names(Relabel), names(BatModels_IS))] ->
   
@@ -53,16 +32,20 @@ Relabel[intersect(names(Relabel), names(BatModels_IS))] ->
 BatModels_IS %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
   #filter(str_detect(Key, "Alb|Car|Dal|Gut")) %>%
-  #mutate_at("Key", ~.x %>% recode(!!!Relabel)) %>%
+  mutate_at("Key", ~.x %>% recode(!!!Relabel)) %>%
   ggplot(aes(Value, Betacov)) + 
   geom_point(alpha = 0.3, colour = AlberColours[[3]]) + 
+  geom_smooth(method = glm, 
+              method.args = list(family = "binomial"),
+              fill = NA, colour = "black") +
   #geom_smooth(method = lm, fill = NA, colour = "black") +
-  geom_smooth(fill = NA, colour = "black") +
+  #geom_smooth(fill = NA, colour = "black") +
   facet_wrap(~Key, nrow = 2) +
-  stat_cor(label.y = 1.2) +
-  lims(y = c(-0.2, 1.2)) + coord_fixed() +
+  stat_cor(label.y = 1.2,
+           aes(label = ..rr.label..)) +
+  #coord_fixed() +
   scale_x_continuous(breaks = c(0, 0.5, 1.3)) +
-  scale_y_continuous(breaks = c(0:5/5)) +
+  scale_y_continuous(breaks = c(0:5/5), limits = c(-0, 1.25)) +
   labs(x = "Proportional rank") -> 
   
   SingleCorrelations
@@ -71,27 +54,28 @@ BatModels_IS %>%
   mutate(Key = "Multi-model ensemble") %>%
   ggplot(aes(PropRank, Betacov)) + 
   #ggtitle("Model assemblage") +
-  geom_point(alpha = 0.6, colour = AlberColours[[3]], position = position_jitter(h = 0.1)) + 
+  geom_point(alpha = 0.6, colour = AlberColours[[3]], 
+             position = position_jitter(h = 0.05)) + 
   #geom_smooth(method = lm, fill = NA, colour = "black") +
-  geom_smooth(fill = NA, colour = "black") +
-  coord_fixed() + 
-  lims(x = c(0, 1), 
-       y = c(-0.2, 1.25)) +
-  scale_y_continuous(breaks = c(0:5/5)) +
-  stat_cor(label.y = 1.2, method = "spearman") +
+  geom_smooth(method = glm, 
+              method.args = list(family = "binomial"),
+              fill = NA, colour = "black") +
+  # geom_smooth(fill = NA, colour = "black") +
+  #coord_fixed() + 
+  lims(x = c(0, 1)) +
+  scale_y_continuous(breaks = c(0:5/5), 
+                     limits = c(-0.1, 1.25)) +
+  stat_cor(label.y = 1.2, method = "spearman",
+           aes(label = ..rr.label..)) +
   facet_wrap(~Key) +
   labs(x = "Proportional rank") ->
   
   OverallCorrelations
 
 (SingleCorrelations|OverallCorrelations) + 
+  plot_layout(widths = c(1.35,1)) +
   ggsave("Figures/Obs_Pred_CorrelationsHorizontal.jpeg", 
-         units = "mm", width = 250, height = 150)
-
-(OverallCorrelations/(SingleCorrelations + facet_wrap(~Key, nrow = 2))) + 
-  plot_layout(heights = c(1, 1.1)) +
-  ggsave("Figures/Obs_Pred_CorrelationsVertical.jpeg", 
-         units = "mm", width = 150, height = 250)
+         units = "mm", width = 325, height = 150)
 
 # Figure 2: Inter-Model Agreement ####
 
@@ -107,6 +91,8 @@ BatModels_IS %>%
   
   CorDF_IS %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
   
+  Relabel -> ModelLimits
+  
   CorDF_IS %>% reshape2::melt() %>% #slice(which(lower.tri(CorDF_IS)))
     
     mutate_at("Var1", ~factor(.x, levels = c(ModelLimits))) %>%
@@ -121,8 +107,8 @@ BatModels_IS %>%
     # scale_fill_continuous_diverging(palette = "Tropic", limits = c(-1, 1)) +
     scale_fill_gradient2(low = AlberColours[[1]], 
                          mid = "white", 
-                         #high = AlberColours[[5]],
-                         high = AlberColours[["Pink"]],
+                         high = AlberColours[[5]],
+                         # high = AlberColours[["Pink"]],
                          midpoint = 0, limits = c(-1, 1)) +
     
     labs(x = NULL, y = NULL, fill = "Correlation") +
@@ -133,7 +119,11 @@ BatModels_IS %>%
   
   # Bump and agreements ####
   
-  CorDF_IS %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
+  CorDF_IS %>% rowSums %>% #sort %>% 
+    #rev %>% 
+    names -> ModelLimits
+  
+  Relabel -> ModelLimits
   
   BatModels_IS %>%
     rename_all(~ifelse(.x %in% names(Relabel), recode(.x, !!!Relabel), .x)) %>% 
@@ -203,8 +193,8 @@ BatModels_IS %>%
     # scale_fill_continuous_diverging(palette = "Tropic", limits = c(-1, 1)) +
     scale_fill_gradient2(low = AlberColours[[1]], 
                          mid = "white", 
-                         # high = AlberColours[[5]],
-                         high = AlberColours[["Pink"]],
+                         high = AlberColours[[5]],
+                         # high = AlberColours[["Pink"]],
                          midpoint = 0, limits = c(-1, 1)) +
     
     labs(x = NULL, y = NULL, fill = "Correlation") +
@@ -216,6 +206,8 @@ BatModels_IS %>%
   # Bump plot ####
   
   CorDF_OS %>% rowSums %>% sort %>% rev %>% names -> ModelLimits
+  
+  Relabel -> ModelLimits
   
   BatModels_OS %>%
     rename_all(~ifelse(.x %in% names(Relabel), recode(.x, !!!Relabel), .x)) %>% 
@@ -292,7 +284,7 @@ BatModels_IS %>%
 
 BatModels_IS %>% 
   gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
-  filter(str_detect(Key, "Alb|Car|Dal|Gut")) %>%
+  #filter(str_detect(Key, "Alb|Car|Dal|Gut")) %>%
   mutate_at("Key", ~.x %>% recode(!!!Relabel)) %>%
   ggplot(aes(Value)) + 
   geom_density(data = BatModels_IS, inherit.aes = F, aes(x = PropRank), colour = "black", size = 3) +

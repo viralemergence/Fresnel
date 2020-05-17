@@ -5,6 +5,8 @@ library(tidyverse); library(fs); library(magrittr); library(ggregplot)
 
 rm(list = ls())
 
+here::here() %>% setwd()
+
 Virionette <- read.delim("Data/virionette.txt", sep = ",")
 
 BatsVsOther <- read.csv("Data/BatsVsOther.csv") %>%
@@ -75,22 +77,21 @@ ModelList %>%
         mutate_at("Sp", function(a) a %>% 
                     str_trim %>% 
                     str_replace("_", " ")) %>%
-        #filter(!(Sp = 'Homo sapiens'))  %>% 
         mutate_at(vars(starts_with("P.")), function(a) rank(a, na.last = "keep")) %>%
         mutate_at(vars(starts_with("P.")), function(a) max(na.omit(a)) - a + 1) %>%
         rename_all(function(a) str_replace_all(a, "^P.", "R.")) %>%
-        bind_cols(.x %>% select(starts_with("P.")))) %>%
+        bind_cols(.x %>% dplyr::select(starts_with("P.")))) %>%
   reduce(full_join) %>% 
   mutate_at("Sp", ~.x %>% 
               str_trim %>% 
-              str_replace("_", " ")) %>% 
-  select(Sp, starts_with("R.")) -> 
+              str_replace("_", " ")) -> 
   
   Models
 
 # Add in betacov true/false
 
-read_csv(paste0(GithubDir, "CarlsonDartCitations.csv")) %>% select(host_species, betacov) %>%
+read_csv(paste0(GithubDir, "CarlsonDartCitations.csv")) %>% 
+  select(host_species, betacov) %>%
   rename(Sp = host_species, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> 
   truth
 
@@ -115,7 +116,8 @@ Models %<>%
   arrange(Rank)
 
 Models %>% 
-  select(Sp, Betacov, starts_with("R."), Rank, PropRank) %>%
+  select(Sp, Betacov, starts_with("R."), 
+         Rank, PropRank) %>%
   as.data.frame -> 
   BatModels
 
@@ -128,7 +130,8 @@ BatModels_OS <- BatModels #%>% filter(!(InSample))
 
 NACols <- BatModels_OS %>% is.na %>% colSums
 
-NACols[NACols >= (nrow(BatModels_OS) - nrow(BatModels_IS))] %>% names %>% setdiff(names(BatModels_OS), .) %>%
+NACols[NACols >= (nrow(BatModels_OS) - nrow(BatModels_IS))] %>% 
+  names %>% setdiff(names(BatModels_OS), .) %>%
   select(BatModels_OS, .) ->
   
   BatModels_OS
