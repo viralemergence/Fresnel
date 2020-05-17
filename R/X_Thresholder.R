@@ -1,5 +1,7 @@
 
-library(PresenceAbsence)
+# Thresholding Model Predictions ####
+
+library(PresenceAbsence); library(tidyverse)
 
 RNames <- c('R.Alb','R.Car3','R.Dal1','R.Far1','R.Gut1','R.Po2','R.Po3')
 
@@ -46,12 +48,19 @@ for (i in 1:length(RNames)) {
 }
 
 BatModels %>% 
+  filter(!Betacov) %>%
   summarise_at(vars(starts_with("T.")), 
-               ~paste0(table(.x), collapse = "; "))
+               ~paste0(table(.x), collapse = "; ")) %>% t
 
 
 for(i in 1:length(names)) {
+  
   b <- BatModels[BatModels$Betacov==0,]
+  
   print(thresh[i])
+  
   print(table(b[,thresh[i]]))
+  
+  print(table(b[, paste0(thresh[i], ".P")]))
+  
 }

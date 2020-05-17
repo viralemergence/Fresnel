@@ -6,7 +6,7 @@
 
 ## source helper files for gpf
 
-source('R/2a_Phylofactor helper.R')
+source('R/02a_Phylofactor helper.R')
 
 detach(package:dplyr)
 
@@ -18,13 +18,19 @@ library(data.table)
 library(ggtree)
 library(plyr)
 library(caper)
+library(patchwork)
+library(ggpubr)
 
 ## load ensemble data
 
 batin = BatModels_IS
-batout = BatModels_IS
+batout = BatModels_OS
+
+#batin2 <- read.csv("Cleaned Files/BatModels_IS.csv")
+#batout2 <- read.csv("Cleaned Files/BatModels_OS.csv")
 
 ## mammals too
+
 mamin = NonBatModels_IS
 mamout = NonBatModels_OS
 
@@ -50,7 +56,7 @@ mamout$treenames = gsub(' ', '_', mamout$Sp)
 
 taxonomy = read.csv(paste0("Github/Repos/becker-betacov/", 
                            'mammal taxonomy.csv'), 
-                  header = T)
+                    header = T)
 
 taxonomy$X = NULL
 taxonomy$Sp = NULL
@@ -71,8 +77,8 @@ batout = merge(batout, taxonomy, by = 'hGenus', all.x = T)
 ## fix batout
 batout$hFamily = as.character(batout$hFamily)
 batout$hFamily2 = revalue(batout$hGenus, 
-                      c('Aproteles' = 'Pteropodidae', 
-                        'Paracoelops' = 'Hipposideridae'))
+                          c('Aproteles' = 'Pteropodidae', 
+                            'Paracoelops' = 'Hipposideridae'))
 batout$hFamily = ifelse(is.na(batout$hFamily), batout$hFamily2, batout$hFamily)
 batout$hFamily2 = NULL
 batout$hOrder = 'Chiroptera'
@@ -85,48 +91,48 @@ set = set[c('hGenus', 'hFamily', 'hOrder')]
 
 ## revalue
 set$hFamily2 = revalue(set$hGenus, 
-                     c('Balaenoptera' = 'Balaenopteridae', 
-                       'Caluromys' = 'Didelphidae', 
-                       'Camelus' = 'Camelidae', 
-                       'Chironectes' = 'Didelphidae', 
-                       'Delphinapterus' = 'Monodontidae', 
-                       'Delphinus' = 'Delphinidae', 
-                       'Didelphis' = 'Didelphidae', 
-                       'Dorcopsis' = 'Macropodidae', 
-                       'Eschrichtius' = 'Eschrichtiidae', 
-                       'Galerella' = 'Herpestidae', 
-                       'Globicephala' = 'Delphinidae', 
-                       'Isoodon' = 'Peramelidae', 
-                       'Lama' = 'Camelidae', 
-                       'Macropus' = 'Macropodidae', 
-                       'Marmosa' = 'Didelphidae', 
-                       'Metachirus' = 'Didelphidae', 
-                       'Orcinus' = 'Delphinidae', 
-                       'Perameles' = 'Peramelidae', 
-                       'Philander' = 'Didelphidae', 
-                       'Phocoena' = 'Phocoenidae', 
-                       'Physeter' = 'Physeteridae', 
-                       'Stenella' = 'Delphinidae', 
-                       'Taurotragus' = 'Bovidae', 
-                       'Trichosurus' = 'Phalangeridae', 
-                       'Tursiops' = 'Tursiops'))
+                       c('Balaenoptera' = 'Balaenopteridae', 
+                         'Caluromys' = 'Didelphidae', 
+                         'Camelus' = 'Camelidae', 
+                         'Chironectes' = 'Didelphidae', 
+                         'Delphinapterus' = 'Monodontidae', 
+                         'Delphinus' = 'Delphinidae', 
+                         'Didelphis' = 'Didelphidae', 
+                         'Dorcopsis' = 'Macropodidae', 
+                         'Eschrichtius' = 'Eschrichtiidae', 
+                         'Galerella' = 'Herpestidae', 
+                         'Globicephala' = 'Delphinidae', 
+                         'Isoodon' = 'Peramelidae', 
+                         'Lama' = 'Camelidae', 
+                         'Macropus' = 'Macropodidae', 
+                         'Marmosa' = 'Didelphidae', 
+                         'Metachirus' = 'Didelphidae', 
+                         'Orcinus' = 'Delphinidae', 
+                         'Perameles' = 'Peramelidae', 
+                         'Philander' = 'Didelphidae', 
+                         'Phocoena' = 'Phocoenidae', 
+                         'Physeter' = 'Physeteridae', 
+                         'Stenella' = 'Delphinidae', 
+                         'Taurotragus' = 'Bovidae', 
+                         'Trichosurus' = 'Phalangeridae', 
+                         'Tursiops' = 'Tursiops'))
 
 ## make order
 set$hOrder2 = revalue(set$hFamily2, 
-                    c('Balaenopteridae' = 'Artiodactyla', 
-                      'Didelphidae' = 'Didelphimorphia', 
-                      'Camelidae' = 'Artiodactyla', 
-                      'Monodontidae' = 'Artiodactyla', 
-                      'Delphinidae' = 'Artiodactyla', 
-                      'Macropodidae' = 'Diprotodontia', 
-                      'Eschrichtiidae' = 'Artiodactyla', 
-                      'Herpestidae' = 'Carnivora', 
-                      'Peramelidae' = 'Peramelemorphia', 
-                      'Phocoenidae' = 'Artiodactyla', 
-                      'Physeteridae' = 'Artiodactyla', 
-                      'Bovidae' = 'Artiodactyla', 
-                      'Phalangeridae' = 'Diprotodontia', 
-                      'Tursiops' = 'Artiodactyla'))
+                      c('Balaenopteridae' = 'Artiodactyla', 
+                        'Didelphidae' = 'Didelphimorphia', 
+                        'Camelidae' = 'Artiodactyla', 
+                        'Monodontidae' = 'Artiodactyla', 
+                        'Delphinidae' = 'Artiodactyla', 
+                        'Macropodidae' = 'Diprotodontia', 
+                        'Eschrichtiidae' = 'Artiodactyla', 
+                        'Herpestidae' = 'Carnivora', 
+                        'Peramelidae' = 'Peramelemorphia', 
+                        'Phocoenidae' = 'Artiodactyla', 
+                        'Physeteridae' = 'Artiodactyla', 
+                        'Bovidae' = 'Artiodactyla', 
+                        'Phalangeridae' = 'Diprotodontia', 
+                        'Tursiops' = 'Artiodactyla'))
 
 ## trim
 set$hFamily = NULL
@@ -190,11 +196,15 @@ bdata_out$data$Species = rownames(bdata_out$data)
 data_in$data$Species = rownames(data_in$data)
 data_out$data$Species = rownames(data_out$data)
 
+# Bat Phylofactor ####
+
 ## bat phylofactor, in sample
 set.seed(1)
-batin_pf = gpf(Data = bdata_in$data, tree = bdata_in$phy, 
-           frmla.phylo = PropRank~phylo, 
-           family = gaussian, algorithm = 'phylo', nfactors = 2)
+batin_pf = gpf(Data = bdata_in$data, 
+               tree = bdata_in$phy, 
+               frmla.phylo = PropRank~phylo, 
+               family = gaussian, algorithm = 'phylo', 
+               nfactors = 2)
 
 ## results
 batin_results = pfsum(batin_pf)
@@ -205,13 +215,16 @@ batin_results = batin_results$results
 
 ## revalue
 batin_results$taxa = revalue(batin_results$taxa, 
-                           c('Natalidae, Mystacinidae, Mormoopidae, Phyllostomidae, Molossidae, Vespertilionidae' = 'Yangochiroptera'))
+                             c('Natalidae, Mystacinidae, Mormoopidae, Phyllostomidae, Molossidae, Vespertilionidae' = 'Yangochiroptera'))
 
 ## bat phylofactor, out of sample
 set.seed(1)
-batout_pf = gpf(Data = bdata_out$data, tree = bdata_out$phy, 
-             frmla.phylo = PropRank~phylo, 
-             family = gaussian, algorithm = 'phylo', nfactors = 8)
+batout_pf = gpf(Data = bdata_out$data, 
+                tree = bdata_out$phy, 
+                frmla.phylo = PropRank~phylo, 
+                family = gaussian, 
+                algorithm = 'phylo', 
+                nfactors = 8)
 
 ## results
 batout_results = pfsum(batout_pf)
@@ -220,36 +233,44 @@ batout_results = pfsum(batout_pf)
 batout_data = batout_results$set
 batout_results = batout_results$results
 
-## mammal phylofactor, in sample
-set.seed(1)
-mamin_pf = gpf(Data = data_in$data, tree = data_in$phy, 
-             frmla.phylo = PropRank~phylo, 
-             family = gaussian, algorithm = 'phylo', nfactors = 5)
+# Mammal Phylofactor ####
 
-## results
-mamin_results = pfsum(mamin_pf)
+Mammal <- T
 
-## split data from results
-mamin_data = mamin_results$set
-mamin_results = mamin_results$results
-
-## mammal phylofactor, out of sample
-set.seed(1)
-mamout_pf = gpf(Data = data_out$data, tree = data_out$phy, 
-             frmla.phylo = PropRank~phylo, 
-             family = gaussian, algorithm = 'phylo', nfactors = 15)
-
-## results
-mamout_results = pfsum(mamout_pf)
-
-## split data from results
-mamout_data = mamout_results$set
-mamout_results = mamout_results$results
+if(Mammal){
+  
+  ## mammal phylofactor, in sample
+  set.seed(1)
+  mamin_pf = gpf(Data = data_in$data, tree = data_in$phy, 
+                 frmla.phylo = PropRank~phylo, 
+                 family = gaussian, algorithm = 'phylo', nfactors = 5)
+  
+  ## results
+  mamin_results = pfsum(mamin_pf)
+  
+  ## split data from results
+  mamin_data = mamin_results$set
+  mamin_results = mamin_results$results
+  
+  ## mammal phylofactor, out of sample
+  set.seed(1)
+  mamout_pf = gpf(Data = data_out$data, tree = data_out$phy, 
+                  frmla.phylo = PropRank~phylo, 
+                  family = gaussian, algorithm = 'phylo', nfactors = 15)
+  
+  ## results
+  mamout_results = pfsum(mamout_pf)
+  
+  ## split data from results
+  mamout_data = mamout_results$set
+  mamout_results = mamout_results$results
+  
+}
 
 ## visualize
 gg = ggtree(bdata_in$phy, 
-          size = 0.15, 
-          layout = 'circular')
+            size = 0.15, 
+            layout = 'circular')
 
 ## add clades
 for(i in 1:nrow(batin_results)){
@@ -258,7 +279,7 @@ for(i in 1:nrow(batin_results)){
     geom_hilight(node = batin_results$node[i], 
                  alpha = 0.5, 
                  fill = ifelse(batin_results$clade<
-                               batin_results$other, pcols[2], pcols[1])[i])+
+                                 batin_results$other, pcols[2], pcols[1])[i])+
     geom_cladelabel(node = batin_results$node[i], 
                     label = batin_results$factor[i], 
                     offset = 25, 
@@ -277,16 +298,16 @@ p1 = gg+
                aes(x = x, y = y, xend = xend, yend = yend, colour = Betacov), size = 0.5)+
   scale_colour_manual(values = c('grey70', 'black'))#+
 
-  # ## add clade
-  # geom_cladelabel(node = batin_results$node[1], 
-  #                 label = batin_results$factor[1], 
-  #                 offset = 25, 
-  #                 offset.text = 20)
+# ## add clade
+# geom_cladelabel(node = batin_results$node[1], 
+#                 label = batin_results$factor[1], 
+#                 offset = 25, 
+#                 offset.text = 20)
 
 ## visualize
 gg = ggtree(bdata_out$phy, 
-          size = 0.1, 
-          layout = 'circular')
+            size = 0.1, 
+            layout = 'circular')
 
 ## add clades
 for(i in 1:nrow(batout_results)){
@@ -295,7 +316,7 @@ for(i in 1:nrow(batout_results)){
     geom_hilight(node = batout_results$node[i], 
                  alpha = 0.5, 
                  fill = ifelse(batout_results$clade<
-                               batout_results$other, pcols[2], pcols[1])[i])+
+                                 batout_results$other, pcols[2], pcols[1])[i])+
     geom_cladelabel(node = batout_results$node[i], 
                     label = batout_results$factor[i], 
                     offset = 25, 
@@ -313,34 +334,34 @@ p2 = gg+
   geom_segment(data = segfun(bdata_out, 25), 
                aes(x = x, y = y, xend = xend, yend = yend, colour = Betacov), size = 0.15)+
   scale_colour_manual(values = c('grey70', 'black'))#+
-  
-  # ## add clades
-  # geom_cladelabel(node = batout_results$node[1], 
-  #                 label = 'Noctilionoidea', 
-  #                 offset = 25, 
-  #                 offset.text = 20, 
-  #                 hjust = 0.5)+
-  # geom_cladelabel(node = batout_results$node[2], 
-  #                 label = 'Emballonuridae', 
-  #                 offset = 25, 
-  #                 offset.text = 20, 
-  #                 hjust = 0)+
-  # geom_cladelabel(node = batout_results$node[5], 
-  #                 label = 'Rousettinae\nEpomophorinae\nCynopterinae', 
-  #                 offset = 25, 
-  #                 offset.text = 10, 
-  #                 hjust = 0, 
-  #                 extend = 10)+
-  # geom_cladelabel(node = batout_results$node[7], 
-  #                 label = 'Rhinolophidae', 
-  #                 offset = 25, 
-  #                 offset.text = 20, 
-  #                 hjust = 0.5)
+
+# ## add clades
+# geom_cladelabel(node = batout_results$node[1], 
+#                 label = 'Noctilionoidea', 
+#                 offset = 25, 
+#                 offset.text = 20, 
+#                 hjust = 0.5)+
+# geom_cladelabel(node = batout_results$node[2], 
+#                 label = 'Emballonuridae', 
+#                 offset = 25, 
+#                 offset.text = 20, 
+#                 hjust = 0)+
+# geom_cladelabel(node = batout_results$node[5], 
+#                 label = 'Rousettinae\nEpomophorinae\nCynopterinae', 
+#                 offset = 25, 
+#                 offset.text = 10, 
+#                 hjust = 0, 
+#                 extend = 10)+
+# geom_cladelabel(node = batout_results$node[7], 
+#                 label = 'Rhinolophidae', 
+#                 offset = 25, 
+#                 offset.text = 20, 
+#                 hjust = 0.5)
 
 ## visualize
 gg = ggtree(data_in$phy, 
-          size = 0.2, 
-          layout = 'circular')
+            size = 0.2, 
+            layout = 'circular')
 
 ## add clades
 for(i in 1:nrow(mamin_results)){
@@ -349,7 +370,7 @@ for(i in 1:nrow(mamin_results)){
     geom_hilight(node = mamin_results$node[i], 
                  alpha = 0.5, 
                  fill = ifelse(mamin_results$clade<
-                               mamin_results$other, pcols[2], pcols[1])[i])+
+                                 mamin_results$other, pcols[2], pcols[1])[i])+
     geom_cladelabel(node = mamin_results$node[i], 
                     label = mamin_results$factor[i], 
                     offset = 55, 
@@ -370,8 +391,8 @@ p3 = gg+
 
 ## visualize
 gg = ggtree(data_out$phy, 
-          size = 0.05, 
-          layout = 'circular')
+            size = 0.05, 
+            layout = 'circular')
 
 ## add clades
 for(i in 1:nrow(mamout_results)){
@@ -380,7 +401,7 @@ for(i in 1:nrow(mamout_results)){
     geom_hilight(node = mamout_results$node[i], 
                  alpha = 0.5, 
                  fill = ifelse(mamout_results$clade<
-                               mamout_results$other, pcols[2], pcols[1])[i])+
+                                 mamout_results$other, pcols[2], pcols[1])[i])+
     geom_cladelabel(node = mamout_results$node[i], 
                     label = mamout_results$factor[i], 
                     offset = 50, 
@@ -400,15 +421,13 @@ p4 = gg+
   scale_colour_manual(values = c('grey70', 'black'))
 
 ## write
-library(patchwork)
-library(ggpubr)
-setwd("~/Desktop/Fresnel/Figures")
-png("Phylofactor_pred ensemble.png", width = 7, height = 6.5, units = "in", res = 600)
+
+png("Figures/Phylofactor_pred ensemble.png", width = 7, height = 6.5, units = "in", res = 600)
 ggpubr::ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2, 
                   labels = c('bat rank, in-sample', 
-                           'bat rank, out-of-sample', 
-                           'mammal rank, in-sample', 
-                           'mammal rank, out-of-sample'), 
+                             'bat rank, out-of-sample', 
+                             'mammal rank, in-sample', 
+                             'mammal rank, out-of-sample'), 
                   hjust = c(-0.85, -0.65, -0.5, -0.4), 
                   vjust = c(1.75, 1.75, 1, 1), 
                   font.label = list(size = 11, face = 'plain'))
@@ -429,19 +448,19 @@ mamout_results$sample = 'out'
 
 ## combine
 results = rbind.data.frame(batin_results, 
-                         batout_results, 
-                         mamin_results, 
-                         mamout_results)
+                           batout_results, 
+                           mamin_results, 
+                           mamout_results)
 results = results[c('scale', 'sample', 'factor', 'taxa', 'tips', 'clade', 'other')]
 
 ## export
-setwd("~/Desktop/Fresnel/Output Files")
-write.csv(results, 'ensemble phylofactor results.csv')
 
-## phylofactor of Albery Rhinolophus sp sharing
-setwd("~/Desktop/albery-betacov/Intermediate")
-bat_ra = readRDS('AlberyPredictedBats_R_affinis.rds')
-bat_rm = readRDS('AlberyPredictedBats_R_malayanus.rds')
+write.csv(results, 'Output Files/ensemble phylofactor results.csv')
+
+## Albery Rhinolophus sp sharing Phylofactor ####
+
+bat_ra = readRDS('Github/Repos/albery-betacov/Intermediate/AlberyPredictedBats_R_affinis.rds')
+bat_rm = readRDS('Github/Repos/albery-betacov/Intermediate/AlberyPredictedBats_R_malayanus.rds')
 
 ## taxonomy
 bat_ra$taxonomy = with(bat_ra, paste(hOrder, hFamily, hGenus, Sp, sep = '; '))
@@ -476,8 +495,8 @@ bat_rm = bat_rm[which(bat_rm$data$hOrder == 'Chiroptera'), ]
 ## ra phylofactor bats
 set.seed(1)
 batra_pf = gpf(Data = bat_ra$data, tree = bat_ra$phy, 
-             frmla.phylo = Rank~phylo, 
-             family = gaussian, algorithm = 'phylo', nfactors = 11)
+               frmla.phylo = Rank~phylo, 
+               family = gaussian, algorithm = 'phylo', nfactors = 11)
 
 ## results
 batra_results = pfsum(batra_pf)
@@ -489,8 +508,8 @@ batra_results = batra_results$results
 ## rm phylofactor
 set.seed(1)
 batrm_pf = gpf(Data = bat_rm$data, tree = bat_rm$phy, 
-             frmla.phylo = Rank~phylo, 
-             family = gaussian, algorithm = 'phylo', nfactors = 10)
+               frmla.phylo = Rank~phylo, 
+               family = gaussian, algorithm = 'phylo', nfactors = 10)
 
 ## results
 batrm_results = pfsum(batrm_pf)
@@ -502,8 +521,8 @@ batrm_results = batrm_results$results
 ## mammal ra pf
 set.seed(1)
 mamra_pf = gpf(Data = mam_ra$data, tree = mam_ra$phy, 
-             frmla.phylo = Rank~phylo, 
-             family = gaussian, algorithm = 'phylo', nfactors = 11)
+               frmla.phylo = Rank~phylo, 
+               family = gaussian, algorithm = 'phylo', nfactors = 11)
 
 ## results
 mamra_results = pfsum(mamra_pf)
@@ -515,8 +534,8 @@ mamra_results = mamra_results$results
 ## mammal rm pf
 set.seed(1)
 mamrm_pf = gpf(Data = mam_rm$data, tree = mam_rm$phy, 
-             frmla.phylo = Rank~phylo, 
-             family = gaussian, algorithm = 'phylo', nfactors = 11)
+               frmla.phylo = Rank~phylo, 
+               family = gaussian, algorithm = 'phylo', nfactors = 11)
 
 ## results
 mamrm_results = pfsum(mamrm_pf)
@@ -527,8 +546,8 @@ mamrm_results = mamrm_results$results
 
 ## visualize
 gg = ggtree(bat_ra$phy, 
-          size = 0.1, 
-          layout = 'circular')
+            size = 0.1, 
+            layout = 'circular')
 
 ## add clades
 for(i in 1:nrow(batra_results[-which(batra_results$tips == 1), ])){
@@ -537,7 +556,7 @@ for(i in 1:nrow(batra_results[-which(batra_results$tips == 1), ])){
     geom_hilight(node = batra_results[-which(batra_results$tips == 1), ]$node[i], 
                  alpha = 0.5, 
                  fill = ifelse(batra_results[-which(batra_results$tips == 1), ]$clade<
-                               batra_results[-which(batra_results$tips == 1), ]$other, pcols[2], pcols[1])[i])+
+                                 batra_results[-which(batra_results$tips == 1), ]$other, pcols[2], pcols[1])[i])+
     geom_cladelabel(node = batra_results[-which(batra_results$tips == 1), ]$node[i], 
                     label = batra_results[-which(batra_results$tips == 1), ]$factor[i], 
                     offset = 25, 
@@ -553,8 +572,8 @@ p1 = gg+
 
 ## visualize rm
 gg = ggtree(bat_rm$phy, 
-          size = 0.1, 
-          layout = 'circular')
+            size = 0.1, 
+            layout = 'circular')
 
 ## add clades
 for(i in 1:nrow(batrm_results[-which(batrm_results$tips == 1), ])){
@@ -563,7 +582,7 @@ for(i in 1:nrow(batrm_results[-which(batrm_results$tips == 1), ])){
     geom_hilight(node = batrm_results[-which(batrm_results$tips == 1), ]$node[i], 
                  alpha = 0.5, 
                  fill = ifelse(batrm_results[-which(batrm_results$tips == 1), ]$clade<
-                               batrm_results[-which(batrm_results$tips == 1), ]$other, pcols[2], pcols[1])[i])+
+                                 batrm_results[-which(batrm_results$tips == 1), ]$other, pcols[2], pcols[1])[i])+
     geom_cladelabel(node = batrm_results[-which(batrm_results$tips == 1), ]$node[i], 
                     label = batrm_results[-which(batrm_results$tips == 1), ]$factor[i], 
                     offset = 25, 
@@ -579,8 +598,8 @@ p2 = gg+
 
 ## mammal ra
 gg = ggtree(mam_ra$phy, 
-          size = 0.1, 
-          layout = 'circular')
+            size = 0.1, 
+            layout = 'circular')
 
 ## add clades
 for(i in 1:nrow(mamra_results[-which(mamra_results$tips == 1), ])){
@@ -589,7 +608,7 @@ for(i in 1:nrow(mamra_results[-which(mamra_results$tips == 1), ])){
     geom_hilight(node = mamra_results$node[i], 
                  alpha = 0.5, 
                  fill = ifelse(mamra_results$clade<
-                               mamra_results$other, pcols[2], pcols[1])[i])+
+                                 mamra_results$other, pcols[2], pcols[1])[i])+
     geom_cladelabel(node = mamra_results$node[i], 
                     label = mamra_results$factor[i], 
                     offset = 25, 
@@ -605,8 +624,8 @@ p3 = gg+
 
 ## mammal rm
 gg = ggtree(mam_rm$phy, 
-          size = 0.1, 
-          layout = 'circular')
+            size = 0.1, 
+            layout = 'circular')
 
 ## add clades
 for(i in 1:nrow(mamrm_results[-which(mamrm_results$tips == 1), ])){
@@ -615,7 +634,7 @@ for(i in 1:nrow(mamrm_results[-which(mamrm_results$tips == 1), ])){
     geom_hilight(node = mamrm_results$node[i], 
                  alpha = 0.5, 
                  fill = ifelse(mamrm_results$clade<
-                               mamrm_results$other, pcols[2], pcols[1])[i])+
+                                 mamrm_results$other, pcols[2], pcols[1])[i])+
     geom_cladelabel(node = mamrm_results$node[i], 
                     label = mamrm_results$factor[i], 
                     offset = 25, 
@@ -630,13 +649,13 @@ p4 = gg+
                aes(x = x, y = y, xend = xend, yend = yend), size = 0.025)
 
 ## write
-setwd("~/Desktop/Fresnel/Figures")
-png("Phylofactor_pred bat sharing.png", width = 7, height = 6.5, units = "in", res = 600)
+
+png("Figures/Phylofactor_pred bat sharing.png", width = 7, height = 6.5, units = "in", res = 600)
 ggpubr::ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2, 
                   labels = c('bat rank, R. affinis', 
-                           'bat rank, R. malayanus', 
-                           'mammal rank, R. affinis', 
-                           'mammal rank, R. malayanus'), 
+                             'bat rank, R. malayanus', 
+                             'mammal rank, R. affinis', 
+                             'mammal rank, R. malayanus'), 
                   hjust = c(-0.85, -0.65, -0.5, -0.4), 
                   vjust = c(1.75, 1.75, 1, 1), 
                   font.label = list(size = 11, face = 'plain'))
@@ -657,11 +676,12 @@ mamrm_results$share = 'R. malayanus'
 
 ## combine
 results = rbind.data.frame(batra_results, 
-                         batrm_results, 
-                         mamra_results, 
-                         mamrm_results)
+                           batrm_results, 
+                           mamra_results, 
+                           mamrm_results)
+
 results = results[c('scale', 'share', 'factor', 'taxa', 'tips', 'clade', 'other')]
 
 ## export
-setwd("~/Desktop/Fresnel/Output Files")
-write.csv(results, 'bat sharing phylofactor results.csv')
+
+write.csv(results, 'Output Files/bat sharing phylofactor results.csv')

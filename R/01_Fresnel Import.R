@@ -2,11 +2,11 @@
 # Importing predictions and creating ranked predictions ####
 
 library(tidyverse); library(fs); library(magrittr); library(ggregplot)
-library(conflicted)
+library(conflicted); library(dplyr)
 
 conflict_prefer("map", "purrr")
 
-c("select", "filter", "intersect") %>%
+c("select", "filter", "intersect", "summarise", "mutate", "rename", "arrange") %>%
   map(~conflict_prefer(.x, "dplyr"))
 
 rm(list = ls())
@@ -66,8 +66,8 @@ poisot3 %>% rename(Sp = X1, P.Po3 = X2) -> poisot3
 
 # Specifically subset Tad ####
 
-assoc <- (read.delim("Data/virionette.txt", sep = ",") %>% 
-            filter(host_order == 'Chiroptera'))
+assoc <- Virionette %>% 
+  filter(host_order == 'Chiroptera')
 
 dallas1 %>% as_tibble %>% mutate(InAssocBats = (Sp %in% assoc$host_species)) %>%
   filter(InAssocBats==1) -> dallas1
@@ -126,7 +126,7 @@ Models %<>%
   arrange(Rank)
 
 Models %>% 
-  select(Sp, Betacov, starts_with("R."), 
+  select(Sp, Betacov, starts_with("R."), starts_with("P."), 
          Rank, PropRank) %>%
   as.data.frame -> 
   BatModels
@@ -238,7 +238,8 @@ Models %<>%
   arrange(PropRank)
 
 Models %>% 
-  select(Sp, Betacov, starts_with("R."), Rank, PropRank) %>%
+  select(Sp, Betacov, starts_with("R."), starts_with("P."), 
+         Rank, PropRank) %>%
   as.data.frame -> 
   NonBatModels
 
@@ -256,12 +257,37 @@ NonBatModels_OS %<>% select(Sp, Betacov, R.Alb, Rank, PropRank, InSample)
 NonBatModels_OS %<>% arrange(PropRank)
 NonBatModels_IS %<>% arrange(PropRank)
 
-
-# dir_create("Cleaned Files")
-
-#BatModels_OS %>% write.csv("Cleaned Files/BatModels_OS.csv", row.names = F)
-#BatModels_IS %>% write.csv("Cleaned Files/BatModels_IS.csv", row.names = F)
-#NonBatModels_OS %>% write.csv("Cleaned Files/NonBatModels_OS.csv", row.names = F)
-#NonBatModels_IS %>% write.csv("Cleaned Files/NonBatModels_IS.csv", row.names = F)
-
-
+if(0){
+  
+  # dir_create("Cleaned Files")
+  
+  #BatModels_OS %>% write.csv("Cleaned Files/BatModels_OS.csv", row.names = F)
+  #BatModels_IS %>% write.csv("Cleaned Files/BatModels_IS.csv", row.names = F)
+  #NonBatModels_OS %>% write.csv("Cleaned Files/NonBatModels_OS.csv", row.names = F)
+  #NonBatModels_IS %>% write.csv("Cleaned Files/NonBatModels_IS.csv", row.names = F)
+  
+  
+  
+  batin %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
+    left_join(
+      
+      batin2 %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)),
+      
+      by = c("Sp", "Key")
+    ) %>% 
+    
+    ggplot(aes(Value.x, Value.y)) + geom_point() + 
+    facet_wrap(~Key)
+  
+  batout %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
+    left_join(
+      
+      batout2 %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)),
+      
+      by = c("Sp", "Key")
+    ) %>% 
+    
+    ggplot(aes(Value.x, Value.y)) + geom_point() + 
+    facet_wrap(~Key)
+  
+}
