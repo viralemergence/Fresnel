@@ -533,8 +533,8 @@ p4=gg+
 ## write
 library(patchwork)
 library(ggpubr)
-setwd("~/Desktop/becker-betacov/predict ensemble")
-png("ensemble predictions.png",width=7,height=6.5,units="in",res=600)
+setwd("~/Desktop/Fresnel/Figures")
+png("Phylofactor_pred ensemble.png",width=7,height=6.5,units="in",res=600)
 ggpubr::ggarrange(p1,p2,p3,p4,ncol=2,nrow=2,
                   labels=c('bat rank, in-sample',
                            'bat rank, out-of-sample',
@@ -566,4 +566,5 @@ results=rbind.data.frame(batin_results,
 results=results[c('scale','sample','factor','taxa','tips','clade','other')]
 
 ## export
+setwd("~/Desktop/Fresnel/Output Files")
 write.csv(results,'ensemble phylofactor results.csv')
