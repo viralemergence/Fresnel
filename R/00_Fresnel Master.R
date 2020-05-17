@@ -44,62 +44,77 @@ names(SourceScripts) <- Repos
 
 # 0_Sourcing Models ####
 
-r <- 4
+r <- 5
 
 for(r in seq_along(Repos)){
   
-  print(Repos[r])
-  
-  setwd(paste0(here::here(),"/Github/Repos/", Repos[r]))
-  
-  if(SourceScripts %>% str_detect("[.]R$|[.]rmd$")){
+  if(!Repos[r] == "poisot-betacov"){
     
-    source(SourceScripts[[r]])
+    print(Repos[r])
     
-  }else{
+    setwd(paste0(here::here(),"/Github/Repos/", Repos[r]))
     
-    SourceScripts[[r]] %>% list.files(full.names = T, 
-                                      pattern = "[.]R$|[.]rmd$|[.]Rmd$") ->
+    if(SourceScripts[[r]] %>% str_detect("[.]R$|[.]rmd$")){
       
-      SubSources
-    
-    file_copy(
-      paste0(here::here(), "/Github/Repos/virionette/04_predictors/bat-supertree_clean.rds"),
-      paste0(SourceScripts[[r]], "/bat-supertree_clean.rds"),
-      overwrite = T
-    )
-    
-    file_copy(
-      paste0(here::here(), "/Github/Repos/virionette/03_interaction_data/virionette.csv"),
-      paste0(SourceScripts[[r]], "/virionette.csv"),
-      overwrite = T
-    )
-    
-    rr <- 1
-    
-    for(rr in seq_along(SubSources)){
+      source(SourceScripts[[r]])
       
-      print(SubSources[[rr]])
+    }else{
       
-      purl(SubSources[[rr]], 
-           output = paste0(SourceScripts[[r]]))#, "/", SubSources[[rr]]))
+      if(!("" %>% nchar)){
+        
+        list.files(full.names = T, 
+                   pattern = "[.]R$|[.]rmd$|[.]Rmd$") ->
+          
+          SubSources
+        
+      }else{
+        
+        SourceScripts[[r]] %>% list.files(full.names = T, 
+                                          pattern = "[.]R$|[.]rmd$|[.]Rmd$") ->
+          
+          SubSources
+        
+      }
       
-      purl(SubSources[[rr]], 
-           output = paste0(SourceScripts[[r]], "/", (SubSources[[rr]]) %>% 
-             str_split("/") %>% map_chr(2)) %>%
-             str_replace_all(c(".Rmd" = ".R",
-                               ".rmd" = ".R")))
+      rr <- 1
       
-      SubSources[[rr]] %>% 
-        str_replace_all(c(".Rmd" = ".R",
-                          ".rmd" = ".R")) %>%
-        source
-      
-      ksource(SubSources[[rr]])
-      
+      for(rr in seq_along(SubSources)){
+        
+        print(SubSources[[rr]])
+        
+        if(SubSources[[rr]] %>% str_detect("[.]R$|[.]rmd$")){
+          
+          ksource(SubSources[[rr]])
+          
+        }else{
+          
+          source(SubSources[[rr]])
+          
+        }
+        
+      }
     }
   }
 }
+
+# Saving some sourcing script ####
+
+purl(SubSources[[rr]], 
+     output = paste0(SourceScripts[[r]], "/", 
+                     (SubSources[[rr]]) %>% 
+                       str_split("/") %>% 
+                       map_chr(2)) %>%
+       str_replace_all(c(".Rmd" = ".R",
+                         ".rmd" = ".R")))
+
+#SubSources[[rr]] %>% 
+#  str_replace_all(c(".Rmd" = ".R",
+#                    ".rmd" = ".R")) %>%
+#  source#
+
+#}
+##}
+#}
 
 
 # 1_Uniting Predictions ####
