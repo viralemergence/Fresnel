@@ -136,3 +136,24 @@ segfun=function(set,len){
                    Betacov=factor(set$data$Betacov))
   return(preds)
 }
+
+## segfun2
+segfun2=function(set,len){
+  
+  ## set x max
+  plus=len
+  
+  ## make bat base
+  base=ggtree(set$phy,size=0.1,layout="fan")
+  base=base$data
+  
+  ## tips only
+  base=base[which(base$isTip==T),]
+  
+  ## make data frame
+  preds=data.frame(x=base$x,
+                   y=base$y,
+                   yend=base$y,
+                   xend=plotrix::rescale(set$data$Rank,c(unique(base$x)[1]+plus,unique(base$x)[1])))
+  return(preds)
+}

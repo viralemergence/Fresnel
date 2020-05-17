@@ -1,0 +1,24 @@
+"","scale","share","factor","taxa","tips","clade","other"
+"1","bats","R. affinis",1,"Rhinolophidae",64,39.96875,763.046255506608
+"2","bats","R. affinis",2,"Myotis_leibii",1,4100,711.950566426365
+"3","bats","R. affinis",3,"Haplonycteris",1,3156.5,712.922245108136
+"4","bats","R. affinis",4,"Pteropus_insularis",1,3156.5,712.922245108136
+"5","bats","R. affinis",5,"Megadermatidae, Nycteridae, Hipposideridae",91,556.71978021978,731.830306469921
+"6","bats","R. affinis",6,"Vespertilionidae",340,704.808823529412,721.153481012658
+"7","bats","R. affinis",7,"Sphaerias, Alionycteris, Otopteropus, Latidens, Penthetor, Thoopterus, Aethalops, Balionycteris, Chironax, Dyacopterus, Ptenochirus, Megaerops, Cynopterus",25,480.96,721.626187961985
+"8","bats","R. affinis",8,"Nyctimene_aello",1,2496.5,713.601956745623
+"9","bats","R. affinis",9,"Platalina",1,2496.5,713.601956745623
+"10","bats","R. affinis",10,"Chaerephon_chapini",1,2496.5,713.601956745623
+"11","bats","R. malayanus",1,"Rhinolophidae",64,41.6171875,656.530837004405
+"12","bats","R. malayanus",2,"Neopteryx",1,2399.5,614.205973223481
+"13","bats","R. malayanus",3,"Chaerephon_bregullae",1,2399.5,614.205973223481
+"14","bats","R. malayanus",4,"Bauerus",1,2399.5,614.205973223481
+"15","bats","R. malayanus",5,"Neoromicia_zuluensis",1,2399.5,614.205973223481
+"16","mammals","R. affinis",1,"Artiodactyla, Perissodactyla, Carnivora, Pholidota, Soricomorpha, Erinaceomorpha",836,2083.74282296651,2665.98114788437
+"17","mammals","R. affinis",2,"Tamiasciurus, Sciurus, Rheithrosciurus, Microsciurus, Syntheosciurus, Pteromys, Petaurista, Belomys, Biswamoyopterus, Trogopterus, Pteromyscus, Aeromys, Eupetaurus, Aeretes, Glaucomys, Eoglaucomys, Hylopetes, Petinomys, Petaurillus, Iomys, Ratufa, Callosciurus, Glyphotes, Lariscus, Menetes, Rhinosciurus, Funambulus, Tamiops, Dremomys, Exilisciurus, Hyosciurus, Prosciurillus, Rubrisciurus, Nannosciurus, Sundasciurus",139,1948.39568345324,2540.49254215305
+"18","mammals","R. affinis",3,"Scandentia",19,1416.36842105263,2521.4715980025
+"19","mammals","R. affinis",4,"Simias, Nasalis, Presbytis, Semnopithecus, Trachypithecus, Rhinopithecus, Pygathrix",42,1957.7380952381,2522.31405218485
+"20","mammals","R. affinis",5,"Elaphodus, Muntiacus",8,361.1875,2520.31617418351
+"21","mammals","R. affinis",6,"Mus_booduga, Mus_caroli, Mus_cervicolor, Mus_cookii, Mus_macedonicus, Mus_musculus, Mus_spicilegus, Mus_spretus, Mus_terricolor",9,1174.16666666667,2518.71141879278
+"22","mammals","R. affinis",7,"Hylobates, Symphalangus",8,1151.6875,2518.34914463453
+"23","mammals","R. malayanus",1,"Artiodactyla, Perissodactyla, Carnivora, Pholidota, Soricomorpha, Erinaceomorpha",836,2160.61303827751,2679.53246753247

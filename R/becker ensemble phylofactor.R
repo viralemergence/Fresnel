@@ -433,3 +433,231 @@ results=results[c('scale','sample','factor','taxa','tips','clade','other')]
 ## export
 setwd("~/Desktop/Fresnel/Output Files")
 write.csv(results,'ensemble phylofactor results.csv')
+
+## phylofactor of Albery Rhinolophus sp sharing
+setwd("~/Desktop/albery-betacov/Intermediate")
+bat_ra=readRDS('AlberyPredictedBats_R_affinis.rds')
+bat_rm=readRDS('AlberyPredictedBats_R_malayanus.rds')
+
+## taxonomy
+bat_ra$taxonomy=with(bat_ra,paste(hOrder,hFamily,hGenus,Sp,sep='; '))
+bat_rm$taxonomy=with(bat_rm,paste(hOrder,hFamily,hGenus,Sp,sep='; '))
+
+## Species
+bat_ra$Species=bat_ra$Sp
+bat_rm$Species=bat_rm$Sp
+
+## trim tree
+ra_tree=keep.tip(tree,bat_ra$Sp)
+rm_tree=keep.tip(tree,bat_rm$Sp)
+
+## merge into phylogeny order
+bat_ra=bat_ra[match(ra_tree$tip.label,bat_ra$Sp),]
+bat_rm=bat_rm[match(rm_tree$tip.label,bat_rm$Sp),]
+
+## caper objects
+bat_ra=comparative.data(phy=ra_tree,data=bat_ra,names.col=Sp,vcv=T,na.omit=F,warn.dropped=T)
+bat_rm=comparative.data(phy=rm_tree,data=bat_rm,names.col=Sp,vcv=T,na.omit=F,warn.dropped=T)
+
+## treenames
+bat_ra$data$treenames=rownames(bat_ra$data)
+bat_rm$data$treenames=rownames(bat_rm$data)
+
+## split into mammals and bats
+mam_ra=bat_ra[-which(bat_ra$data$hOrder=='Chiroptera'),]
+mam_rm=bat_rm[-which(bat_rm$data$hOrder=='Chiroptera'),]
+bat_ra=bat_ra[which(bat_ra$data$hOrder=='Chiroptera'),]
+bat_rm=bat_rm[which(bat_rm$data$hOrder=='Chiroptera'),]
+
+## ra phylofactor bats
+set.seed(1)
+batra_pf=gpf(Data=bat_ra$data,tree=bat_ra$phy,
+             frmla.phylo=Rank~phylo,
+             family=gaussian,algorithm='phylo',nfactors=11)
+
+## results
+batra_results=pfsum(batra_pf)
+
+## split data from results
+batra_data=batra_results$set
+batra_results=batra_results$results
+
+## rm phylofactor
+set.seed(1)
+batrm_pf=gpf(Data=bat_rm$data,tree=bat_rm$phy,
+             frmla.phylo=Rank~phylo,
+             family=gaussian,algorithm='phylo',nfactors=10)
+
+## results
+batrm_results=pfsum(batrm_pf)
+
+## split data from results
+batrm_data=batrm_results$set
+batrm_results=batrm_results$results
+
+## mammal ra pf
+set.seed(1)
+mamra_pf=gpf(Data=mam_ra$data,tree=mam_ra$phy,
+             frmla.phylo=Rank~phylo,
+             family=gaussian,algorithm='phylo',nfactors=11)
+
+## results
+mamra_results=pfsum(mamra_pf)
+
+## split data from results
+mamra_data=mamra_results$set
+mamra_results=mamra_results$results
+
+## mammal rm pf
+set.seed(1)
+mamrm_pf=gpf(Data=mam_rm$data,tree=mam_rm$phy,
+             frmla.phylo=Rank~phylo,
+             family=gaussian,algorithm='phylo',nfactors=11)
+
+## results
+mamrm_results=pfsum(mamrm_pf)
+
+## split data from results
+mamrm_data=mamrm_results$set
+mamrm_results=mamrm_results$results
+
+## visualize
+gg=ggtree(bat_ra$phy,
+          size=0.1,
+          layout='circular')
+
+## add clades
+for(i in 1:nrow(batra_results[-which(batra_results$tips==1),])){
+  
+  gg=gg+
+    geom_hilight(node=batra_results[-which(batra_results$tips==1),]$node[i],
+                 alpha=0.5,
+                 fill=ifelse(batra_results[-which(batra_results$tips==1),]$clade<
+                               batra_results[-which(batra_results$tips==1),]$other,pcols[2],pcols[1])[i])+
+    geom_cladelabel(node=batra_results[-which(batra_results$tips==1),]$node[i],
+                    label=batra_results[-which(batra_results$tips==1),]$factor[i],
+                    offset=25,
+                    offset.text=20)
+}
+
+## visualize
+p1=gg+
+  
+  ## add predictions
+  geom_segment(data=segfun2(bat_ra,15),
+               aes(x=x,y=y,xend=xend,yend=yend),size=0.05)
+
+## visualize rm
+gg=ggtree(bat_rm$phy,
+          size=0.1,
+          layout='circular')
+
+## add clades
+for(i in 1:nrow(batrm_results[-which(batrm_results$tips==1),])){
+  
+  gg=gg+
+    geom_hilight(node=batrm_results[-which(batrm_results$tips==1),]$node[i],
+                 alpha=0.5,
+                 fill=ifelse(batrm_results[-which(batrm_results$tips==1),]$clade<
+                               batrm_results[-which(batrm_results$tips==1),]$other,pcols[2],pcols[1])[i])+
+    geom_cladelabel(node=batrm_results[-which(batrm_results$tips==1),]$node[i],
+                    label=batrm_results[-which(batrm_results$tips==1),]$factor[i],
+                    offset=25,
+                    offset.text=20)
+}
+
+## visualize
+p2=gg+
+  
+  ## add predictions
+  geom_segment(data=segfun2(bat_rm,15),
+               aes(x=x,y=y,xend=xend,yend=yend),size=0.05)
+
+## mammal ra
+gg=ggtree(mam_ra$phy,
+          size=0.1,
+          layout='circular')
+
+## add clades
+for(i in 1:nrow(mamra_results[-which(mamra_results$tips==1),])){
+  
+  gg=gg+
+    geom_hilight(node=mamra_results$node[i],
+                 alpha=0.5,
+                 fill=ifelse(mamra_results$clade<
+                               mamra_results$other,pcols[2],pcols[1])[i])+
+    geom_cladelabel(node=mamra_results$node[i],
+                    label=mamra_results$factor[i],
+                    offset=25,
+                    offset.text=20)
+}
+
+## visualize
+p3=gg+
+  
+  ## add predictions
+  geom_segment(data=segfun2(mam_ra,15),
+               aes(x=x,y=y,xend=xend,yend=yend),size=0.025)
+
+## mammal rm
+gg=ggtree(mam_rm$phy,
+          size=0.1,
+          layout='circular')
+
+## add clades
+for(i in 1:nrow(mamrm_results[-which(mamrm_results$tips==1),])){
+  
+  gg=gg+
+    geom_hilight(node=mamrm_results$node[i],
+                 alpha=0.5,
+                 fill=ifelse(mamrm_results$clade<
+                               mamrm_results$other,pcols[2],pcols[1])[i])+
+    geom_cladelabel(node=mamrm_results$node[i],
+                    label=mamrm_results$factor[i],
+                    offset=25,
+                    offset.text=20)
+}
+
+## visualize
+p4=gg+
+  
+  ## add predictions
+  geom_segment(data=segfun2(mam_rm,15),
+               aes(x=x,y=y,xend=xend,yend=yend),size=0.025)
+
+## write
+setwd("~/Desktop/Fresnel/Figures")
+png("Phylofactor_pred bat sharing.png",width=7,height=6.5,units="in",res=600)
+ggpubr::ggarrange(p1,p2,p3,p4,ncol=2,nrow=2,
+                  labels=c('bat rank, R. affinis',
+                           'bat rank, R. malayanus',
+                           'mammal rank, R. affinis',
+                           'mammal rank, R. malayanus'),
+                  hjust=c(-0.85,-0.65,-0.5,-0.4),
+                  vjust=c(1.75,1.75,1,1),
+                  font.label=list(size=11,face='plain'))
+#p1+p2+p3+p4+plot_layout(ncol=2)
+dev.off()
+
+## assign scale
+batra_results$scale='bats'
+batrm_results$scale='bats'
+mamra_results$scale='mammals'
+mamrm_results$scale='mammals'
+
+## species
+batra_results$share='R. affinis'
+batrm_results$share='R. malayanus'
+mamra_results$share='R. affinis'
+mamrm_results$share='R. malayanus'
+
+## combine
+results=rbind.data.frame(batra_results,
+                         batrm_results,
+                         mamra_results,
+                         mamrm_results)
+results=results[c('scale','share','factor','taxa','tips','clade','other')]
+
+## export
+setwd("~/Desktop/Fresnel/Output Files")
+write.csv(results,'bat sharing phylofactor results.csv')
