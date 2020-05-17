@@ -239,11 +239,12 @@ NonBatModels_OS %<>% select(Sp, Betacov, R.Alb, Rank, PropRank, InSample)
 NonBatModels_OS %<>% arrange(PropRank)
 NonBatModels_IS %<>% arrange(PropRank)
 
-dir_create("Cleaned Files")
 
-BatModels_OS %>% write.csv("Cleaned Files/BatModels_OS.csv", row.names = F)
-BatModels_IS %>% write.csv("Cleaned Files/BatModels_IS.csv", row.names = F)
-NonBatModels_OS %>% write.csv("Cleaned Files/NonBatModels_OS.csv", row.names = F)
-NonBatModels_IS %>% write.csv("Cleaned Files/NonBatModels_IS.csv", row.names = F)
+# dir_create("Cleaned Files")
+
+#BatModels_OS %>% write.csv("Cleaned Files/BatModels_OS.csv", row.names = F)
+#BatModels_IS %>% write.csv("Cleaned Files/BatModels_IS.csv", row.names = F)
+#NonBatModels_OS %>% write.csv("Cleaned Files/NonBatModels_OS.csv", row.names = F)
+#NonBatModels_IS %>% write.csv("Cleaned Files/NonBatModels_IS.csv", row.names = F)
 
 

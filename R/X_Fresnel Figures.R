@@ -9,6 +9,12 @@ AlberPalettes <- c("YlGnBu","Reds","BuPu", "PiYG")
 
 AlberColours <- sapply(AlberPalettes, function(a) RColorBrewer::brewer.pal(5, a)[4])
 
+AlberColours[length(AlberColours)+1:2] <- 
+  
+  RColorBrewer::brewer.pal(11, AlberPalettes[[4]])[c(2,10)]
+
+AlberColours <- c(AlberColours, Pink = "#FD6396", Blue = "#3C78D8")
+
 Relabel <- c(
   
   "Network-based.1", 
@@ -35,7 +41,8 @@ Relabel <- c(
 
 names(Relabel) <- c("R.Po2", "R.Po3",
                     "R.Alb", "R.Far1",
-                    "R.Gut1", "R.Car3", "R.Dal1")
+                    "R.Gut1", "R.Car3", 
+                    "R.Dal1")
 
 Relabel[intersect(names(Relabel), names(BatModels_IS))] ->
   
@@ -112,7 +119,10 @@ BatModels_IS %>%
     theme(axis.text.y = element_text(angle = 45, hjust = 1)) +
     
     # scale_fill_continuous_diverging(palette = "Tropic", limits = c(-1, 1)) +
-    scale_fill_gradient2(low = AlberColours[[1]], mid = "white", high = AlberColours[[3]],
+    scale_fill_gradient2(low = AlberColours[[1]], 
+                         mid = "white", 
+                         #high = AlberColours[[5]],
+                         high = AlberColours[["Pink"]],
                          midpoint = 0, limits = c(-1, 1)) +
     
     labs(x = NULL, y = NULL, fill = "Correlation") +
@@ -191,14 +201,17 @@ BatModels_IS %>%
     theme(axis.text.y = element_text(angle = 45, hjust = 1)) +
     
     # scale_fill_continuous_diverging(palette = "Tropic", limits = c(-1, 1)) +
-    scale_fill_gradient2(low = AlberColours[[1]], mid = "white", high = AlberColours[[3]],
+    scale_fill_gradient2(low = AlberColours[[1]], 
+                         mid = "white", 
+                         # high = AlberColours[[5]],
+                         high = AlberColours[["Pink"]],
                          midpoint = 0, limits = c(-1, 1)) +
     
     labs(x = NULL, y = NULL, fill = "Correlation") +
     
     NULL -> TilePlot_OS
   
-  TilePlot_OS
+  # TilePlot_OS
   
   # Bump plot ####
   
@@ -270,7 +283,7 @@ BatModels_IS %>%
   
   # plot_layout(heights = c(1, 1)) +
   plot_annotation(tag_levels = "A") +
-  ggsave("In_Out_ModelAgreement.jpeg", units = "mm", height = 250, width = 200)
+  ggsave("Figures/In_Out_ModelAgreement.jpeg", units = "mm", height = 250, width = 200)
 
 
 # Auxiliary plots ####
