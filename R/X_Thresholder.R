@@ -21,6 +21,7 @@ BatModels %>% mutate(!!thresh[i] := (BatModels[,names[i]] > t)) -> BatModels
 }
 
 for(i in 1:length(names)) {
+  b <- BatModels[BatModels$Betacov==0,]
   print(thresh[i])
-  print(table(BatModels[BatModels$Betacov==0, thresh[i]]))
+  print(table(b[,thresh[i]]))
 }
