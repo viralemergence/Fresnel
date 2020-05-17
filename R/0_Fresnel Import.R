@@ -2,12 +2,20 @@
 # Importing predictions and creating ranked predictions ####
 
 library(tidyverse); library(fs); library(magrittr); library(ggregplot)
+library(conflicted)
+
+conflict_prefer("map", "purrr")
+
+c("select", "filter", "intersect") %>%
+  map(~conflict_prefer(.x, "dplyr"))
 
 rm(list = ls())
 
 here::here() %>% setwd()
 
-Virionette <- read.delim("Data/virionette.txt", sep = ",")
+Virionette <- 
+  read_csv(paste0(here::here(),
+                  "/GitHub/Repos/virionette/03_interaction_data/virionette.csv"))
 
 BatsVsOther <- read.csv("Data/BatsVsOther.csv") %>%
   rename_all(CamelConvert) %>% 
@@ -24,7 +32,7 @@ Repos <- c(
 
 # ~~~~~ Bats ####
 
-GithubDir <- "Github/BatCSVs/"
+GithubDir <- "Github/CSVs/"
 
 albery <- read_csv(paste0(GithubDir, "AlberyBats.csv"))
 carlson1 <- read_csv(paste0(GithubDir, "CarlsonBartCitations.csv"))
@@ -90,9 +98,13 @@ ModelList %>%
 
 # Add in betacov true/false
 
-read_csv(paste0(GithubDir, "CarlsonDartCitations.csv")) %>% 
-  select(host_species, betacov) %>%
-  rename(Sp = host_species, Betacov = betacov) %>% mutate(Sp = gsub("_"," ",Sp)) -> 
+Virionette %>% 
+  
+  group_by(host_species) %>% 
+  summarise(Betacov = as.numeric(any(virus_genus == "Betacoronavirus"))) %>%
+  
+  select(Sp = host_species, Betacov) %>%
+  mutate_at("Sp", ~.x %>% str_trim %>% str_replace_all("_"," ")) -> 
   truth
 
 Models %>% 
@@ -141,7 +153,7 @@ BatModels_IS %<>% arrange(PropRank)
 
 # ~~~~~ NonBats ####
 
-GithubDir <- "Github/MammalCSVs/"
+GithubDir <- "Github/CSVs/"
 
 albery <- read_csv(paste0(GithubDir, "AlberyNonBats.csv"))
 dallas1 <- read_csv(paste0(GithubDir, "DallasMammalsCitations.csv"))
@@ -189,9 +201,13 @@ ModelList %>%
 
 # Add in betacov true/false
 
-read_csv(paste0(GithubDir, "DallasMammalsUncorrected.csv"))[,-1] %>% 
-  select(host, presence) %>%
-  rename(Sp = host, Betacov = presence) %>% mutate(Sp = gsub("_"," ",Sp)) -> 
+Virionette %>% 
+  
+  group_by(host_species) %>% 
+  summarise(Betacov = as.numeric(any(virus_genus == "Betacoronavirus"))) %>%
+  
+  select(Sp = host_species, Betacov) %>%
+  mutate_at("Sp", ~.x %>% str_trim %>% str_replace_all("_"," ")) -> 
   truth
 
 Models %>% 

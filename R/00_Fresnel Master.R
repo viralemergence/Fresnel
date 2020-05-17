@@ -3,7 +3,7 @@
 
 rm(list = ls())
 
-library(tidyverse); library(fs)
+library(tidyverse); library(fs); library(glue)
 
 here::here() %>% setwd()
 
@@ -20,13 +20,16 @@ ksource <- function(x, ...) {
 }
 
 Repos <- c(
+  
   "albery-betacov",
   # "becker-betacov",
   "carlson-betacov",
   "dallas-betacov",
   "farrell-betacov",
   "guth-betacov",
-  "poisot-betacov")
+  "poisot-betacov"
+  
+)
 
 SourceScripts <- list(
   
@@ -44,7 +47,7 @@ names(SourceScripts) <- Repos
 
 # 0_Sourcing Models ####
 
-r <- 5
+r <- 1
 
 for(r in r:length(Repos)){
   
@@ -107,25 +110,66 @@ for(r in r:length(Repos)){
 
 # Saving some sourcing script ####
 
-purl(SubSources[[rr]], 
-     output = paste0(SourceScripts[[r]], "/", 
-                     (SubSources[[rr]]) %>% 
-                       str_split("/") %>% 
-                       map_chr(2)) %>%
-       str_replace_all(c(".Rmd" = ".R",
-                         ".rmd" = ".R")))
+#purl(SubSources[[rr]], 
+#     output = paste0(SourceScripts[[r]], "/", 
+#                     (SubSources[[rr]]) %>% 
+#                       str_split("/") %>% 
+#                       map_chr(2)) %>%
+#       str_replace_all(c(".Rmd" = ".R",
+#                         ".rmd" = ".R")))
 
-#SubSources[[rr]] %>% 
-#  str_replace_all(c(".Rmd" = ".R",
-#                    ".rmd" = ".R")) %>%
-#  source#
-
-#}
-##}
-#}
 
 # 0b_Copying across csvs ####
 
+OutputCSVs <- list(
+  
+  glue("Output Files/{c('AlberyBats', 'AlberyNonBats')}.csv"),
+  
+  # ,
+  
+  c(glue("Carlson{c('Dart', 'Dart', 'Bart', 'Bart')}{c('Citations', 'Uncorrected', 'Citations', 'Uncorrected')}.csv")),
+  
+  c(glue("Dallas{c('Mammals', 'Mammals', 'Bats', 'Bats')}{c('Citations', 'Uncorrected', 'Citations', 'Uncorrected')}.csv")),
+  
+  c(glue("results/Farrell{c('Mammals', 'Mammals', 'Bat', 'Bat')}{c('Phylogeny', 'Full', 'Phylogeny', 'Full')}.csv")),
+  
+  c(glue("Guth{c('Citations', 'Uncorrected')}.csv")),
+  
+  c(glue("predictions/Poisot{c(rep('Knn', 4), rep('Lf', 2))}{c(1,1,2,2,'','')}{rep(c('Bat','Mammal'), 3)}.csv"))
+  
+)
+
+names(OutputCSVs) <- Repos
+
+i <- 1
+j <- 1
+
+for(i in i:length(Repos)){
+  
+  j <- 1
+  
+  for(j in j:length(OutputCSVs[[Repos[[i]]]])){
+    
+    print(j)
+    
+    file_copy(
+      
+      path = paste0("Github/Repos/", Repos[i], "/", 
+             OutputCSVs[[Repos[i]]][[j]]),
+      
+      new_path = 
+        paste0("Github/", "CSVs", "/", 
+               OutputCSVs[[Repos[i]]][[j]] %>%
+                 str_split("/") %>% map_chr(last)
+             
+      ),
+      
+      overwrite = T
+    )
+    
+    
+  }
+}
 
 # 1_Uniting Predictions ####
 
