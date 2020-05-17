@@ -44,13 +44,13 @@ names(SourceScripts) <- Repos
 
 # 0_Sourcing Models ####
 
-r <- 5
+r <- 1
 
-for(r in seq_along(Repos)){
+for(r in r:length(Repos)){
+  
+  print(Repos[r])
   
   if(!Repos[r] == "poisot-betacov"){
-    
-    print(Repos[r])
     
     setwd(paste0(here::here(),"/Github/Repos/", Repos[r]))
     
@@ -60,7 +60,7 @@ for(r in seq_along(Repos)){
       
     }else{
       
-      if(!("" %>% nchar)){
+      if(!(SourceScripts[[r]] %>% nchar)){
         
         list.files(full.names = T, 
                    pattern = "[.]R$|[.]rmd$|[.]Rmd$") ->
@@ -80,15 +80,23 @@ for(r in seq_along(Repos)){
       
       for(rr in seq_along(SubSources)){
         
+        #invisible(lapply(paste0('package:', 
+        #                        names(sessionInfo()$otherPkgs)), 
+        #                 detach, 
+        #                 character.only = TRUE, 
+        #                 unload = TRUE))
+        
+        detach(package:dplyr)
+        
         print(SubSources[[rr]])
         
-        if(SubSources[[rr]] %>% str_detect("[.]R$|[.]rmd$")){
+        if(stringr::str_detect(SubSources[[rr]], "[.]R$")){
           
-          ksource(SubSources[[rr]])
+          source(SubSources[[rr]])
           
         }else{
           
-          source(SubSources[[rr]])
+          ksource(SubSources[[rr]])
           
         }
         
@@ -115,6 +123,8 @@ purl(SubSources[[rr]],
 #}
 ##}
 #}
+
+# 0b_Copying across csvs ####
 
 
 # 1_Uniting Predictions ####
