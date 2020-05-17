@@ -6,7 +6,9 @@
 
 ## source helper files for gpf
 
-source('R/becker_phylofactor helper.R')
+source('R/2a_Phylofactor helper.R')
+
+detach(package:dplyr)
 
 ## packages
 library(ape)

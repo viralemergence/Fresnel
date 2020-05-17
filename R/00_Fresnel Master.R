@@ -173,16 +173,19 @@ for(i in i:length(Repos)){
 
 # 1_Uniting Predictions ####
 
+source("R/01_Fresnel Import.R")
 
+# 2_Phylofactor ####
 
+source("R/02_Phylofactor.R")
 
-# 2_Making Bat Figures ####
+# 3a_Making Bat Figures ####
 
+source("R/03a_Bat Figures.R")
 
+# 3b_Making Mammal Figures ####
 
-# 3_Making Mammal Figures ####
-
-
+source("R/03b_Mammal Figures.R")
 
 # 4_Making Maps ####
 
