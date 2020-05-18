@@ -173,7 +173,7 @@ NonBatModels_IS %>%
 (TilePlot_IS/
   
   (BumpPlot_IS + 
-     theme(legend.position = "bottom") +
+     theme(legend.position = "right") +
      guides(colour = guide_legend(direction = "vertical",
                                   hjust = 0.5,
                                   ncol = 1,
@@ -181,7 +181,7 @@ NonBatModels_IS %>%
   
   # plot_layout(heights = c(1, 1)) +
   plot_annotation(tag_levels = "A") +
-  ggsave("Figures/MammalIn_Out_ModelAgreement.jpeg", units = "mm", height = 250, width = 125)
+  ggsave("Figures/MammalIn_Out_ModelAgreement.jpeg", units = "mm", height = 200, width = 175)
 
 
 # Auxiliary plots ####

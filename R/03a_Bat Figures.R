@@ -30,8 +30,8 @@ Relabel[intersect(names(Relabel), names(BatModels_IS))] ->
 # Figure 1: Observed v Predicted panels ####
 
 BatModels_IS %>% 
-  gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
-  #filter(str_detect(Key, "Alb|Car|Dal|Gut")) %>%
+  #gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
+  gather("Key", "Value", starts_with("R.")) %>%
   mutate_at("Key", ~.x %>% recode(!!!Relabel)) %>%
   ggplot(aes(Value, Betacov)) + 
   geom_point(alpha = 0.3, colour = AlberColours[[3]]) + 
