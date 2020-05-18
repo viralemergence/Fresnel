@@ -9,58 +9,38 @@ RNames %>% str_replace_all("^R.", "P.") -> PNames
 
 thresh <- c('T.Alb','T.Car','T.Dal','T.Far','T.Gut','T.Po1','T.Po2')
 
-i <- 1
+negatory <- function(x) {1-x}
 
-for (i in 1:length(RNames)) {
-  
-  print(RNames[i])
-  
-  BatModels %>% select(Betacov, RNames[i]) %>% mutate(n = 1:nrow(BatModels)) %>%
-    mutate(!!RNames[i] := (1-BatModels[,RNames[i]])) %>%
-    select(n, Betacov, RNames[i]) -> 
-    
-    training
-  
-  t <- optimal.thresholds(data.frame(training),
-                          threshold = 10001,
-                          opt.methods = 10,
-                          req.sens = 0.9,
-                          na.rm = TRUE)[1,2]
-  
-  BatModels %>% mutate(!!thresh[i] := (BatModels[,RNames[i]] > t)) -> BatModels
-  
-  BatModels %>% select(Betacov, PNames[i]) %>% mutate(n = 1:nrow(BatModels)) %>%
-    #mutate(!!PNames[i] := (1-BatModels[,PNames[i]])) %>%
-    select(n, Betacov, PNames[i]) -> 
-    
-    training
-  
-  t <- optimal.thresholds(data.frame(training),
-                          threshold = 10001,
-                          opt.methods = 10,
-                          req.sens = 0.9,
-                          na.rm = TRUE)[1,2]
-  
-  BatModels %>% mutate(!!(paste0(thresh[i], ".P")) := (BatModels[,PNames[i]] > t)) -> 
-    
-    BatModels
-  
-}
+BatModels %>% mutate(n = 1:nrow(BatModels)) %>%
+  mutate_at(RNames, negatory) %>%
+  mutate_at('PropRank', negatory) -> BatModels2
 
-BatModels %>% 
-  filter(!Betacov) %>%
-  summarise_at(vars(starts_with("T.")), 
-               ~paste0(table(.x), collapse = "; ")) %>% t
+tvalues <- optimal.thresholds(data.frame(BatModels2[,c('n','Betacov',RNames,PNames,'PropRank')]),
+                              threshold = 10001,
+                              opt.methods = 10,
+                              req.sens = 0.9,
+                              na.rm = TRUE)
 
+for (name in RNames) {BatModels2[,name] <- (BatModels2[,name] > tvalues[1,name])}
+for (name in PNames) {BatModels2[,name] <- (BatModels2[,name] > tvalues[1,name])}
 
-for(i in 1:length(names)) {
-  
-  b <- BatModels[BatModels$Betacov==0,]
-  
-  print(thresh[i])
-  
-  print(table(b[,thresh[i]]))
-  
-  print(table(b[, paste0(thresh[i], ".P")]))
-  
-}
+colSums(BatModels2[BatModels2$Betacov==0,RNames], na.rm = TRUE)
+colSums(BatModels2[BatModels2$Betacov==0,PNames], na.rm = TRUE)
+
+# TOTAL RANK
+
+BatModels2[,'PropRank'] <- (BatModels2[,'PropRank'] > tvalues[1,'PropRank'])
+
+table(BatModels2[BatModels2$Betacov==0,'PropRank'])
+
+# Clean it up to write out
+
+BatModels2 %>% select(Sp, Betacov, P.Alb, P.Car3, P.Dal1, P.Far1, P.Gut1, P.Po2, P.Po3, PropRank) %>%
+  rename(Trait.3 = P.Alb,
+         Trait.2 = P.Car3,
+         Network.3 = P.Dal1,
+         Network.4 = P.Far1,
+         Trait.1 = P.Gut1,
+         Network.1 = P.Po2,
+         Network.2 = P.Po3,
+         Ensemble = PropRank) %>% write_csv("BinaryPredictions.csv")
