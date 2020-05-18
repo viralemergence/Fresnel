@@ -15,6 +15,16 @@ BatModels %>% mutate(n = 1:nrow(BatModels)) %>%
   mutate_at(RNames, negatory) %>%
   mutate_at('PropRank', negatory) -> BatModels2
 
+####### GET AUC'S
+
+for (i in 1:7) {
+  print(c(PNames)[i])
+  print(auc(data.frame(BatModels2[,c('n','Betacov',PNames[i])]), na.rm = TRUE))
+}
+auc(data.frame(BatModels2[,c('n','Betacov',"PropRank")]), na.rm = TRUE)
+
+####### 
+
 tvalues <- optimal.thresholds(data.frame(BatModels2[,c('n','Betacov',RNames,PNames,'PropRank')]),
                               threshold = 10001,
                               opt.methods = 10,
@@ -32,6 +42,13 @@ colSums(BatModels2[BatModels2$Betacov==0,PNames], na.rm = TRUE)
 BatModels2[,'PropRank'] <- (BatModels2[,'PropRank'] > tvalues[1,'PropRank'])
 
 table(BatModels2[BatModels2$Betacov==0,'PropRank'])
+
+# Rhinolophus
+
+BatModels2[grep('Rhinolophus',BatModels2$Sp),] %>% View()
+
+BatModels2[grep('Rhinolophus',BatModels2$Sp),] %>%
+  filter(Betacov==0) %>% select(PropRank) %>% table()
 
 # Clean it up to write out
 
