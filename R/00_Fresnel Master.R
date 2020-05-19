@@ -47,7 +47,7 @@ names(SourceScripts) <- Repos
 
 # 0_Downloading repos ####
 
-Download <- F
+Download <- T
 
 if(Download){
   
@@ -57,7 +57,9 @@ if(Download){
     
     FocalRepo <- Repos[[r]] 
     
-    download.file(url = paste0("https://github.com/gfalbery/", FocalRepo, "/archive/master.zip"),
+    file_delete(paste0(here::here(), "/Github/Repos/", FocalRepo))
+    
+    download.file(url = paste0("https://github.com/viralemergence/", FocalRepo, "/archive/master.zip"),
                   destfile = paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
     
     unzip(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"),
@@ -73,7 +75,7 @@ if(Download){
 
 # 0_Sourcing Models ####
 
-ModelRun <- F
+ModelRun <- T
 
 if(ModelRun){
   
