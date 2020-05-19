@@ -57,7 +57,11 @@ if(Download){
     
     FocalRepo <- Repos[[r]] 
     
-    file_delete(paste0(here::here(), "/Github/Repos/", FocalRepo))
+    if(dir.exists(paste0(here::here(), "/Github/Repos/", FocalRepo))){
+      
+      dir_delete(paste0(here::here(), "/Github/Repos/", FocalRepo))
+      
+    }
     
     download.file(url = paste0("https://github.com/viralemergence/", FocalRepo, "/archive/master.zip"),
                   destfile = paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
