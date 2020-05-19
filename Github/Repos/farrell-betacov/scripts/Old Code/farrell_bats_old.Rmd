@@ -1,0 +1,355 @@
+---
+title: "Bat-Betacoronavirus link prediction via Elmasri et al. approach"
+author: "Maxwell J. Farrell"
+date: "`r format(Sys.time(), '%B %d %Y')`"
+output: 
+  html_document:
+    highlight: default
+    toc: yes
+    toc_depth: 2
+    toc_float: true
+    theme: yeti
+urlcolor: blue
+---
+
+```{r setup, include = FALSE, eval=TRUE, echo=TRUE, message=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+```
+
+```{r loadinglibraries}
+# devtools::install_github("melmasri/HPprediction")
+require(HPprediction)
+require(ape)
+require(dplyr)
+require(parallel)
+```
+
+```{r custom_funcs, eval=T, echo=F}
+# Custom functions to parse predictions
+
+# Modified topPairs function that attaches names from Z matrix
+topPairs<-function(P,Z,topX=20){
+    ## Plotting the top uncodumented interactions
+    P[Z==1]<--1
+    rownames(P) <- rownames(Z)
+    colnames(P) <- colnames(Z)
+    aux = melt(P)
+    aux = aux[order(aux$value,decreasing=TRUE),]
+    colnames(aux)<-c('Host', 'Parasite', 'p(interaction)')
+    aux
+    aux[1:topX,]
+}
+
+# Top links for particular parasite taxa
+topPara <- function(P,Z,para,topX=10){
+  rownames(P) <- rownames(Z)
+  colnames(P) <- colnames(Z)  
+  P_aux <- P[,colnames(P)%in%c(para)]
+  Z_aux <- Z[,colnames(Z)%in%c(para)]
+  P_aux[Z_aux==1]<--1
+  aux = P_aux[order(P_aux,decreasing=TRUE)]
+  aux <- data.frame(Host=names(aux), p=aux)
+  rownames(aux) <- NULL
+  colnames(aux)<-c('Host', 'p(interaction)')
+    aux[1:topX,]  
+}
+
+
+# this should be in package but isn't loaded?
+cross.validate.fold <-
+function(Z, n= 10, min.per.col = 1, missing.pattern=c('random','prop.to.col.sums')){
+    ## n-fold cross validation
+    ## Returns a matrix of 3 columns, the first two are the (row,col) index of the pair,
+    ## the third is the group
+    missing.pattern = tolower(missing.pattern[1])
+    if(max(range(Z))>1) Z[Z>0]<-1
+    pairs = which(Z==1, arr.ind=T)
+    colnames(pairs)<-c('row', 'col')
+    
+    if(length(which(colSums(Z)<min.per.col))>0){
+        aux = which(pairs[,'col'] %in% which(colSums(Z)<min.per.col))
+        if(length(aux))
+            pairs = pairs[-aux,]
+    }
+    
+    colm = pmax(colSums(Z) -min.per.col , 0)
+    size = floor(sum(colm)/n)
+    gr = rep(size, n)
+    if(sum(colm) %% size!=0)
+        gr[n] =  gr[n] + sum(colm) %% size
+    
+    group.colm = rep(1:n,times = gr)[sample.int(sum(colm), sum(colm))]
+    pair.list = numeric(sum(colm))
+    for(i in 1:sum(colm)){
+        a = which(colm>0)
+        if(missing.pattern=='random')
+            b = a[sample.int(length(a),1)] else
+        if (missing.pattern=='prop.to.col.sums')
+            b = a[sample.int(length(a),1, prob=colm[a]/sum(colm[a]))] else
+        stop('missing pattern has to be specified from selection!')
+        colm[b] = colm[b]-1
+        pair.list[i]<-b
+    }
+    pair.list= tapply(pair.list, group.colm,identity)
+    
+    gr.list= list()
+    bank= c()
+    for(i in 1:n){
+        a= table(pair.list[[i]])
+        gr.rows = unlist(sapply(1:length(a), function(r){
+            b = which(pairs[,'col']== as.numeric(names(a[r])))
+            b =setdiff(b, bank)
+            b[sample.int(length(b), a[r])]
+        }))
+        bank = c(bank, gr.rows)
+        gr.list[[i]]<-cbind(gr.rows, i)
+    }
+
+    aux = do.call('rbind', gr.list)
+    pairs = cbind(pairs[aux[,1], ],gr= aux[,2])
+    
+    print(sprintf("Actual cross-validation rate is %0.3f" , table(pairs[,'gr'])/sum(1*(Z>0))))
+    pairs[order(pairs[,'gr']),]
+    
+}
+
+ana.table <-
+function(Z, ZCross, P, roc, plot=FALSE){
+    Z = 1*(Z>0)
+    ZCross  = 1*(ZCross>0)
+    Zpost = 1*(P>roc$threshold)
+    data.frame(auc = roc$auc/100, thresh= roc$threshold,
+               tot.ones = sum(Z), held.out.ones= sum(abs(ZCross - Z)[Z==1]),
+               pred.held.out.ones = 100*sum(Zpost[Z==1 & ZCross==0])/sum(abs(ZCross - Z)[Z==1]),
+               pred.tot.ones = sum(Zpost[Z==1])/sum(Z)*100)
+    
+}
+
+```
+
+# Data
+
+## Loading 
+
+```{r loadData, eval=TRUE, echo=TRUE}
+# Data in cleanbats_betacov pulled May 8th 2020 from https://github.com/ViromeNet/cleanbats_betacov
+
+cov_dat <- read.csv("../../cleanbats_betacov/clean\ data/BatCoV-assoc_clean.csv", as.is=T)
+
+bat_tree <- readRDS("../../cleanbats_betacov/clean\ data/bat-supertree_clean.rds")
+
+hp3_clean <- read.csv("../../cleanbats_betacov/clean\ data/HP3-bat-associations_clean.csv", as.is=T)
+
+setdiff(cov_dat$clean_hostnames,bat_tree$tip.label)# 0
+setdiff(hp3_clean$clean_hostnames,bat_tree$tip.label)# 0
+
+names(cov_dat)
+com_cov <- table(cov_dat$clean_hostnames, cov_dat$virus_genus)
+com_cov[com_cov>1] <- 1
+com_cov <- as.matrix(unclass(com_cov), nrow=nrow(com_cov), ncol=ncol(com_cov))
+dim(com_cov)#254 x 14
+
+# Missing some interaction data present in HP3
+
+```
+
+
+## Merging Bat-CoV with HP3-bats-clean
+
+```{r , echo=TRUE, eval=TRUE}
+
+# join hp3 with viral taxonomy to pull out viral genus
+virus_tax <- read.csv("../../cleanbats_betacov/raw\ data/HP3-viruses.csv", as.is=T)
+hp3_genera <- left_join(hp3_clean, virus_tax)
+hp3_genera <- subset(hp3_genera, select=c(clean_hostnames,vGenus,DetectionMethod,DetectionQuality))
+names(hp3_genera)[1:2] <- c("host_species","virus_genus")
+
+# join and remove double counted hp3 interactions
+dat_full <- full_join(cov_dat[cov_dat$origin=="Anthony",], hp3_genera)
+setdiff(dat_full$host_species,bat_tree$tip.label)# 8
+
+# From becker bat name cleaning.R
+## fix names in betacov
+dat_full$host_species=plyr::revalue(dat_full$host_species,
+                           c('Dermanura_phaeotis'='Artibeus_phaeotis',
+                             'Hipposideros_commersonii'='Hipposideros_commersoni',
+                             'Artibeus_planirostris'='Artibeus_jamaicensis',
+                             'Chaerephon_pusillus'='Chaerephon_pumilus',
+                             'Dermanura_cinerea'='Artibeus_cinereus',
+                             'Dermanura_tolteca'='Artibeus_toltecus',
+                             'Miniopterus_fuliginosus'='Miniopterus_schreibersii',
+                             'Myotis_pilosus'='Myotis_ricketti',
+                             'Neoromicia_nana'='Neoromicia_nanus',
+                             'Parastrellus_hesperus'='Pipistrellus_hesperus',
+                             'Perimyotis_subflavus'='Pipistrellus_subflavus',
+                             'Tadarida_plicatus'='Chaerephon_plicatus',
+                             'Triaenops_afer'='Triaenops_persicus'))
+
+setdiff(dat_full$host_species,bat_tree$tip.label)
+# "Carollia_sowelli" was split from brevicauda
+# Both exist in the association data and the traits, but not in the tree
+# Dan Becker will decide what to do
+
+com_bats <- table(dat_full$host_species, dat_full$virus_genus)
+com_bats[com_bats>1] <- 1
+com_bats <- as.matrix(unclass(com_bats), nrow=nrow(com_bats), ncol=ncol(com_bats))
+
+dim(com_bats)# 261 * 19
+
+# merge the trees and interaction matrices
+dat_bats <- network_clean(com_bats, bat_tree, 'full')
+
+dim(dat_bats$Z)# 260 x 19
+
+setdiff(sort(unique(colnames(dat_bats$Z))),
+        sort(unique(colnames(com_cov))))
+
+# which viruses are these?
+
+# join hp3 with viral taxonomy to pull out viral genus
+virus_tax <- read.csv("../../cleanbats_betacov/raw\ data/HP3-viruses.csv", as.is=T)
+hp3_genera <- left_join(hp3_clean, virus_tax)
+
+names(hp3_genera)
+hp3_genera[hp3_genera$vGenus=="Arenavirus",]
+hp3_genera[hp3_genera$vGenus=="Hantavirus",]
+
+```
+
+
+# Plotting interaction matrix
+
+```{r plotZ_lof, eval=TRUE, echo=FALSE,fig.align='center'}
+plot_Z(lof(dat_bats$Z), tickMarks=1, cex.lab=1, cex.axis=1, ylab="host species", xlab="Viral genus - Combined bat data (BetaCov + HP3)")
+
+```
+
+
+# Models on Bat-Viral genus data
+
+## Elmasri combined affinity + phylogeny model
+
+```{r betacov_full_cv_setup, echo=TRUE, eval=TRUE}
+## General variables
+MODEL = 'full'                       # full, distance or affinity
+SLICE = 1000                          # no of iterations
+NO.CORES = 3                         # maximum cores to use
+COUNT = TRUE                         # TRUE = count data, FALSE = year of first pub.
+ALPHA.ROWS = 0.3                     # hyperparameter for prior over rows affinity, effective under affinity and full models only
+ALPHA.COLS = 0.3                     # hyperparameter for prior over columns affinity, effective under affinity and full models only
+
+## preparing tree and com
+cleaned <- dat_bats
+com <- cleaned$Z                         # cleaned binary interaction matrix
+tree <- cleaned$tree                     # cleaned tree
+
+```
+
+```{r betacov_full_cv, echo=TRUE, eval=FALSE}
+## indexing 10-folds of interactions
+folds <- cross.validate.fold(com, n = 10, min.per.col=2)  
+
+# returns a matrix of 3 columns (row, col, group), (row, col) correspond to Z, group to the CV group
+tot.gr <- length(unique(folds[,'gr']))   # total number of CV groups
+
+## A loop to run over all CV groups
+res <- mclapply(1:tot.gr, function(x, folds, Z, tree, slice, model.type, ALPHA.ROWS, ALPHA.COLS){
+
+    ## Analysis for a single fold
+    Z.train = Z
+    Z.train[folds[which(folds[,'gr']==x),c('row', 'col')]]<-0
+
+    ## running the model of interest
+    obj = network_est(Z.train, slices=slice, tree=tree, model.type=model.type,
+                      a_y = ALPHA.ROWS, a_w = ALPHA.COLS)
+
+    P = sample_parameter(obj$param, model.type, Z.train, tree)
+    Eta = if(is.null(obj$param$eta)) 0 else mean(obj$param$eta)
+    
+    ## order the rows in Z.test as in Z.train
+    roc = rocCurves(Z, Z.train, P, plot=FALSE, bins=400, all=FALSE)
+    tb  = ana.table(Z, Z.train, P, roc,  plot=FALSE)
+    roc.all = rocCurves(Z, Z.train, P=P, plot=FALSE, bins=400, all=TRUE)
+    tb.all  = ana.table(Z, Z.train, P, roc.all, plot=FALSE)
+    
+    list(param=list(P=P, Eta = Eta), tb = tb,
+         tb.all = tb.all, FPR.all = roc.all$roc$FPR,
+         TPR.all=roc.all$roc$TPR, FPR = roc$roc$FPR, TPR=roc$roc$TPR)
+    
+},  
+    folds=folds, Z = com, tree=tree, model.type=MODEL, slice = SLICE,
+    ALPHA.ROWS = ALPHA.ROWS, ALPHA.COLS= ALPHA.COLS, 
+    mc.preschedule = TRUE, mc.cores = min(tot.gr, NO.CORES))
+
+saveRDS(res,"../results/bats_viral_genera_full_res.rds")
+
+```
+
+We can analyze the performance of the model via the area under the receiver operating characteristic curve (AUC), and the proportion of 1s in the original data successfully recovered. 
+
+```{r batcov_full_diag, eval=TRUE, echo=FALSE}
+res <- readRDS("../results/bats_viral_genera_full_res.rds")
+
+## Some analysis results, AUC, %1 recovered
+TB = data.frame(
+    m.auc = sapply(res, function(r) r$tb$auc),
+    m.pred.held.out.ones = sapply(res,function(r) r$tb$pred.held.out.ones),
+    m.thresh = sapply(res, function(r) r$tb$thresh),
+    m.hold.out = sapply(res, function(r) r$tb$held.out.ones)
+)
+TB
+
+## Printing and writing out average MCMC 
+print(sprintf('Model: %s, AUC: %f and percent 1 recovered from held out: %f',
+              MODEL,mean(TB$m.auc), mean(TB$m.pred.held.out.ones)))
+
+## ROC curve points, can plot as plot(ROCgraph)
+ROCgraph = cbind(
+    FPR = rowMeans(sapply(res, function(r) r$FPR)),
+    TPR = rowMeans(sapply(res, function(r) r$TPR)))
+
+plot(ROCgraph, type="l", lty=2, col=2)
+
+```
+
+We construct the posterior probability matrix 'P' as the average across each fold, and look at the top undocumented interactions.
+
+```{r batcov_full_topundoc, eval=TRUE, echo=TRUE}
+## Constructing the P probability matrix from CV results
+P = matrix(rowMeans(sapply(res, function(r) r$param$P)),
+    nrow = nrow(cleaned$Z), ncol = ncol(cleaned$Z))
+
+## view top undocumented interactions
+topPairs(P,1*(cleaned$Z>0),topX=10)
+topPara(P, 1*(cleaned$Z>0),topX=10, para="Betacoronavirus")
+
+# Save full list of predictions
+# P[cleaned$Z==1]<--1 # set observed interactions to -1
+rownames(P) <- rownames(cleaned$Z)
+colnames(P) <- colnames(cleaned$Z)
+aux = melt(P)
+aux = aux[order(aux$value,decreasing=TRUE),]
+colnames(aux)<-c('Host', 'Parasite', 'p.interaction')
+
+# Subset to betacovs
+aux <- aux[aux$Parasite=="Betacoronavirus",]
+
+# adding bats in the tree but without data to make predictions
+bats_nodata <- data.frame(Host=setdiff(bat_tree$tip.label,rownames(com)),
+                            Parasite=NA,
+                            'p.interaction'=NA)
+
+aux <- rbind(aux, bats_nodata)
+
+head(aux)
+
+# remove Parasite column
+aux <- select(aux, -Parasite)
+
+write.csv(aux, "../results/farrell_Predictions.csv", row.names=FALSE)
+
+```

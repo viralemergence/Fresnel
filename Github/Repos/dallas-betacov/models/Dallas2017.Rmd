@@ -1,0 +1,679 @@
+---
+title: "Plug and play link estimation"
+author: "Tad Dallas"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 10
+    highlight: tango
+    theme: journal
+    toc: yes
+---
+
+
+
+
+
+```{r eval = TRUE, echo = FALSE, comment = "", message = FALSE}
+
+#dat <- read.csv(paste0(here::here(), "/Github/Repos/virionette/03_interaction_data/virionette.csv"), stringsAsFactors = FALSE)
+
+#host <- read.csv(paste0(here::here(), "/Github/Repos/virionette/04_predictors/Han-BatTraits.csv"), stringsAsFactors = FALSE)
+
+#cites <- read.csv(paste0(here::here(), "/Github/Repos/virionette/04_predictors/Citations.csv"), stringsAsFactors = FALSE)
+
+# dat <- read.delim('models/virionette.txt', stringsAsFactors=FALSE, sep = ",")
+#dat <- read.csv('models/virionette.csv', stringsAsFactors=FALSE)
+#host <- read.csv('models/Han-BatTraits.csv',stringsAsFactors=FALSE)
+#cites <- read.csv('models/Citations.csv',stringsAsFactors=FALSE)
+
+#dat <- read.csv('virionette.csv', stringsAsFactors=FALSE)
+#host <- read.csv('Han-BatTraits.csv',stringsAsFactors=FALSE)
+#cites <- read.csv('Citations.csv',stringsAsFactors=FALSE)
+
+dat <- read.csv(paste0("C:/Users/gfalb/Documents/Script/Fresnel/", "/Github/Repos/virionette/03_interaction_data/virionette.csv"), stringsAsFactors = FALSE)
+
+host <- read.csv(paste0("C:/Users/gfalb/Documents/Script/Fresnel/", "/Github/Repos/virionette/04_predictors/Han-BatTraits.csv"), stringsAsFactors = FALSE)
+
+cites <- read.csv(paste0("C:/Users/gfalb/Documents/Script/Fresnel/", "/Github/Repos/virionette/04_predictors/Citations.csv"), stringsAsFactors = FALSE)
+
+# set.seed(666)
+
+```
+
+
+
+
+# Load packages
+
+```{r}
+
+library(Amelia)
+library(fields)
+library(ROCR)
+library(corpcor)
+library(np)
+library(plyr)
+library(dplyr)
+library(vegan)
+
+```
+
+
+
+# Make some colors 
+```{r}
+ose1 <- rgb(85,108,17, m = 255)
+ose2 <- rgb(160,108,17, m = 255)
+ose3 <- rgb(114,132,56, m = 255)
+ose4 <- rgb(137,152,87, m = 255)
+```
+
+
+
+
+
+```{r, eval = TRUE, echo = FALSE}
+
+#' Plug and Play algorithm
+#' Applies the plug and play algorithm to data on environmental covariates at presence and background using multivariate Gaussian distribution for f and f1
+#'
+#'  @param p covariate data at presence/occurrence points
+#'  @param bgrd covariate data at background points
+#'  @param method either 'classical' (default), 'robust', or 'regularized'
+#'  
+#'  @returns A list contain the means and covariances
+#'  
+
+pp.gauss <- function(p, bgrd, method = 'regularized', vbose = FALSE){
+  mean.p <- colMeans(p)         # estimated mean of presence points
+  mean.bgrd <- colMeans(bgrd)   # estimated mean of background points
+  sigma.p <- stats::cov(p)             # estimated covariance of presence points
+  sigma.bgrd <- stats::cov(bgrd)       # estimated covariance of background points
+  
+  if(method == 'robust'){
+    require(robust)
+    p.est <- covRob(p)
+    mean.p <- p.est$center        # robust estimated mean
+    sigma.p <- p.est$cov          # robust estimated covariance of presence points
+    bgrd.est <- covRob(bgrd)
+    mean.bgrd <- bgrd.est$center  # robust estimated mean
+    sigma.bgrd <- bgrd.est$cov    # robust estimated covariance of background points
+  }
+  if(method == 'regularized'){
+    require(corpcor)
+    # robust estimated covariance of presence points
+    p.est <- as.numeric(cov.shrink(p, verbose =  vbose))  
+    sigma.p <- matrix(as.numeric(p.est), nrow = sqrt(length(p.est)))  
+    # robust estimated covariance of background points
+    bgrd.est <- as.numeric(cov.shrink(bgrd, verbose = vbose))    
+    sigma.bgrd <- matrix(as.numeric(bgrd.est), nrow = sqrt(length(bgrd.est))) # reformat
+  }
+  return(model = list(mean.p = mean.p, sigma.p = sigma.p, mean.bgrd = mean.bgrd, sigma.bgrd = sigma.bgrd))
+}
+
+
+
+#'  Takes a learned gaussian-plug-and-play and applies to a new point
+#'  
+#'  @param model a list object from pp.gauss
+#'  @param x  a vector of points to classify
+#'
+#'  @returns A vector of relative suitabilities
+
+predict.pp.gauss <- function(model, x){
+  require(mvtnorm)
+  f1 <- dmvnorm(x, mean = model$mean.p, sigma = model$sigma.p, log = TRUE)
+  f0 <- dmvnorm(x, mean = model$mean.bgrd, sigma = model$sigma.bgrd, log = TRUE)
+  return(S = exp(f1-f0))
+}
+
+
+
+
+#' Applies the plug and play algorithm to data on environmental covariates at presence and background using multivariate Gaussian distribution for f and f1
+#'
+#'  @param p covariate data at presence/occurrence points
+#'  @param bgrd covariate data at background points
+#'
+#'  @returns model a list object containing f1 and f0 
+
+pp.kde <- function(p, bgrd){
+  require(np)
+  f1 <- npudens(p, bwmethod = 'normal-reference')
+  f0 <- npudens(bgrd, bwmethod = 'normal-reference')
+  return(model = list(f1 = f1,f0 = f0))
+}
+
+
+
+
+#'  Takes a learned kde-plug-and-play and applies to a new point
+#'  
+#'  @param model a list object from pp.gauss
+#'  @param x  a vector of points to classify
+#'
+#'  @returns A vector of relative suitabilities
+
+predict.pp.kde <- function(model, x){
+  require(np)
+  f1 <- fitted(npudens(bws = model$f1$bws, edat = data.frame(x), bwmethod = 'normal-reference'))
+  f0 <- fitted(npudens(bws = model$f0$bws, edat = data.frame(x), bwmethod = 'normal-reference'))
+  return(S = f1/f0)
+}
+
+```
+
+
+# The code below is used to calculate the number of estimated missing links from host-parasite networks
+
+
+```{r eval = TRUE, echo = F}
+
+#' Function to compute frequnecy of frequencies table from a list of records
+#' Input: x (a list of unique records)
+#' 
+#'
+#' @returns frequency of frequencies table 
+
+FoF <- function(x){
+  x.0 <- table(table(x))
+  out <- cbind(as.numeric(names(x.0)),as.vector(x.0))
+  out
+}
+
+
+
+#' Function to estimate and summarize missing classes
+#' @param fof (a frequency-of-frequencies table)
+#' 
+#' @returns list object containing observed, estimated, and missing links
+
+summarize <- function(fof){
+  observed <- sum(fof[,2])
+  ace <- ChaoLee1992(fof, t = 10, method = "all", conf = 0.95)
+  number.missing <- ace$Nhat - observed
+  fraction.observed <- observed/ace$Nhat[2:1]
+  out <- list(observed = observed, estimated = ace$Nhat[2:1], number.mising = number.missing, fraction.observed = fraction.observed)
+  out
+}
+
+```
+
+
+
+
+
+
+---
+
+
+
+# Host-virus associations
+
+
+```{r eval = TRUE, echo = TRUE}
+
+#' imputes missing data.
+#'
+#' @param listobject contains interaction matrix (intMat), host traits, parasite traits, and a points object that gets handed to pp.gauss
+#' 
+#' @returns the same listobject, now with missing host and parasite trait data imputed and pointsobject updated.
+
+getImpute <- function(listobject, m = 10, rem = FALSE, useMeans = TRUE){
+  require(Amelia)
+  require(vegan)
+  
+  htriz <- listobject$Hosts
+  ptriz <- listobject$Parasites
+  
+  #remove columns with less than 75% data coverage
+  no  <- which(colSums(is.na(htriz))/nrow(htriz) > 0.75)
+  nop <- which(colSums(is.na(ptriz))/nrow(ptriz) > 0.75)
+  if(length(no) > 0){
+    htriz <- htriz[,-no]
+  }
+  if(length(nop) > 0){
+    ptriz <- ptriz[,-nop]
+  }
+  
+  # remove columns with correlation coeff
+  no2 <- which(cor(htriz, use = 'complete.obs')[,1] > 0.6)
+  if(length(no2) > 1){
+    no2 <- no2[-1]
+    htriz = htriz[,-no2]
+  }
+  
+  #remove rows without any data
+  #hosts
+  inds <- which(is.na(colSums(htriz)))
+  if(rem == TRUE){
+    cut = rep(0,nrow(htriz))
+    for(i in seq_len(nrow(htriz))){
+      if(all(is.na(htriz[i,]))){cut[i] = 1}
+    }
+    htriz <- htriz[-which(cut == 1), ]
+  }
+  #parasites
+  indsP <- which(is.na(colSums(ptriz)))
+  if(rem == TRUE){
+    cut = rep(0,nrow(ptriz))
+    for(i in seq_len(nrow(ptriz))){
+      if(all(is.na(ptriz[i,]))){cut[i] = 1}
+    }
+    ptriz <- ptriz[-which(cut == 1), ]
+  }
+  
+  #impute host traits
+  if(any(is.na(colSums(htriz)))){
+    helper <- which(colSums(htriz,na.rm = TRUE)>1)[1]
+    tmp <- htriz[, unique(c(helper,inds))]
+    if(useMeans == TRUE){
+      means <- which(apply(tmp, 1, function(x){sum(is.na(x))})/ncol(tmp) > 0)
+      tmp[means, ] <- colMeans(tmp, na.rm = TRUE)
+      htriz2 <- tmp
+    }else{
+      htriz2 <- amelia(x = tmp, m = m, p2s = 0)$imputations[[m]]
+    }
+    notInds <- seq(1,ncol(htriz),by = 1)[-c(helper,inds)]
+    htriz3 <- cbind(htriz2, htriz[,notInds])
+  }else{
+    htriz2 <- amelia(x = htriz[, c(inds)], m = m, p2s = 0)$imputations[[m]]
+    notInds <- seq(1,ncol(htriz),by = 1)[-c(inds)]
+    htriz3 <- cbind(htriz2, htriz[,notInds])
+  }
+  
+  
+  #remake the points object
+  intMat <- listobject$intMat
+  pos <- which(intMat  ==  1, arr.ind = TRUE)
+  neg <- which(intMat  ==  0, arr.ind = TRUE)
+  ret <- rbind(pos,neg) 
+  ret <- cbind(ret, c(rep(1, nrow(pos)), rep(0,nrow(neg)))) 
+  colnames(ret) <- c('parasite', 'host', 'presence')
+  
+  pt <- ptriz[ret[,2],]
+  ht <- htriz3[ret[,1],]
+  ht <- ht[,-1]
+  
+  ptobj <- data.frame(ret, ht, pt, stringsAsFactors = TRUE)
+  return(list(intMat = intMat, Hosts = htriz3, 
+              Parasites = ptriz, pointsObject = ptobj))
+}
+
+
+```
+
+
+```{r eval = TRUE, echo = TRUE}
+
+#' Train pp.gauss model on data
+#'
+#' @param pointsobject input to pp.gauss function
+#' 
+#' @returns list object of host and parasite information, model predictions, and AUC value
+
+getReal <- function(pointsobject, cv = TRUE, folds = 5){
+  require(ROCR)
+  # all the data divided into presence (p) and background (bg)
+  p <- pointsobject[(pointsobject[,'presence']  ==  1), 4:ncol(pointsobject)]
+  bg <- pointsobject[,4:ncol(pointsobject)]
+  if(cv == TRUE){
+    # Take a random sample and exclude it
+    ints <- sample(1:nrow(pointsobject), nrow(pointsobject)/folds)
+    red <- pointsobject[-ints,]
+    p.red <- red[(red[,'presence']  ==  1), 4:ncol(pointsobject)]
+    bg.red <- red[, 4:ncol(pointsobject)]
+    # Train the model on a portion of the data
+    cvmodel <- pp.gauss(p = p.red, bgrd = bg.red, vbose = FALSE)
+    #... and predict on the holdout set
+    red.preds <- predict.pp.gauss(cvmodel, x = bg[ints,])
+    ret <- data.frame(presence = pointsobject[ints,'presence'], suitability = red.preds)
+    hosts <- pointsobject[ints,'parasite']; parasites = pointsobject[ints,'host']
+  }
+  
+  if(cv == FALSE){
+    fullmodel <- pp.gauss(p = p, bgrd = bg, vbose = FALSE)
+    # ignore cites in the predictions on bg data
+    if(!is.null(bg$cites)){
+      bg$cites <- mean(bg$cites)
+    }
+    redpreds <- predict.pp.gauss(fullmodel, x = bg)
+    ret <- data.frame(presence = pointsobject[,'presence'], suitability = redpreds)
+    hosts <- pointsobject$parasite; parasites = pointsobject$host
+  }
+  #auc calculation
+  pred <- prediction(predictions = ret[,2], labels = ret[,1])
+  acc <- as.numeric(performance(pred, 'auc')@y.values)
+  return(list(hostInds = hosts, parasiteInds = parasites, predictions = ret, auc = acc))
+}
+
+```
+
+
+
+
+
+
+```{r eval = TRUE, echo = F, message = FALSE, warning = FALSE}
+
+makePoints <- function(intmat, HostTraits, ParasiteTraits){
+  ret <- matrix(0,ncol = 3, nrow = (nrow(intmat)*ncol(intmat))) 
+  colnames(ret) <- c('row', 'column', 'presence')
+  negInts <- which(intmat  ==  0, arr.ind = TRUE)
+  posInts <- which(intmat > 0, arr.ind = TRUE)
+  ret[,1:2] <- rbind(negInts, posInts)
+  ret[,3] <- c(rep(0, nrow(negInts)), rep(1, nrow(posInts)))
+  ret2 <- cbind(ret,HostTraits[(ret[,1]),], ParasiteTraits[(ret[,2]),])
+  return(list(intMat = intmat, Hosts = HostTraits, Parasites = ParasiteTraits, pointsObject = ret2))
+}
+
+
+```
+
+
+
+
+
+
+
+```{r eval = TRUE, echo = F, message = FALSE, warning = FALSE}
+expandCol <- function(dat, colName = NULL){
+  namez <- na.omit(unique(dat))
+  ret <- sapply(namez, function(x){as.integer(grepl(x, dat))}) 
+  colnames(ret) <- paste(colName, '.', namez, sep = '')
+  return(as.data.frame(ret))
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
+
+
+datBats <- filter(dat, host_order == 'Chiroptera')
+
+host$host_species <- paste(host$MSW05_Genus, host$MSW05_Species, sep = ' ')
+
+notHosts <- host$host_species[-which(host$host_species %in% unique(datBats$host_species))]
+## interaction matrix
+intMatFull <- as.data.frame.matrix(table(c(datBats$host_species, notHosts), c(datBats$virus_genus, rep('dummy', length(notHosts)))))
+
+intMatFull$dummy <- NULL
+
+
+### created features
+# numParasites <- rowSums(intMatFull > 0)
+numHosts <- colSums(intMatFull > 0)
+
+
+
+h <- data.frame(host_species = rownames(intMatFull))
+h <- left_join(host, h, by = 'host_species')
+h <- left_join(h, cites, by = c('host_species' = 'name'))
+h$X <- NULL
+h$Pan <- NULL
+
+
+
+
+
+
+### forming data.frame objects
+host2 <- data.frame(
+  expandCol(h$MSW05_Genus, 'hGenus'), 
+  expandCol(h$ForStrat.Value, 'hForStratValue'),
+  expandCol(h$IUCN , 'hIUCN '),  
+  h[,c(6:60, 62:68)] 
+  #	numParasites
+)
+
+host2$X12.2_Terrestriality <- NULL
+host2$Diet.Vunk<- NULL
+host2$Diet.Scav <- NULL
+host2$Activity.Nocturnal<- NULL 
+host2$X12.1_HabitatBreadth<- NULL
+host2$Diet.Vfish<- NULL
+host2$Diet.Nect <- NULL
+host2$Diet.Seed<- NULL
+host2$Diet.PlantO<- NULL
+host2$urbc_1970AD<- NULL
+host2$urbc_1980AD<- NULL
+host2$urbc_1990AD<- NULL
+host2$urbc_2000AD<- NULL
+host2$urbc_2005AD <- NULL
+host2$hFamily.DELPHINIDAE <- NULL
+host2$ForStrat.Value <- NULL
+host2$IUCN <- NULL
+
+host2$BodyMass.value <- NULL
+host2$PET_mean_mm <- NULL
+host2$HuPopDen_5p_n.km2 <- NULL
+host2$HuPop_Den_min_n.km2 <- NULL
+host2$host_species <- NULL
+
+
+
+virus2 <- datBats %>%
+  group_by(virus_genus) %>%
+  summarise(nHostSp = length(unique(host_species)),
+            nHostFam = length(unique(host_family)),
+            nHostOrder = length(unique(host_order)))
+
+virus2$virus_genus <- NULL
+
+## Points object
+hvDat <- makePoints(intMatFull, host2, virus2)
+
+```
+
+
+
+```{r}
+writeLinks <- function(dat, model, fileName = 'DallasPredictions.csv'){
+  linksDF <- data.frame(host = rownames(dat[[1]])[model[[1]]],
+                        virus = colnames(dat[[1]])[model[[2]]], 
+                        presence = model[[3]]$presence,
+                        suitability = model[[3]]$suitability)
+  linksDF <- linksDF[order(linksDF$suitability, decreasing = TRUE),]
+  ret <- linksDF[which(linksDF$virus  ==  'Betacoronavirus'), ]
+  write.csv(ret, file = fileName)
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+```{r eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
+
+hvDati <- getImpute(hvDat, m = 5, useMeans = TRUE)
+
+```
+
+
+
+
+
+3.       Filter (host_order = CHIROPTERA) > PNP with trait approach (no latent) >  include citation counts > Return a csv of bat species and probability of interaction with virus_genus = ‘Betacoronavirus’ as outcome variable > DallasBatsCitations.csv
+
+
+```{r eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
+
+hvOut1 <- getReal(hvDati[[4]], cv = FALSE)
+writeLinks(dat = hvDati, model = hvOut1, fileName = 'DallasBatsCitations.csv')
+
+```
+
+
+
+
+
+4.       Filter (host_order = CHIROPTERA) > PNP with trait approach (no latent) >  don’t include citation counts > Return a csv of bat species and probability of interaction with virus_genus = ‘Betacoronavirus’ as outcome variable > DallasBatsUncorrected.csv
+
+
+```{r eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
+hvDati[[2]]$cites <- NULL
+hvDati[[4]]$cites <- NULL
+hvOut2 <- getReal(hvDati[[4]], cv = FALSE)
+writeLinks(dat = hvDati, model = hvOut2, fileName = 'DallasBatsUncorrected.csv')
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### The approach we took in the Open Science article (just use dissimilarity values)
+
+
+```{r}
+#' Format the data from a list of interaction matrices to a data.frame 
+#' that can be input to the plug and play model.
+#'
+#'
+#' @param intMatList list of interaction matrices
+#' @param year year of prediction
+#' @param lagYears number of years which to train the model on
+#' @param distFun how to calculate dissimilarity values
+
+formatPPobject <- function(intMat,
+                           distFun = 'bray', includeCitations = FALSE){
+  require(plyr)
+  require(dplyr)
+  locSim <- rowMeans(as.matrix(vegan::vegdist(intMat)))	
+  pathSim <- rowMeans(as.matrix(vegan::vegdist(t(intMat))))
+  simMat <- locSim %*% t(pathSim)	
+  locDF <- data.frame(host = rownames(intMat), locSim)
+  
+  if(includeCitations){
+    locDF <- left_join(locDF, cites,by = c('host' = 'name'))
+    locDF$X <- NULL
+  }
+  
+  pathDF <- data.frame(pathogen = colnames(intMat), pathSim)
+  df <- expand.grid(rownames(intMat), colnames(intMat))
+  colnames(df) <- c('host', 'pathogen')
+  df$presence <- as.vector(intMat > 0)+0 
+  df$similarity <- as.vector(simMat)
+  df <- left_join(df, pathDF, by = 'pathogen')
+  df <- left_join(df, locDF, by = 'host')
+  return(df)
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+1.       Entire dataset > PNP with latent approach (no traits) > include citation counts > Return a csv of mammal species and probability of interaction with virus_genus = ‘Betacoronavirus’ as outcome variable > DallasMammalsCitations.csv
+
+```{r}
+
+intMatFull <- as.data.frame.matrix(table(dat$host_species, dat$virus_genus))
+test <- formatPPobject(intMatFull, includeCitations = TRUE)
+out <- getReal(test, cv = FALSE)
+
+mamLinks <- cbind(test, suitability = out$predictions[,'suitability'])
+mLinksCites <- mamLinks[which(mamLinks$pathogen  ==  'Betacoronavirus'), c('host','pathogen', 'presence', 'suitability')]
+colnames(mLinksCites)[2] <- 'virus'
+write.csv(mLinksCites, file = 'DallasMammalsCitations.csv')
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+2.       Entire dataset > PNP with latent approach (no traits) > don’t include citation counts > Return a csv of mammal species and probability of interaction with virus_genus = ‘Betacoronavirus’ as outcome variable > DallasMammalsUncorrected.csv
+
+```{r}
+
+test2 <- formatPPobject(intMatFull, includeCitations = FALSE)
+out2 <- getReal(test2, cv = FALSE)
+
+mamLinksNoCites <- cbind(test, suitability = out2$predictions[,'suitability'])
+mLinksNoCites <- mamLinksNoCites[which(mamLinksNoCites$pathogen  ==  'Betacoronavirus'), c('host','pathogen', 'presence', 'suitability')]
+colnames(mLinksNoCites)[2] <- 'virus'
+write.csv(mLinksNoCites, file = 'DallasMammalsUncorrected.csv')
+
+detach(package:plyr)
+
+```
