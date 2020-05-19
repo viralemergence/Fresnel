@@ -47,86 +47,93 @@ names(SourceScripts) <- Repos
 
 # 0_Downloading repos ####
 
+Download <- F
+
 if(Download){
   
   r <- 1
   
   for(r in r:length(Repos)){
     
-   FocalRepo <- Repos[[r]] 
-   
-   download.file(url = paste0("https://github.com/gfalbery/", FocalRepo, "/archive/master.zip"),
-                 destfile = paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
-   
-   unzip(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"),
-         exdir = paste0(here::here(), "/Github/Repos"))
-   
-   file.rename(paste0(here::here(), "/Github/Repos/", FocalRepo, "-master"),
-               paste0(here::here(), "/Github/Repos/", FocalRepo))
-   
-   file_delete(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
-   
+    FocalRepo <- Repos[[r]] 
+    
+    download.file(url = paste0("https://github.com/gfalbery/", FocalRepo, "/archive/master.zip"),
+                  destfile = paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
+    
+    unzip(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"),
+          exdir = paste0(here::here(), "/Github/Repos"))
+    
+    file.rename(paste0(here::here(), "/Github/Repos/", FocalRepo, "-master"),
+                paste0(here::here(), "/Github/Repos/", FocalRepo))
+    
+    file_delete(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
+    
   }
 }
 
 # 0_Sourcing Models ####
 
-r <- 1
+ModelRun <- F
 
-for(r in r:length(Repos)){
+if(ModelRun){
   
-  print(Repos[r])
+  r <- 1
   
-  if(!Repos[r] == "poisot-betacov"){
+  for(r in r:length(Repos)){
     
-    setwd(paste0(here::here(),"/Github/Repos/", Repos[r]))
+    print(Repos[r])
     
-    if(SourceScripts[[r]] %>% str_detect("[.]R$|[.]rmd$")){
+    if(!Repos[r] == "poisot-betacov"){
       
-      source(SourceScripts[[r]])
+      setwd(paste0(here::here(),"/Github/Repos/", Repos[r]))
       
-    }else{
-      
-      if(!(SourceScripts[[r]] %>% nchar)){
+      if(SourceScripts[[r]] %>% str_detect("[.]R$|[.]rmd$")){
         
-        list.files(full.names = T, 
-                   pattern = "[.]R$|[.]rmd$|[.]Rmd$") ->
-          
-          SubSources
+        source(SourceScripts[[r]])
         
       }else{
         
-        SourceScripts[[r]] %>% list.files(full.names = T, 
-                                          pattern = "[.]R$|[.]rmd$|[.]Rmd$") ->
+        if(!(SourceScripts[[r]] %>% nchar)){
           
-          SubSources
-        
-      }
-      
-      rr <- 2
-      
-      for(rr in seq_along(SubSources)){
-        
-        #invisible(lapply(paste0('package:', 
-        #                        names(sessionInfo()$otherPkgs)), 
-        #                 detach, 
-        #                 character.only = TRUE, 
-        #                 unload = TRUE))
-        
-        detach(package:dplyr)
-        
-        print(SubSources[[rr]])
-        
-        if(stringr::str_detect(SubSources[[rr]], "[.]R$")){
-          
-          source(SubSources[[rr]])
+          list.files(full.names = T, 
+                     pattern = "[.]R$|[.]rmd$|[.]Rmd$") ->
+            
+            SubSources
           
         }else{
           
-          ksource(SubSources[[rr]])
+          SourceScripts[[r]] %>% list.files(full.names = T, 
+                                            pattern = "[.]R$|[.]rmd$|[.]Rmd$") ->
+            
+            SubSources
           
         }
         
+        rr <- 2
+        
+        for(rr in seq_along(SubSources)){
+          
+          #invisible(lapply(paste0('package:', 
+          #                        names(sessionInfo()$otherPkgs)), 
+          #                 detach, 
+          #                 character.only = TRUE, 
+          #                 unload = TRUE))
+          
+          detach(package:dplyr)
+          
+          print(SubSources[[rr]])
+          
+          if(stringr::str_detect(SubSources[[rr]], "[.]R$")){
+            
+            source(SubSources[[rr]])
+            
+          }else{
+            
+            ksource(SubSources[[rr]])
+            
+          }
+          
+        }
       }
     }
   }

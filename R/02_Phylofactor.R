@@ -26,13 +26,16 @@ library(ggpubr)
 batin = BatModels_IS
 batout = BatModels_OS
 
-#batin2 <- read.csv("Cleaned Files/BatModels_IS.csv")
-#batout2 <- read.csv("Cleaned Files/BatModels_OS.csv")
+batin <- read.csv("Cleaned Files/BatModels_IS.csv")
+batout <- read.csv("Cleaned Files/BatModels_OS.csv")
 
 ## mammals too
 
 mamin = NonBatModels_IS
 mamout = NonBatModels_OS
+
+mamin2 <- read.csv("Cleaned Files/NonBatModels_IS.csv")
+mamout2 <- read.csv("Cleaned Files/NonBatModels_OS.csv")
 
 ## fix mamout
 mamout = mamout[!is.na(mamout$PropRank), ]
@@ -182,7 +185,7 @@ data_in = comparative.data(phy = tree_in, data = mamin, names.col = treenames, v
 data_out = comparative.data(phy = tree_out, data = mamout, names.col = treenames, vcv = T, na.omit = F, warn.dropped = T)
 
 ## clean up
-rm(batin, batout, btree, mamin, mamout, tree, tree_in, tree_out, btree_in, btree_out)
+# rm(batin, batout, btree, mamin, mamout, tree, tree_in, tree_out, btree_in, btree_out)
 
 ## rename
 bdata_in$data$treenames = rownames(bdata_in$data)
@@ -270,7 +273,9 @@ if(Mammal){
 ## visualize
 gg = ggtree(bdata_in$phy, 
             size = 0.15, 
-            layout = 'circular')
+            layout = 'circular') + 
+  theme(legend.position = "none")
+
 
 ## add clades
 for(i in 1:nrow(batin_results)){
@@ -307,7 +312,8 @@ p1 = gg+
 ## visualize
 gg = ggtree(bdata_out$phy, 
             size = 0.1, 
-            layout = 'circular')
+            layout = 'circular') + 
+  theme(legend.position = "none")
 
 ## add clades
 for(i in 1:nrow(batout_results)){
@@ -361,7 +367,8 @@ p2 = gg+
 ## visualize
 gg = ggtree(data_in$phy, 
             size = 0.2, 
-            layout = 'circular')
+            layout = 'circular') + 
+  theme(legend.position = "none")
 
 ## add clades
 for(i in 1:nrow(mamin_results)){
@@ -392,20 +399,30 @@ p3 = gg+
 ## visualize
 gg = ggtree(data_out$phy, 
             size = 0.05, 
-            layout = 'circular')
+            layout = 'circular') + 
+  theme(legend.position = "none")
+
+mamout_results %<>% arrange(desc(tips))
+
+i <- 1
 
 ## add clades
-for(i in 1:nrow(mamout_results)){
+for(i in i:nrow(mamout_results)){
   
   gg = gg+
     geom_hilight(node = mamout_results$node[i], 
-                 alpha = 0.5, 
+                 alpha = ifelse(mamout_results$clade[i]<
+                                  mamout_results$other[i], 0.5, 0.3)[1], 
                  fill = ifelse(mamout_results$clade<
-                                 mamout_results$other, pcols[2], pcols[1])[i])+
+                                 mamout_results$other, pcols[2], pcols[1])[i]) +
+    
     geom_cladelabel(node = mamout_results$node[i], 
                     label = mamout_results$factor[i], 
                     offset = 50, 
                     offset.text = 45)
+  
+  # plot(gg)
+  
 }
 
 ## finish
@@ -417,12 +434,13 @@ p4 = gg+
   
   ## add predictions
   geom_segment(data = segfun(data_out, 50), 
-               aes(x = x, y = y, xend = xend, yend = yend, colour = Betacov), size = 0.05)+
+               aes(x = x, y = y, xend = xend, yend = yend, colour = Betacov), 
+               size = 0.05)+
   scale_colour_manual(values = c('grey70', 'black'))
 
 ## write
 
-png("Figures/Phylofactor_pred ensemble.png", width = 7, height = 6.5, units = "in", res = 600)
+png("Figures/Phylofactor_pred ensemble_Old.png", width = 7, height = 6.5, units = "in", res = 600)
 ggpubr::ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2, 
                   labels = c('bat rank, in-sample', 
                              'bat rank, out-of-sample', 
@@ -547,7 +565,8 @@ mamrm_results = mamrm_results$results
 ## visualize
 gg = ggtree(bat_ra$phy, 
             size = 0.1, 
-            layout = 'circular')
+            layout = 'circular') + 
+  theme(legend.position = "none")
 
 ## add clades
 for(i in 1:nrow(batra_results[-which(batra_results$tips == 1), ])){

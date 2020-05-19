@@ -290,4 +290,26 @@ if(0){
     ggplot(aes(Value.x, Value.y)) + geom_point() + 
     facet_wrap(~Key)
   
+  mamin %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
+    left_join(
+      
+      mamin2 %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)),
+      
+      by = c("Sp", "Key")
+    ) %>% 
+    
+    ggplot(aes(Value.x, Value.y)) + geom_point() + 
+    facet_wrap(~Key)
+  
+  mamout %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
+    left_join(
+      
+      mamout2 %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)),
+      
+      by = c("Sp", "Key")
+    ) %>% 
+    
+    ggplot(aes(Value.x, Value.y)) + geom_point() + 
+    facet_wrap(~Key)
+  
 }
