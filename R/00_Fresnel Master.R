@@ -3,7 +3,10 @@
 
 rm(list = ls())
 
-library(tidyverse); library(fs); library(glue)
+library(tidyverse); library(fs); library(glue); library(zip)
+library(conflicted)
+
+conflict_prefer("unzip", "zip")
 
 here::here() %>% setwd()
 
@@ -45,9 +48,43 @@ SourceScripts <- list(
 
 names(SourceScripts) <- Repos
 
+# Master Files ####
+
+MasterFiles <- T
+
+if(MasterFiles){
+  
+  download.file(url = paste0("https://github.com/viralemergence/", "virionette", "/archive/master.zip"),
+                destfile = paste0(here::here(), "/Github/Repos/", "virionette", ".zip"))
+  
+  unzip(paste0(here::here(), "/Github/Repos/", "virionette", ".zip"),
+        exdir = paste0(here::here(), "/Github/Repos/"))
+  
+  Virionette <- read.csv("Github/Repos/virionette-master/03_interaction_data/virionette.csv")
+  Citations <- read.csv("Github/Repos/virionette-master/04_predictors/Citations.csv")
+  HanTraits <- read.csv("Github/Repos/virionette-master/04_predictors/Han-BatTraits.csv")
+  
+  BatTree <- readRDS("Github/Repos/virionette-master/04_predictors/bat-supertree_clean.rds")
+  SuperTree <- readRDS("Github/Repos/virionette-master/04_predictors/Full Supertree.rds")
+  
+  file.rename(paste0(here::here(), "/Github/Repos/", "virionette", "-master"),
+              paste0(here::here(), "/Github/Repos/", "virionette"))
+  
+  download.file(url = paste0("https://github.com/viralemergence/", "becker-betacov", "/archive/master.zip"),
+                destfile = paste0(here::here(), "/Github/Repos/", "becker-betacov", ".zip"))
+  
+  unzip(paste0(here::here(), "/Github/Repos/", "becker-betacov", ".zip"),
+        exdir = paste0(here::here(), "/Github/Repos/"))
+  
+  file.rename(paste0(here::here(), "/Github/Repos/", "becker-betacov", "-master"),
+              paste0(here::here(), "/Github/Repos/", "becker-betacov"))
+  
+  
+}
+
 # 0_Downloading repos ####
 
-Download <- T
+Download <- F
 
 if(Download){
   
@@ -72,8 +109,18 @@ if(Download){
     file.rename(paste0(here::here(), "/Github/Repos/", FocalRepo, "-master"),
                 paste0(here::here(), "/Github/Repos/", FocalRepo))
     
-    file_delete(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
+  }
+  
+  for(r in r:length(Repos)){
     
+    FocalRepo <- Repos[[r]] 
+    
+    if(dir.exists(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))){
+      
+      
+      file_delete(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
+      
+    }
   }
 }
 
@@ -125,7 +172,7 @@ if(ModelRun){
           #                 character.only = TRUE, 
           #                 unload = TRUE))
           
-          detach(package:dplyr)
+          #detach(package:dplyr)
           
           print(SubSources[[rr]])
           
@@ -180,6 +227,10 @@ names(OutputCSVs) <- Repos
 
 i <- 1
 j <- 1
+
+conflict_prefer("last", "dplyr")
+
+here::here() %>% setwd()
 
 for(i in i:length(Repos)){
   

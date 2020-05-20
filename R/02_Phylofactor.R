@@ -8,7 +8,7 @@
 
 source('R/02a_Phylofactor helper.R')
 
-detach(package:dplyr)
+#detach(package:dplyr)
 
 ## packages
 library(ape)

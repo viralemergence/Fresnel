@@ -257,7 +257,7 @@ BatModels_IS %>%
 }
 
 ((TilePlot_IS + ggtitle("In-sample")|
-    TilePlot_OS + ggtitle("Out-sample")) +
+    TilePlot_OS + ggtitle("Out-of-sample")) +
     
     plot_layout(guides = "collect"))/
   
