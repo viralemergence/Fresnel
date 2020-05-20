@@ -440,7 +440,7 @@ p4 = gg+
 
 ## write
 
-png("Figures/Phylofactor_pred ensemble_Old.png", width = 7, height = 6.5, units = "in", res = 600)
+png("Figures/Phylofactor_pred ensemble.png", width = 7, height = 6.5, units = "in", res = 600)
 ggpubr::ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2, 
                   labels = c('bat rank, in-sample', 
                              'bat rank, out-of-sample', 

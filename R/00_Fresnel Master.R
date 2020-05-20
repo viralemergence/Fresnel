@@ -70,6 +70,8 @@ if(MasterFiles){
   file.rename(paste0(here::here(), "/Github/Repos/", "virionette", "-master"),
               paste0(here::here(), "/Github/Repos/", "virionette"))
   
+  file_delete(paste0(here::here(), "/Github/Repos/", "virionette", ".zip"))
+  
   download.file(url = paste0("https://github.com/viralemergence/", "becker-betacov", "/archive/master.zip"),
                 destfile = paste0(here::here(), "/Github/Repos/", "becker-betacov", ".zip"))
   
@@ -79,6 +81,7 @@ if(MasterFiles){
   file.rename(paste0(here::here(), "/Github/Repos/", "becker-betacov", "-master"),
               paste0(here::here(), "/Github/Repos/", "becker-betacov"))
   
+  file_delete(paste0(here::here(), "/Github/Repos/", "becker-betacov", ".zip"))
   
 }
 

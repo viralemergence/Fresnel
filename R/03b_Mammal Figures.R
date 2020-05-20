@@ -126,6 +126,7 @@ NonBatModels_IS %>%
   Relabel -> ModelLimits
   
   NonBatModels_IS %>%
+    arrange(PropRank) %>%
     rename_all(~ifelse(.x %in% names(Relabel), recode(.x, !!!Relabel), .x)) %>% 
     filter(Betacov == 0) %>%
     slice(1:10) %>% 
@@ -163,7 +164,10 @@ NonBatModels_IS %>%
     scale_x_continuous(breaks = 1:length(ModelLimits), 
                        labels = ModelLimits) +
     scale_y_reverse() +
-    scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12) +
+    scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12, 
+                                     labels = levels(TopPredictions_IS$Sp) %>% 
+                                       str_replace(" ", "<i>") %>% str_c("</i>")) +    
+    theme(legend.text = element_markdown()) +    
     labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
     
     BumpPlot_IS

@@ -30,6 +30,7 @@ require(HPprediction)
 require(ape)
 require(dplyr)
 require(parallel)
+library(conflicted)
 
 conflict_prefer("rescale", "geiger")
 

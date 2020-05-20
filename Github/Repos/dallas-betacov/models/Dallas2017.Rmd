@@ -19,26 +19,16 @@ output:
 
 ```{r eval = TRUE, echo = FALSE, comment = "", message = FALSE}
 
-#dat <- read.csv(paste0(here::here(), "/Github/Repos/virionette/03_interaction_data/virionette.csv"), stringsAsFactors = FALSE)
+dat <- read.csv(paste0(here::here(), "/Github/Repos/virionette/03_interaction_data/virionette.csv"), stringsAsFactors = FALSE)
 
-#host <- read.csv(paste0(here::here(), "/Github/Repos/virionette/04_predictors/Han-BatTraits.csv"), stringsAsFactors = FALSE)
+host <- read.csv(paste0(here::here(), "/Github/Repos/virionette/04_predictors/Han-BatTraits.csv"), stringsAsFactors = FALSE)
 
-#cites <- read.csv(paste0(here::here(), "/Github/Repos/virionette/04_predictors/Citations.csv"), stringsAsFactors = FALSE)
-
-# dat <- read.delim('models/virionette.txt', stringsAsFactors=FALSE, sep = ",")
-#dat <- read.csv('models/virionette.csv', stringsAsFactors=FALSE)
-#host <- read.csv('models/Han-BatTraits.csv',stringsAsFactors=FALSE)
-#cites <- read.csv('models/Citations.csv',stringsAsFactors=FALSE)
+cites <- read.csv(paste0(here::here(), "/Github/Repos/virionette/04_predictors/Citations.csv"), stringsAsFactors = FALSE)
 
 #dat <- read.csv('virionette.csv', stringsAsFactors=FALSE)
 #host <- read.csv('Han-BatTraits.csv',stringsAsFactors=FALSE)
 #cites <- read.csv('Citations.csv',stringsAsFactors=FALSE)
 
-dat <- read.csv(paste0("C:/Users/gfalb/Documents/Script/Fresnel/", "/Github/Repos/virionette/03_interaction_data/virionette.csv"), stringsAsFactors = FALSE)
-
-host <- read.csv(paste0("C:/Users/gfalb/Documents/Script/Fresnel/", "/Github/Repos/virionette/04_predictors/Han-BatTraits.csv"), stringsAsFactors = FALSE)
-
-cites <- read.csv(paste0("C:/Users/gfalb/Documents/Script/Fresnel/", "/Github/Repos/virionette/04_predictors/Citations.csv"), stringsAsFactors = FALSE)
 
 # set.seed(666)
 
@@ -59,6 +49,7 @@ library(np)
 library(plyr)
 library(dplyr)
 library(vegan)
+library(conflicted)
 
 ```
 

@@ -163,7 +163,10 @@ BatModels_IS %>%
     scale_x_continuous(breaks = 1:length(ModelLimits), 
                        labels = ModelLimits) +
     scale_y_reverse() +
-    scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12) +
+    scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12, 
+                                     labels = TopPredictions_IS$Sp %>% 
+                                       str_replace(" ", "<i>") %>% str_c("</i>")) +    
+    theme(legend.text = element_markdown()) +
     labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
     
     BumpPlot_IS
@@ -249,7 +252,10 @@ BatModels_IS %>%
     scale_x_continuous(breaks = 1:length(ModelLimits), 
                        labels = ModelLimits) +
     scale_y_reverse() +
-    scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12) +
+    scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12, 
+                                     labels = TopPredictions_OS$Sp %>% 
+                                       str_replace(" ", "<i>") %>% str_c("</i>")) +    
+    theme(legend.text = element_markdown()) +
     labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
     
     BumpPlot_OS

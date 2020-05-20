@@ -15,6 +15,12 @@ library(forcats)
 library(PresenceAbsence)
 library(reshape2)
 
+library(conflicted)
+conflict_prefer("map", "purrr")
+
+c("select", "filter", "intersect", "summarise", "mutate", "rename", "arrange") %>%
+  map(~conflict_prefer(.x, "dplyr"))
+
 quietly <- function(x) {
   sink(tempfile())
   on.exit(sink())
