@@ -2,6 +2,7 @@
 # Fresnel Figures ####
 
 library(tidyverse); library(cowplot); library(colorspace); library(patchwork); library(ggpubr); library(ggregplot)
+library(ggtext)
 
 theme_set(theme_cowplot() + theme(strip.background = element_rect(fill = "white")))
 
@@ -129,7 +130,7 @@ BatModels_IS %>%
     rename_all(~ifelse(.x %in% names(Relabel), recode(.x, !!!Relabel), .x)) %>% 
     filter(Betacov == 0) %>%
     slice(1:10) %>% 
-    mutate_at("Sp", ~glue::glue("{1:n()}. {.x}")) %>%
+    mutate_at("Sp", ~glue::glue(" {1:n()}. {.x}")) %>%
     gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
     mutate_at("Value", ~.x*1) %>%
     mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
@@ -165,7 +166,7 @@ BatModels_IS %>%
     scale_y_reverse() +
     scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12, 
                                      labels = TopPredictions_IS$Sp %>% 
-                                       str_replace(" ", "<i>") %>% str_c("</i>")) +    
+                                       str_replace(" ", " <i>") %>% str_c("</i>")) +    
     theme(legend.text = element_markdown()) +
     labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
     
@@ -218,7 +219,7 @@ BatModels_IS %>%
     rename_all(~ifelse(.x %in% names(Relabel), recode(.x, !!!Relabel), .x)) %>% 
     filter(Betacov == 0) %>%
     slice(1:10) %>% 
-    mutate_at("Sp", ~glue::glue("{1:n()}. {.x}")) %>%
+    mutate_at("Sp", ~glue::glue(" {1:n()}. {.x}")) %>%
     gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
     mutate_at("Value", ~.x*1) %>%
     mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
@@ -254,7 +255,7 @@ BatModels_IS %>%
     scale_y_reverse() +
     scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12, 
                                      labels = TopPredictions_OS$Sp %>% 
-                                       str_replace(" ", "<i>") %>% str_c("</i>")) +    
+                                       str_replace(" ", " <i>") %>% str_c("</i>")) +    
     theme(legend.text = element_markdown()) +
     labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
     
