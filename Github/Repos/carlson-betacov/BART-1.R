@@ -10,7 +10,7 @@ library(fastDummies)
 library(tidyverse)
 library(tidyverse)
 library(dplyr)
-detach(package:plyr)
+# detach(package:plyr)
 library(PresenceAbsence)
 
 varimp.pbart <- function(model, plot=TRUE) {
@@ -60,7 +60,7 @@ varimp.pbart <- function(model, plot=TRUE) {
 }
 
 read_csv(paste0(here::here(), 
-                '/GitHub/Repos/virionette/03_interaction_data/virionette.csv'))-> 
+                '/GitHub/Repos/virionette/03_interaction_data/virionette.csv')) -> 
   
   batcov
 
