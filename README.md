@@ -1,4 +1,4 @@
-![banner](https://github.com/viralemergence/Fresnel/blob/master/FresnelBanner.png)
+![banner](https://github.com/viralemergence/Fresnel/blob/master/FresnelBanner.jpg)
 
 # Fresnel
 
