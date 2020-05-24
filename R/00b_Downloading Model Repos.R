@@ -6,6 +6,28 @@ library(conflicted)
 
 conflict_prefer("unzip", "zip")
 
+# function from https://stackoverflow.com/questions/10966109/how-to-source-r-markdown-file-like-sourcemyfile-r
+
+ksource <- function(x, ...) {
+  
+  library(knitr)
+  
+  source(purl(x, output = tempfile()), ...)
+  
+}
+
+Repos <- c(
+  
+  "albery-betacov",
+  # "becker-betacov",
+  "carlson-betacov",
+  "dallas-betacov",
+  "farrell-betacov",
+  "guth-betacov",
+  "poisot-betacov"
+  
+)
+
 r <- 1
 
 for(r in r:length(Repos)){

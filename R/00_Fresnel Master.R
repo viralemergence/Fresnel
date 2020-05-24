@@ -12,16 +12,6 @@ here::here() %>% setwd()
 
 getwd()
 
-# function from https://stackoverflow.com/questions/10966109/how-to-source-r-markdown-file-like-sourcemyfile-r
-
-ksource <- function(x, ...) {
-  
-  library(knitr)
-  
-  source(purl(x, output = tempfile()), ...)
-  
-}
-
 Repos <- c(
   
   "albery-betacov",
@@ -50,6 +40,7 @@ names(SourceScripts) <- Repos
 
 # 0a_Downloading Data Repos ####
 
+source("R/00a_Downloading Data Repos.R")
 
 # 0b_Downloading Model Repos ####
 
