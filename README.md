@@ -1,3 +1,5 @@
+![banner](https://github.com/viralemergence/Fresnel/blob/master/FresnelBanner.png)
+
 # Fresnel
 
 ## Predicting wildlife hosts of betacoronavirus for SARS-CoV-2 sampling prioritisation
