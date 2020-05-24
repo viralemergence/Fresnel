@@ -130,7 +130,8 @@ NonBatModels_IS %>%
     rename_all(~ifelse(.x %in% names(Relabel), recode(.x, !!!Relabel), .x)) %>% 
     filter(Betacov == 0) %>%
     slice(1:10) %>% 
-    mutate_at("Sp", ~glue::glue(" {1:n()}. {.x}")) %>%
+    #mutate_at("Sp", ~glue::glue(" {1:n()}. {.x}")) %>%
+    mutate_at("Sp", ~glue::glue("<i>{.x}</i>")) %>%
     gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
     mutate_at("Value", ~.x*1) %>%
     mutate_at("Key", ~factor(.x, levels = ModelLimits)) %>%
@@ -165,8 +166,7 @@ NonBatModels_IS %>%
                        labels = ModelLimits) +
     scale_y_reverse() +
     scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12, 
-                                     labels = levels(TopPredictions_IS$Sp) %>% 
-                                       str_replace(" ", " <i>") %>% str_c("</i>")) +    
+                                     labels = levels(TopPredictions_IS$Sp)) +    
     theme(legend.text = element_markdown()) +    
     labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
     
