@@ -1,14 +1,14 @@
 # Fresnel
 
-## Predicting Betacoronavirus hosts
+## Predicting wildlife hosts of betacoronavirus for SARS-CoV-2 sampling prioritisation
 
-This project uses a suite of seven predictive models to predict likely betacoronavirus hosts for sampling prioritisation.
+This project uses a suite of seven predictive models to predict likely betacoronavirus hosts for sampling prioritisation. The initial report of its findings have been preprinted here: https://www.biorxiv.org/content/10.1101/2020.05.22.111344v1
 
 The scripts for the project are located in the folder `R` and are structured as follows:
 
 ## Getting data and running predictive models:
 - `00_Fresnel Master` contains all source code in order, and should run as an entity straight out of the box.
-- `00a_Downloading Data Repos` will download the data repos from github, ***including the up-to-date list of known betacoronavirus hosts***. 
+- `00a_Downloading Data Repos` will download the data repos from github, ***including the up-to-date list of known betacoronavirus hosts***.   
 -- They will appear in the folder `Github/Repos`.
 - `00b_Downloading Model Repos` will download the model repos from github.
 
