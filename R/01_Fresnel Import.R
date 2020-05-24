@@ -126,6 +126,8 @@ Models %<>%
   arrange(Rank)
 
 Models %>% 
+  mutate_at("Sp", ~str_replace_all(.x, "Lissonycteris angolensis", 
+                                   "Myonycteris angolensis")) %>%
   select(Sp, Betacov, starts_with("R."), starts_with("P."), 
          Rank, PropRank) %>%
   as.data.frame -> 
@@ -238,6 +240,8 @@ Models %<>%
   arrange(PropRank)
 
 Models %>% 
+  mutate_at("Sp", ~str_replace_all(.x, "Lissonycteris angolensis", 
+                                   "Myonycteris angolensis")) %>%
   select(Sp, Betacov, starts_with("R."), starts_with("P."), 
          Rank, PropRank) %>%
   as.data.frame -> 
