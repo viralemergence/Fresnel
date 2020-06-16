@@ -1,27 +1,10 @@
 "","scale","sample","factor","taxa","tips","clade","other"
-"1","bats","in",1,"Yangochiroptera",160,0.549029256676948,0.422442587061182
-"2","bats","out",1,"Mystacinidae, Noctilionidae, Mormoopidae, Phyllostomidae",161,0.723558378529902,0.488047814390154
-"3","bats","out",2,"Mosia, Emballonura, Coleura, Rhynchonycteris, Cyttarops, Diclidurus, Centronycteris, Cormura, Saccopteryx, Balantiopteryx, Peropteryx",31,0.774065920261436,0.516445311501092
-"4","bats","out",3,"Thyropteridae, Furipteridae, Natalidae",12,0.852569073997125,0.520238741176349
-"5","bats","out",4,"Molossidae",98,0.595384635731721,0.516707011393319
-"6","bats","out",5,"Rousettus, Lissonycteris, Megaloglossus, Eidolon, Myonycteris, Plerotes, Casinycteris, Scotonycteris, Nanonycteris, Hypsignathus, Epomops, Micropteropus, Epomophorus",35,0.267110665590444,0.532846637780232
-"7","bats","out",6,"Sphaerias, Alionycteris, Otopteropus, Haplonycteris, Latidens, Penthetor, Thoopterus, Aethalops, Balionycteris, Chironax, Dyacopterus, Ptenochirus, Megaerops, Cynopterus",26,0.26277000687383,0.530629938730547
-"8","bats","out",7,"Rhinolophidae",73,0.360367281662001,0.536200596974919
-"9","mammals","in",1,"Phocoenidae, Delphinidae, Tursiops, Monodontidae, Physeteridae, Balaenopteridae, Eschrichtiidae",12,0.889177425665102,0.61104632033768
-"10","mammals","in",2,"Artiodactyla, Perissodactyla, Carnivora, Pholidota, Erinaceomorpha, Soricomorpha",173,0.549147052997907,0.660679346887891
-"11","mammals","in",3,"Lophuromys, Micaelamys, Apodemus, Arvicanthis, Bandicota, Madromys, Dasymys, Hydromys, Lemniscomys, Mastomys, Mus, Pelomys, Niviventer, Otomys, Praomys, Rattus, Vandeleuria",38,0.519966642517314,0.627310916081946
-"12","mammals","out",3,"Anomaluridae, Pedetidae, Dipodidae, Cricetidae, Muridae, Nesomyidae, Calomyscidae, Spalacidae, Platacanthomyidae",779,0.643179628385402,0.621910145963154
-"13","mammals","out",1,"Abditomys, Bullimus, Limnomys, Tarsomys, Tryphomys, Acomys, Lophuromys, Uranomys, Aethomys, Micaelamys, Anisomys, Chiruromys, Coccymys, Crossomys, Hyomys, Leptomys, Lorentzimys, Pseudohydromys, Paraleptomys, Macruromys, Mallomys, Microhydromys, Parahydromys, Pogonomelomys, Abeomelomys, Solomys, Xenuromys, Apodemus, Tokudaia, Apomys, Crunomys, Chrotomys, Rhynchomys, Arvicanthis, Bandicota, Batomys, Carpomys, Crateromys, Berylmys, Bunomys, Chiromyscus, Chiropodomys, Hapalomys, Haeromys, Colomys, Nilopegamys, Conilurus, Leporillus, Mesembriomys, Melomys, Protochromys, Mammelomys, Paramelomys, Uromys, Zyzomys, Leggadina, Notomys, Pseudomys, Mastacomys, Madromys, Cremnomys, Millardia, Dacnomys, Dasymys, Dephomys, Hybomys, Hydromys, Xeromys, Desmomys, Diomys, Diplothrix, Echiothrix, Margaretamys, Melasmothrix, Tateomys, Eropeplus, Lenomys, Golunda, Grammomys, Thallomys, Hadromys, Heimyscus, Hylomyscus, Komodomys, Papagomys, Oenomys, Thamnomys, Lemniscomys, Lenothrix, Leopoldamys, Malacomys, Praomys, Myomyscus, Mastomys, Maxomys, Micromys, Muriculus, Mus, Mylomys, Pelomys, Stenocephalemys, Nesokia, Niviventer, Otomys, Parotomys, Palawanomys, Paruromys, Phloeomys, Pithecheir, Pogonomys, Rattus, Rhabdomys, Srilankamys, Nesoromys, Stochomys, Sundamys, Taeromys, Vandeleuria, Vernaya, Zelotomys",510,0.382076132832436,0.672103233604498
-"14","mammals","out",2,"Artiodactyla, Perissodactyla, Carnivora, Pholidota",505,0.495033462400855,0.651001651015785
-"15","mammals","out",6,"Abrawayaomys, Handleyomys, Aepeomys, Thomasomys, Abrothrix, Akodon, Necromys, Deltamys, Thaptomys, Andalgalomys, Auliscomys, Loxodontomys, Phyllotis, Paralomys, Graomys, Andinomys, Bibimys, Kunsia, Scapteromys, Blarinomys, Calomys, Chelemys, Chilomys, Chinchillula, Delomys, Eligmodontia, Euneomys, Galenomys, Geoxus, Holochilus, Lundomys, Pseudoryzomys, Irenomys, Lenoxus, Melanomys, Microryzomys, Neacomys, Nectomys, Neotomys, Nesoryzomys, Notiomys, Oecomys, Oligoryzomys, Oryzomys, Oxymycterus, Brucepattersonius, Phaenomys, Podoxymys, Punomys, Reithrodon, Rhagomys, Rhipidomys, Scolomys, Sigmodontomys, Thalpomys, Wiedomys, Wilfredomys, Juliomys, Zygodontomys, Anotomys, Chibchanomys, Ichthyomys, Neusticomys, Rheomys, Sigmodon, Nyctomys, Otonyctomys, Ototylomys, Tylomys, Baiomys, Scotinomys, Ochrotomys, Habromys, Neotomodon, Podomys, Osgoodomys, Megadontomys, Peromyscus, Onychomys, Isthmomys, Reithrodontomys, Hodomys, Xenomys, Neotoma, Nelsonia",397,0.703125954833666,0.616467871895563
-"16","mammals","out",4,"Talpidae, Erinaceomorpha, Soricidae",357,0.629806227704209,0.626619058848557
-"17","mammals","out",14,"Castoridae, Heteromyidae, Geomyidae, Octodontidae, Ctenodactylidae, Ctenomyidae, Abrocomidae, Caviidae, Dinomyidae, Petromuridae, Dasyproctidae, Myocastoridae, Echimyidae, Erethizontidae, Capromyidae, Cuniculidae, Thryonomyidae, Bathyergidae, Chinchillidae",295,0.871912448825996,0.602734507955908
-"18","mammals","out",5,"Cercopithecidae, Hominidae, Hylobatidae",139,0.649360803915413,0.625974290434654
-"19","mammals","out",7,"Tamiasciurus, Sciurus, Rheithrosciurus, Microsciurus, Syntheosciurus, Pteromys, Petaurista, Belomys, Biswamoyopterus, Trogopterus, Pteromyscus, Aeromys, Eupetaurus, Aeretes, Glaucomys, Eoglaucomys, Hylopetes, Petinomys, Petaurillus, Iomys, Ratufa, Callosciurus, Glyphotes, Lariscus, Menetes, Rhinosciurus, Funambulus, Tamiops, Dremomys, Exilisciurus, Hyosciurus, Prosciurillus, Rubrisciurus, Nannosciurus, Sundasciurus",139,0.671935206267154,0.624974340808494
-"20","mammals","out",15,"Cheirogaleidae, Indriidae, Daubentoniidae, Lemuridae, Lepilemuridae",48,0.921202219743155,0.622592371811866
-"21","mammals","out",13,"Afrosoricida",41,0.970145783440675,0.622618200867466
-"22","mammals","out",9,"Odobenidae, Otariidae, Phocidae",33,0.714290844070696,0.626077952303901
-"23","mammals","out",11,"Caprolagus, Poelagus, Lepus, Oryctolagus",33,0.64155229348941,0.626817894402909
-"24","mammals","out",12,"Paraechinus, Hemiechinus, Mesechinus, Erinaceus, Atelerix",15,0.388311636198103,0.628063703428944
-"25","mammals","out",8,"Phocoenidae, Delphinidae, Tursiops, Monodontidae, Physeteridae, Balaenopteridae, Eschrichtiidae",12,0.889177425665102,0.626002556208333
-"26","mammals","out",10,"Hystricidae",11,0.481746685154693,0.62745537709476
+"1","bats","in",1,"Yangochiroptera",160,0.550095570516611,0.392879447327595
+"2","bats","out",1,"Mystacinidae, Noctilionidae, Mormoopidae, Phyllostomidae",161,0.730406944498245,0.482785718855235
+"3","bats","out",2,"Rhinolophidae",73,0.294254283488992,0.537510016926929
+"4","bats","out",3,"Pteropodidae",173,0.379405410824919,0.548412776375427
+"5","bats","out",4,"Mosia, Emballonura, Coleura, Rhynchonycteris, Cyttarops, Diclidurus, Centronycteris, Cormura, Saccopteryx, Balantiopteryx, Peropteryx",31,0.754855533216206,0.513541935179437
+"6","bats","out",5,"Eonycteris, Macroglossus, Syconycteris, Notopteris, Melonycteris, Harpyionycteris, Aproteles, Dobsonia, Styloctenium, Neopteryx, Pteralopex, Acerodon, Pteropus",99,0.457843052653527,0.527163435084264
+"7","bats","out",6,"Thyropteridae, Furipteridae, Natalidae",12,0.818248697599656,0.517215557071941
+"8","bats","out",7,"Otomops, Promops, Molossus, Eumops",26,0.668540701450329,0.516901967911761
+"9","bats","out",8,"Lasiurus",15,0.716886537909288,0.517810290187329

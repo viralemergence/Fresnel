@@ -16,11 +16,13 @@ AlberColours[length(AlberColours)+1:2] <-
 
 AlberColours <- c(AlberColours, Pink = "#FD6396", Blue = "#3C78D8")
 
-Relabel <- c(glue::glue("Network.{1:4}"), 
+Relabel <- c(glue::glue("Network.{1:4}"),
+             glue::glue("Hybrid.{1}"), 
              glue::glue("Trait.{1:3}"))
 
 names(Relabel) <- c("R.Po2", "R.Po3",
                     "R.Dal1","R.Far1",
+                    "R.Stock1",
                     "R.Gut1", "R.Car3",
                     "R.Alb")
 
@@ -33,7 +35,7 @@ Relabel[intersect(names(Relabel), names(BatModels_IS))] ->
 BatModels_IS %>% 
   #gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
   gather("Key", "Value", starts_with("R.")) %>%
-  mutate_at("Key", ~.x %>% recode(!!!Relabel)) %>%
+  mutate_at("Key", ~.x %>% recode(!!!Relabel) %>% factor(levels = Relabel)) %>%
   ggplot(aes(Value, Betacov)) + 
   geom_point(alpha = 0.3, colour = AlberColours[[3]]) + 
   geom_smooth(method = glm, 
@@ -166,8 +168,7 @@ BatModels_IS %>%
                        labels = ModelLimits) +
     scale_y_reverse() +
     scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12, 
-                                     labels = TopPredictions_IS$Sp %>% 
-                                       str_replace(" ", " <i>") %>% str_c("</i>")) +    
+                                     labels = levels(TopPredictions_IS$Sp)) +    
     theme(legend.text = element_markdown()) +
     labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
     
@@ -256,7 +257,7 @@ BatModels_IS %>%
                        labels = ModelLimits) +
     scale_y_reverse() +
     scale_colour_discrete_sequential(palette = AlberPalettes[[3]], rev = F, nmax = 12, 
-                                     labels = TopPredictions_OS$Sp) +    
+                                     labels = levels(TopPredictions_OS$Sp)) +    
     theme(legend.text = element_markdown()) +
     labs(x = "Model", y = "Proportional rank", colour = "Top 10 unknown hosts") ->
     

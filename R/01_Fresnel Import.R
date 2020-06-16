@@ -47,6 +47,9 @@ guth2 <- read_csv(paste0(GithubDir, "GuthUncorrected.csv"))
 poisot1 <- read_csv(paste0(GithubDir, "PoisotKnn1Bat.csv"), col_names = FALSE)
 poisot2 <- read_csv(paste0(GithubDir, "PoisotKnn2Bat.csv"), col_names = FALSE)
 poisot3 <- read_csv(paste0(GithubDir, "PoisotLfBat.csv"), col_names = FALSE)
+stock1 <- read_csv(paste0(GithubDir, 
+                          "scores_tskrr_both.csv"), 
+                   col_names = TRUE)
 
 # Triaging column names ####
 
@@ -64,17 +67,23 @@ poisot1 %>% rename(Sp = X1, P.Po1 = X2) -> poisot1
 poisot2 %>% rename(Sp = X1, P.Po2 = X2) -> poisot2
 poisot3 %>% rename(Sp = X1, P.Po3 = X2) -> poisot3
 
+stock1 %>% select(Sp = X1, P.Stock1 = Betacoronavirus) %>% 
+  arrange(desc(P.Stock1)) ->
+  
+  StockDF
+
 # Specifically subset Tad ####
 
 assoc <- Virionette %>% 
   filter(host_order == 'Chiroptera')
 
 dallas1 %>% as_tibble %>% mutate(InAssocBats = (Sp %in% assoc$host_species)) %>%
-  filter(InAssocBats==1) -> dallas1
+  filter(InAssocBats == 1) -> dallas1
 
 # Drops or not ####
 
-ModelList <- list(albery, carlson3, dallas1, farrell1, guth1, poisot2, poisot3) 
+ModelList <- list(albery, carlson3, dallas1, farrell1, 
+                  guth1, poisot2, poisot3, StockDF) 
 
 # Mutating ####
 
@@ -109,6 +118,8 @@ Models %>%
   left_join(truth) %>% 
   mutate(Betacov = replace_na(Betacov, 0)) ->
   Models
+
+Models %<>% select(-c(R.Stock2:R.Stock4))
 
 # Generate proportional rankings
 

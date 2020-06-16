@@ -26,16 +26,16 @@ library(ggpubr)
 batin = BatModels_IS
 batout = BatModels_OS
 
-batin <- read.csv("Cleaned Files/BatModels_IS.csv")
-batout <- read.csv("Cleaned Files/BatModels_OS.csv")
+#batin <- read.csv("Cleaned Files/BatModels_IS.csv")
+#batout <- read.csv("Cleaned Files/BatModels_OS.csv")
 
 ## mammals too
 
 mamin = NonBatModels_IS
 mamout = NonBatModels_OS
 
-mamin2 <- read.csv("Cleaned Files/NonBatModels_IS.csv")
-mamout2 <- read.csv("Cleaned Files/NonBatModels_OS.csv")
+#mamin2 <- read.csv("Cleaned Files/NonBatModels_IS.csv")
+#mamout2 <- read.csv("Cleaned Files/NonBatModels_OS.csv")
 
 ## fix mamout
 mamout = mamout[!is.na(mamout$PropRank), ]
@@ -207,7 +207,7 @@ batin_pf = gpf(Data = bdata_in$data,
                tree = bdata_in$phy, 
                frmla.phylo = PropRank~phylo, 
                family = gaussian, algorithm = 'phylo', 
-               nfactors = 2)
+               nfactors = 4)
 
 ## results
 batin_results = pfsum(batin_pf)
@@ -227,7 +227,7 @@ batout_pf = gpf(Data = bdata_out$data,
                 frmla.phylo = PropRank~phylo, 
                 family = gaussian, 
                 algorithm = 'phylo', 
-                nfactors = 8)
+                nfactors = 10)
 
 ## results
 batout_results = pfsum(batout_pf)
@@ -238,7 +238,7 @@ batout_results = batout_results$results
 
 # Mammal Phylofactor ####
 
-Mammal <- T
+Mammal <- F
 
 if(Mammal){
   
@@ -284,7 +284,8 @@ for(i in 1:nrow(batin_results)){
     geom_hilight(node = batin_results$node[i], 
                  alpha = 0.5, 
                  fill = ifelse(batin_results$clade<
-                                 batin_results$other, pcols[2], pcols[1])[i])+
+                                 batin_results$other, 
+                               pcols[2], pcols[1])[i])+
     geom_cladelabel(node = batin_results$node[i], 
                     label = batin_results$factor[i], 
                     offset = 25, 
