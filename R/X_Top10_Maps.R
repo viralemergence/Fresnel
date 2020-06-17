@@ -111,7 +111,7 @@ maps <- stack(true1.map,
 mycolors <- colorRampPalette(rev(brewer.pal(10,"Spectral")))(21)
 mycolors[1] <- "#C0C0C0"
 
-levelplot(maps,  
+rasterVis::levelplot(maps,  
           col.regions = mycolors,
           at = seq(0, 20, 1),
           alpha = 0.5, 
