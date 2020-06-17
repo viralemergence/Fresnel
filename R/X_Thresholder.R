@@ -67,4 +67,4 @@ BatModels2 %>% select(Sp, Betacov, P.Alb, P.Car3, P.Dal1, P.Far1, P.Gut1, P.Po2,
 verify <- c('Scotophilus kuhlii', 'Scotophilus heathii', 'Hipposideros larvatus', 'Hipposideros pomona', 'Pteropus lylei', 'Myotis pequinius', 'Myotis horsfieldii')
 
 BatModels2 %>% select(Sp, Betacov, P.Alb, P.Car3, P.Dal1, P.Far1, P.Gut1, P.Po2, P.Po3, PropRank) %>%
-  filter()
+  filter(Sp %in% verify)
