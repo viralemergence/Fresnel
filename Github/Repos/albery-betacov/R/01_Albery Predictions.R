@@ -37,10 +37,9 @@ PredictedNetwork <-
 
 rownames(PredictedNetwork) <- colnames(PredictedNetwork)
 
-read_csv(paste0(here::here(), 
-               "/Github/Repos/virionette/03_interaction_data/virionette.csv")) ->
-
-#Virionette ->
+read.csv(paste0(here::here(), 
+                "/Github/Repos/virionette/03_interaction_data/virionette.csv")) ->
+  
   BetaCovHosts
 
 # Bat-Specific ####

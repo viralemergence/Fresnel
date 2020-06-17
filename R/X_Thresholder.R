@@ -3,11 +3,11 @@
 
 library(PresenceAbsence); library(tidyverse)
 
-RNames <- c('R.Alb','R.Car3','R.Dal1','R.Far1','R.Gut1','R.Po2','R.Po3')
+RNames <- c('R.Alb','R.Car3','R.Dal1','R.Far1','R.Gut1','R.Po2','R.Po3','R.Stock1')
 
 RNames %>% str_replace_all("^R.", "P.") -> PNames
 
-thresh <- c('T.Alb','T.Car','T.Dal','T.Far','T.Gut','T.Po1','T.Po2')
+thresh <- c('T.Alb','T.Car','T.Dal','T.Far','T.Gut','T.Po1','T.Po2','T.Stock1')
 
 negatory <- function(x) {1-x}
 
@@ -17,7 +17,7 @@ BatModels %>% mutate(n = 1:nrow(BatModels)) %>%
 
 ####### GET AUC'S
 
-for (i in 1:7) {
+for (i in 1:8) {
   print(c(PNames)[i])
   print(auc(data.frame(BatModels2[,c('n','Betacov',PNames[i])]), na.rm = TRUE))
 }
@@ -61,3 +61,10 @@ BatModels2 %>% select(Sp, Betacov, P.Alb, P.Car3, P.Dal1, P.Far1, P.Gut1, P.Po2,
          Network.1 = P.Po2,
          Network.2 = P.Po3,
          Ensemble = PropRank) %>% write_csv("BinaryPredictions.csv")
+
+# WHO WON! WHO'S NEXT!
+
+verify <- c('Scotophilus kuhlii', 'Scotophilus heathii', 'Hipposideros larvatus', 'Hipposideros pomona', 'Pteropus lylei', 'Myotis pequinius', 'Myotis horsfieldii')
+
+BatModels2 %>% select(Sp, Betacov, P.Alb, P.Car3, P.Dal1, P.Far1, P.Gut1, P.Po2, P.Po3, PropRank) %>%
+  filter()
