@@ -104,4 +104,17 @@ BatWeb %>% select(c(Sp,
                     Network.3,
                     Network.4)) %>% rename(Hybrid = Hybrid.1) -> BatWeb
 
+BatWeb %>% mutate(Source = '') -> BatWeb
+
+BatWeb$Source[BatWeb$Sp %in% c('Hipposideros pomona',
+                        'Scotophilus kuhlii', 
+                        'Myotis pequinius', 
+                        'Myotis horsfieldii')] <- 'https://www.biorxiv.org/content/10.1101/2020.05.31.116061v1'
+
+BatWeb$Source[BatWeb$Sp %in% c('Pteropus lylei')] <- 'https://virologyj.biomedcentral.com/articles/10.1186/s12985-018-0950-6'
+
+BatWeb$Source[BatWeb$Sp %in% c('Hipposideros larvatus',
+                               'Scotophilus heathii')] <- 'https://virologyj.biomedcentral.com/articles/10.1186/s12985-015-0289-1'
+
 BatWeb %>% write_csv("BinaryWebsite.csv")
+
