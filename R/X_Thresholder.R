@@ -91,7 +91,8 @@ BatModels2 %>% mutate_at(vars(contains(".")), ~(as.numeric(.))) %>%
 
 BatWeb$`New data`[which(BatWeb$Sp %in% verify)] <- 'New data'
 
-BatWeb %>% select(c(`Training data`, 
+BatWeb %>% select(c(Sp,
+                    `Training data`, 
                     `New data`,
                     Ensemble,
                     Trait.1,
