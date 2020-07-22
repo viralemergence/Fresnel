@@ -67,7 +67,14 @@ BatModels2 %>% write_csv("BinaryPredictions.csv")
 
 # WHO WON! WHO'S NEXT!
 
-verify <- c('Scotophilus kuhlii', 'Scotophilus heathii', 'Hipposideros larvatus', 'Hipposideros pomona', 'Pteropus lylei', 'Myotis pequinius', 'Myotis horsfieldii')
+verify <- c('Scotophilus kuhlii', 
+            'Scotophilus heathii', 
+            'Hipposideros larvatus', 
+            'Hipposideros pomona', 
+            'Pteropus lylei', 
+            'Myotis pequinius', 
+            'Myotis horsfieldii',
+            'Desmodus rotundus')
 
 BatModels2 %>% filter(Sp %in% verify)
 
@@ -115,6 +122,8 @@ BatWeb$Source[BatWeb$Sp %in% c('Pteropus lylei')] <- 'https://virologyj.biomedce
 
 BatWeb$Source[BatWeb$Sp %in% c('Hipposideros larvatus',
                                'Scotophilus heathii')] <- 'https://virologyj.biomedcentral.com/articles/10.1186/s12985-015-0289-1'
+
+BatWeb$Source[BatWeb$Sp %in% c('Desmodus rotundus')] <- 'https://www.scielo.br/scielo.php?script=sci_arttext&pid=S1413-86702008000600003'
 
 BatWeb %>% write_csv("BinaryWebsite.csv")
 
