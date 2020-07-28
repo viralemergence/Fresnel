@@ -74,7 +74,11 @@ verify <- c('Scotophilus kuhlii',
             'Pteropus lylei', 
             'Myotis pequinius', 
             'Myotis horsfieldii',
-            'Desmodus rotundus')
+            'Desmodus rotundus',
+            'Macroglossus minimus',
+            'Hipposideros gigas',
+            'Plecotus auritus',
+            'Tadarida teniotis')
 
 BatModels2 %>% filter(Sp %in% verify)
 
@@ -124,6 +128,15 @@ BatWeb$Source[BatWeb$Sp %in% c('Hipposideros larvatus',
                                'Scotophilus heathii')] <- 'https://virologyj.biomedcentral.com/articles/10.1186/s12985-015-0289-1'
 
 BatWeb$Source[BatWeb$Sp %in% c('Desmodus rotundus')] <- 'https://www.scielo.br/scielo.php?script=sci_arttext&pid=S1413-86702008000600003'
+
+BatWeb$Source[BatWeb$Sp %in% c('Macroglossus minimus')] <- 'http://philjournalsci.dost.gov.ph/96-next-issue/vol-149-no-1-march-2020/1160-first-molecular-evidence-for-bat-betacoronavirus-in-mindanao'
+
+BatWeb$Source[BatWeb$Sp %in% c('Hipposideros gigas')] <- 'https://www.nature.com/articles/s41598-020-64159-1.pdf'
+
+BatWeb$Source[BatWeb$Sp %in% c('Plecotus auritus',
+                               'Tadarida teniotis')] <- 'https://link.springer.com/content/pdf/10.1007/s11262-018-1614-8.pdf'
+
+# Compile and print out 
 
 BatWeb %>% write_csv("BinaryWebsite.csv")
 
