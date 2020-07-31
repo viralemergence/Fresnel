@@ -78,7 +78,10 @@ verify <- c('Scotophilus kuhlii',
             'Macroglossus minimus',
             'Hipposideros gigas',
             'Plecotus auritus',
-            'Tadarida teniotis')
+            'Tadarida teniotis',
+            'Artibeus jamaicensis',
+            'Carollia sowelli'
+            )
 
 BatModels2 %>% filter(Sp %in% verify)
 
@@ -135,6 +138,9 @@ BatWeb$Source[BatWeb$Sp %in% c('Hipposideros gigas')] <- 'https://www.nature.com
 
 BatWeb$Source[BatWeb$Sp %in% c('Plecotus auritus',
                                'Tadarida teniotis')] <- 'https://link.springer.com/content/pdf/10.1007/s11262-018-1614-8.pdf'
+
+BatWeb$Source[BatWeb$Sp %in% c('Artibeus jamaicensis',
+                               'Carollia sowelli')] <- 'https://onlinelibrary.wiley.com/doi/epdf/10.1111/tbed.13751'
 
 # Compile and print out 
 
