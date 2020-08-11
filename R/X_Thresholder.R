@@ -80,10 +80,13 @@ verify <- c('Scotophilus kuhlii',
             'Plecotus auritus',
             'Tadarida teniotis',
             'Artibeus jamaicensis',
-            'Carollia sowelli'
+            'Carollia sowelli',
+            'Myonycteris angolensis',
+            'Nycteris macrotis',
+            'Nanonycteris veldkampii'
             )
 
-BatModels2 %>% filter(Sp %in% verify)
+BatModels2 %>% filter(Sp %in% verify) 
 
 #################################
 
@@ -141,6 +144,10 @@ BatWeb$Source[BatWeb$Sp %in% c('Plecotus auritus',
 
 BatWeb$Source[BatWeb$Sp %in% c('Artibeus jamaicensis',
                                'Carollia sowelli')] <- 'https://onlinelibrary.wiley.com/doi/epdf/10.1111/tbed.13751'
+
+BatWeb$Source[BatWeb$Sp %in% c('Myonycteris angolensis',
+                               'Nycteris macrotis',
+                               'Nanonycteris veldkampii')] <- 'https://www.mdpi.com/1999-4915/12/8/855'
 
 # Compile and print out 
 

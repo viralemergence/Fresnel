@@ -9,7 +9,7 @@ Cynopterus brachyotis,Reported,Reported,True +,True +,True +,True +,True +,True 
 Rhinolophus luctus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Eptesicus serotinus,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,True +,
 Pipistrellus pipistrellus,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,True +,
-Myonycteris angolensis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
+Myonycteris angolensis,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,https://www.mdpi.com/1999-4915/12/8/855
 Rhinolophus affinis,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,True +,
 Pteropus giganteus,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,True +,
 Epomophorus gambianus,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,True +,
@@ -123,7 +123,7 @@ Hipposideros ater,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,
 Tylonycteris robustula,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Unlikely,Unlikely,
 Rousettus spinalatus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Rhinolophus mitratus,Unreported,Unreported,Suspected,Suspected,Suspected,NA,Suspected,NA,NA,NA,NA,
-Nanonycteris veldkampii,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
+Nanonycteris veldkampii,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,https://www.mdpi.com/1999-4915/12/8/855
 Rhinolophus eloquens,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,Unlikely,Unlikely,Suspected,
 Pteropus hypomelanus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
 Hipposideros galeritus,Reported,Reported,False -,True +,True +,True +,True +,NA,False -,False -,False -,
@@ -321,7 +321,7 @@ Paracoelops megalotis,Unreported,Unreported,Suspected,Suspected,Unlikely,NA,Susp
 Desmodus rotundus,Unreported,New data,Suspected,Suspected,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,Suspected,Suspected,https://www.scielo.br/scielo.php?script=sci_arttext&pid=S1413-86702008000600003
 Rhinolophus deckenii,Unreported,Unreported,Suspected,Unlikely,Unlikely,Suspected,Suspected,NA,NA,NA,NA,
 Nyctinomops laticaudatus,Reported,Reported,False -,True +,False -,False -,False -,True +,True +,True +,True +,
-Nycteris macrotis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
+Nycteris macrotis,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,https://www.mdpi.com/1999-4915/12/8/855
 Chalinolobus gouldii,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Unlikely,Unlikely,
 Acerodon celebensis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Rhinolophus denti,Unreported,Unreported,Suspected,Unlikely,Suspected,Suspected,Suspected,NA,NA,NA,NA,
