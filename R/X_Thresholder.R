@@ -83,7 +83,8 @@ verify <- c('Scotophilus kuhlii',
             'Carollia sowelli',
             'Myonycteris angolensis',
             'Nycteris macrotis',
-            'Nanonycteris veldkampii'
+            'Nanonycteris veldkampii',
+            'Pipistrellus deserti'
             )
 
 BatModels2 %>% filter(Sp %in% verify) 
@@ -148,6 +149,8 @@ BatWeb$Source[BatWeb$Sp %in% c('Artibeus jamaicensis',
 BatWeb$Source[BatWeb$Sp %in% c('Myonycteris angolensis',
                                'Nycteris macrotis',
                                'Nanonycteris veldkampii')] <- 'https://www.mdpi.com/1999-4915/12/8/855'
+
+BatWeb$Source[BatWeb$Sp %in% c('Pipistrellus deserti')] <- 'https://wwwnc.cdc.gov/eid/article/22/1/15-1397_article'
 
 # Compile and print out 
 
