@@ -67,27 +67,30 @@ BatModels2 %>% write_csv("BinaryPredictions.csv")
 
 # WHO WON! WHO'S NEXT!
 
-verify <- c('Scotophilus kuhlii', 
-            'Scotophilus heathii', 
-            'Hipposideros larvatus', 
-            'Hipposideros pomona', 
-            'Pteropus lylei', 
-            'Myotis pequinius', 
-            'Myotis horsfieldii',
-            'Desmodus rotundus',
-            'Macroglossus minimus',
-            'Hipposideros gigas',
-            'Plecotus auritus',
-            'Tadarida teniotis',
-            'Artibeus jamaicensis',
+verify <- c('Artibeus jamaicensis',
             'Carollia sowelli',
+            'Desmodus rotundus',
+            'Hipposideros gigas',
+            'Hipposideros larvatus', 
+            'Hipposideros lekaguli',
+            'Hipposideros pomona', 
+            'Macroglossus minimus',
+            'Megaerops kusnotoi',
             'Myonycteris angolensis',
-            'Nycteris macrotis',
+            'Myotis horsfieldii',
+            'Myotis pequinius', 
             'Nanonycteris veldkampii',
-            'Pipistrellus deserti'
+            'Nycteris macrotis',
+            'Pipistrellus coromandra',
+            'Pipistrellus deserti',
+            'Plecotus auritus',
+            'Pteropus lylei', 
+            'Scotophilus heathii', 
+            'Scotophilus kuhlii',
+            'Tadarida teniotis'
             )
 
-BatModels2 %>% filter(Sp %in% verify) 
+BatModels2 %>% filter(Sp %in% verify) %>% View()
 
 #################################
 
@@ -132,7 +135,8 @@ BatWeb$Source[BatWeb$Sp %in% c('Hipposideros pomona',
 BatWeb$Source[BatWeb$Sp %in% c('Pteropus lylei')] <- 'https://virologyj.biomedcentral.com/articles/10.1186/s12985-018-0950-6'
 
 BatWeb$Source[BatWeb$Sp %in% c('Hipposideros larvatus',
-                               'Scotophilus heathii')] <- 'https://virologyj.biomedcentral.com/articles/10.1186/s12985-015-0289-1'
+                               'Scotophilus heathii',
+                               'Hipposideros lekaguli')] <- 'https://virologyj.biomedcentral.com/articles/10.1186/s12985-015-0289-1'
 
 BatWeb$Source[BatWeb$Sp %in% c('Desmodus rotundus')] <- 'https://www.scielo.br/scielo.php?script=sci_arttext&pid=S1413-86702008000600003'
 
@@ -151,6 +155,12 @@ BatWeb$Source[BatWeb$Sp %in% c('Myonycteris angolensis',
                                'Nanonycteris veldkampii')] <- 'https://www.mdpi.com/1999-4915/12/8/855'
 
 BatWeb$Source[BatWeb$Sp %in% c('Pipistrellus deserti')] <- 'https://wwwnc.cdc.gov/eid/article/22/1/15-1397_article'
+
+BatWeb$Source[BatWeb$Sp %in% c('Pipistrellus coromandra')] <- 'https://www.sciencedirect.com/science/article/abs/pii/S1567134816305135'
+
+BatWeb$Source[BatWeb$Sp %in% c('Hipposideros lekaguli')] <- 'https://www.sciencedirect.com/science/article/abs/pii/S1567134816305135'
+
+BatWeb$Source[BatWeb$Sp %in% c('Megaerops kusnotei')] <- 'https://link.springer.com/content/pdf/10.1007/s12250-016-3727-3.pdf'
 
 # Compile and print out 
 
