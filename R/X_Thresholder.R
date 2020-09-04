@@ -164,5 +164,7 @@ BatWeb$Source[BatWeb$Sp %in% c('Megaerops kusnotei')] <- 'https://link.springer.
 
 # Compile and print out 
 
-BatWeb %>% write_csv("BinaryWebsite.csv")
+# BatWeb %>% write_csv("BinaryWebsite.csv")
+
+BatWeb %>% write_csv("BinaryWebsiteNew.csv")
 

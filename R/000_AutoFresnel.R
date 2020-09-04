@@ -1,8 +1,6 @@
 
 # 000_Fresnel Automating ####
 
-# 00_Fresnel Master Code ####
-
 rm(list = ls())
 
 library(tidyverse); library(fs); library(glue); library(zip)
@@ -22,8 +20,7 @@ Repos <- c(
   "dallas-betacov",
   "farrell-betacov",
   "guth-betacov",
-  "poisot-betacov",
-  "stock-betacov"
+  "poisot-betacov"
   
 )
 
