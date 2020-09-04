@@ -26,8 +26,6 @@ require(HPprediction)
 require(ape)
 require(dplyr)
 require(parallel)
-library(conflicted)
-
 ```
 
 ```{r custom_funcs, eval = T, echo = F}
