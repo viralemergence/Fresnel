@@ -20,7 +20,8 @@ Repos <- c(
   "dallas-betacov",
   "farrell-betacov",
   "guth-betacov",
-  "poisot-betacov"
+  "poisot-betacov",
+  "stock-betacov"
   
 )
 

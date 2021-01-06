@@ -51,6 +51,10 @@ stock1 <- read_csv(paste0(GithubDir,
                           "scores_tskrr_both.csv"), 
                    col_names = TRUE)
 
+#stock1 <- read_csv(paste0(GithubDir, 
+#                          "scores_tskrr_both_nocites.csv"), 
+#                   col_names = TRUE)
+
 # Triaging column names ####
 
 albery %>% rename(P.Alb = Count) -> albery

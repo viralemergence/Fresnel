@@ -19,7 +19,6 @@ ksource <- function(x, ...) {
 Repos <- c(
   
   "albery-betacov",
-  # "becker-betacov",
   "carlson-betacov",
   "dallas-betacov",
   "farrell-betacov",
@@ -56,7 +55,6 @@ for(r in r:length(Repos)){
   FocalRepo <- Repos[[r]] 
   
   if(dir.exists(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))){
-    
     
     file_delete(paste0(here::here(), "/Github/Repos/", FocalRepo, ".zip"))
     

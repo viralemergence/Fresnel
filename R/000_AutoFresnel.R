@@ -7,6 +7,9 @@ library(tidyverse); library(fs); library(glue); library(zip)
 library(conflicted)
 
 conflict_prefer("unzip", "zip")
+conflict_prefer("filter", "dplyr")
+conflict_prefer("summarise", "dplyr") 
+conflict_prefer("intersect", "dplyr") 
 
 here::here() %>% setwd()
 
