@@ -4,9 +4,20 @@
 rm(list = ls())
 
 library(tidyverse); library(fs); library(glue); library(zip)
-library(conflicted)
+library(conflicted); library(magrittr)
+
+dir_create("Github/Repos")
+dir_create("Github/CSVs")
 
 conflict_prefer("unzip", "zip")
+conflict_prefer("filter", "dplyr")
+conflict_prefer("rename", "dplyr")
+conflict_prefer("summarise", "dplyr")
+conflict_prefer("mutate", "dplyr")
+conflict_prefer("intersect", "base")
+conflict_prefer("as.matrix", "base")
+conflict_prefer("map", "purrr")
+conflict_prefer("select", "dplyr")
 
 here::here() %>% setwd()
 
@@ -33,19 +44,113 @@ SourceScripts <- list(
   "models",
   "scripts",
   "",
-  NA
+  NA,
+  "scripts"
   
 )
 
 names(SourceScripts) <- Repos
 
+ksource <- function(x, ...) {
+  
+  library(knitr)
+  
+  source(purl(x, output = tempfile()), ...)
+  
+}
+
 # 0a_Downloading Data Repos ####
+
+dir_delete("Github/Repos/virionette")
 
 source("R/00a_Downloading Data Repos.R")
 
+# Dictating whether to add the most up-to-date betacov predictions ####
+
+AddNewData <- T
+
+if(AddNewData){
+  
+  if(file.exists(paste0(here::here(), 
+                        '/Github/Repos/virionette/03_interaction_data/OldVirionette.csv'))){
+    
+    Virionette <- read_csv(paste0(here::here(), 
+                                  '/Github/Repos/virionette/03_interaction_data/OldVirionette.csv'))
+    
+  }else{
+    
+    Virionette <- read_csv(paste0(here::here(), 
+                                  '/Github/Repos/virionette/03_interaction_data/virionette.csv'))
+    
+    Virionette %>% 
+      write.csv(paste0(here::here(), 
+                       '/Github/Repos/virionette/03_interaction_data/OldVirionette.csv'))
+    
+  }
+  
+  BinaryWebsite <- read_csv("BinaryWebsite.csv")
+  
+  NewData <- 
+    BinaryWebsite %>% filter(`New data` == "New data") %>% 
+    mutate(virus_genus = "Betacoronavirus", host_order = "Chiroptera") %>% 
+    dplyr::select(host_species = Sp, host_order, virus_genus)
+  
+  Virionette %>% 
+    # anti_join(NewData, by = c("host_species", "host_order", "virus_genus")) %>% #nrow
+    bind_rows(NewData) %>% 
+    # nrow
+    mutate_at("host_species", ~str_replace_all(.x, "Myonycteris angolensis", "Lissonycteris angolensis")) %>% 
+    write.csv(paste0(here::here(), 
+                     '/Github/Repos/virionette/03_interaction_data/virionette.csv'))
+  
+}
+
 # 0b_Downloading Model Repos ####
 
+Repos %>% paste0("Github/Repos/", .) %>% map(dir_delete)
+Repos %>% paste0("Github/Repos/", ., ".zip") %>% map(file_delete)
+
 source("R/00b_Downloading Model Repos.R")
+
+# Deleting Output CSVs
+
+OutputCSVs <- list(
+  
+  glue("Output Files/{c('AlberyBats', 'AlberyNonBats')}.csv"),
+  
+  # ,
+  
+  c(glue("Carlson{c('Dart', 'Dart', 'Bart', 'Bart')}{c('Citations', 'Uncorrected', 'Citations', 'Uncorrected')}.csv")),
+  
+  c(glue("Dallas{c('Mammals', 'Mammals', 'Bats', 'Bats')}{c('Citations', 'Uncorrected', 'Citations', 'Uncorrected')}.csv")),
+  
+  c(glue("results/Farrell{c('Mammals', 'Mammals', 'Bat', 'Bat')}{c('Phylogeny', 'Full', 'Phylogeny', 'Full')}.csv")),
+  
+  c(glue("Guth{c('Citations', 'Uncorrected')}.csv")),
+  
+  c(glue("predictions/Poisot{c(rep('Knn', 4), rep('Lf', 2))}{c(1,1,2,2,'','')}{rep(c('Bat','Mammal'), 3)}.csv")),
+  
+  c(glue("05_results/Stock_both{c('', '_nocites')}.csv"))
+  
+)
+
+names(OutputCSVs) <- Repos
+
+for(r in seq_along(Repos)){
+  
+  print(paste("Removing", Repos[r], "CSVs"))
+  
+  paste0(here::here(),"/Github/Repos/", Repos[r]) %>% 
+    dir_ls(recurse = T) -> Files
+  
+  paste0(here::here(),"/Github/Repos/", Repos[r], "/", OutputCSVs[[Repos[r]]]) %>% 
+    paste(collapse = "|") -> ToRemove
+  
+  Files[str_detect(Files, ToRemove)] %>% 
+    map(file.remove)
+  
+  
+}
 
 # 0_Sourcing Models ####
 
@@ -79,13 +184,13 @@ if(ModelRun){
         }else{
           
           SourceScripts[[r]] %>% list.files(full.names = T, 
-                                            pattern = "[.]R$|[.]rmd$|[.]Rmd$") ->
+                                            pattern = "[.]r$|[.]R$|[.]rmd$|[.]Rmd$") ->
             
             SubSources
           
         }
         
-        rr <- 2
+        # rr <- 2
         
         for(rr in seq_along(SubSources)){
           
@@ -99,7 +204,7 @@ if(ModelRun){
           
           print(SubSources[[rr]])
           
-          if(stringr::str_detect(SubSources[[rr]], "[.]R$")){
+          if(stringr::str_detect(SubSources[[rr]], "[.]R$|[.]r$")){
             
             source(SubSources[[rr]])
             
@@ -142,7 +247,9 @@ OutputCSVs <- list(
   
   c(glue("Guth{c('Citations', 'Uncorrected')}.csv")),
   
-  c(glue("predictions/Poisot{c(rep('Knn', 4), rep('Lf', 2))}{c(1,1,2,2,'','')}{rep(c('Bat','Mammal'), 3)}.csv"))
+  c(glue("predictions/Poisot{c(rep('Knn', 4), rep('Lf', 2))}{c(1,1,2,2,'','')}{rep(c('Bat','Mammal'), 3)}.csv")),
+  
+  c(glue("05_results/Stock_both{c('', '_nocites')}.csv"))
   
 )
 
