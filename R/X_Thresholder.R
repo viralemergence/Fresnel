@@ -74,11 +74,13 @@ verify <- c('Artibeus jamaicensis',
             'Hipposideros larvatus', 
             'Hipposideros lekaguli',
             'Hipposideros pomona', 
+            'Hypsugo pulveratus',
             'Macroglossus minimus',
             'Megaerops kusnotoi',
             'Myonycteris angolensis',
             'Myotis horsfieldii',
             'Myotis pequinius', 
+            'Myotis punicus',
             'Nanonycteris veldkampii',
             'Nycteris macrotis',
             'Pipistrellus coromandra',
@@ -162,9 +164,17 @@ BatWeb$Source[BatWeb$Sp %in% c('Hipposideros lekaguli')] <- 'https://www.science
 
 BatWeb$Source[BatWeb$Sp %in% c('Megaerops kusnotei')] <- 'https://link.springer.com/content/pdf/10.1007/s12250-016-3727-3.pdf'
 
+BatWeb$Source[BatWeb$Sp %in% c('Hipposideros lekaguli')] <- 'https://www.sciencedirect.com/science/article/abs/pii/S1567134816305135'
+
+BatWeb$Source[BatWeb$Sp %in% c('Megaerops kusnotei')] <- 'https://link.springer.com/content/pdf/10.1007/s12250-016-3727-3.pdf'
+
+BatWeb$Source[BatWeb$Sp %in% c('Hypsugo pulveratus')] <- 'GenBank: MN312842, MN312848, MN312849, MN312852, MN312853, MN312854'
+
+BatWeb$Source[BatWeb$Sp %in% c('Myotis punicus')] <- 'GenBank: MN823619'
+
 # Compile and print out 
 
-# BatWeb %>% write_csv("BinaryWebsite.csv")
+BatWeb %>% write_csv("BinaryWebsite.csv")
 
-BatWeb %>% write_csv("BinaryWebsiteNew.csv")
+#BatWeb %>% write_csv("BinaryWebsiteNew.csv")
 

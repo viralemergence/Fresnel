@@ -97,7 +97,7 @@ Pipistrellus paterculus,Unreported,Unreported,Suspected,Suspected,Suspected,Susp
 Vespertilio murinus,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,
 Pipistrellus pygmaeus,Reported,Reported,True +,True +,True +,True +,True +,NA,False -,False -,False -,
 Rhinolophus coelophyllus,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Unlikely,Unlikely,
-Hypsugo pulveratus,Unreported,Unreported,Suspected,Suspected,Suspected,NA,Unlikely,NA,NA,NA,NA,
+Hypsugo pulveratus,Unreported,New data,Suspected,Suspected,Suspected,NA,Unlikely,NA,NA,NA,NA,"GenBank: MN312842, MN312848, MN312849, MN312852, MN312853, MN312854"
 Myotis formosus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Tadarida teniotis,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,https://link.springer.com/content/pdf/10.1007/s11262-018-1614-8.pdf
 Pipistrellus coromandra,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Unlikely,Unlikely,https://www.sciencedirect.com/science/article/abs/pii/S1567134816305135
@@ -250,7 +250,7 @@ Myotis sicarius,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Un
 Kerivoula picta,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Rhinolophus inops,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Myotis csorbai,Unreported,Unreported,Suspected,Suspected,Suspected,NA,NA,NA,NA,NA,NA,
-Myotis punicus,Unreported,Unreported,Unlikely,Unlikely,Suspected,Suspected,Unlikely,Suspected,Unlikely,Unlikely,Unlikely,
+Myotis punicus,Unreported,New data,Unlikely,Unlikely,Suspected,Suspected,Unlikely,Suspected,Unlikely,Unlikely,Unlikely,GenBank: MN823619
 Hipposideros rotalis,Unreported,Unreported,Suspected,Suspected,Suspected,NA,NA,NA,NA,NA,NA,
 Hipposideros turpis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Epomophorus minor,Unreported,Unreported,Suspected,Suspected,Unlikely,Suspected,Suspected,NA,NA,NA,NA,
