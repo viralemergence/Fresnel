@@ -87,6 +87,7 @@ verify <- c('Artibeus jamaicensis',
             'Pipistrellus deserti',
             'Plecotus auritus',
             'Pteropus lylei', 
+            'Rhinolophus acuminatus',
             'Rhinolophus shameli',
             'Scotophilus heathii', 
             'Scotophilus kuhlii',
@@ -174,6 +175,8 @@ BatWeb$Source[BatWeb$Sp %in% c('Hypsugo pulveratus')] <- 'GenBank: MN312842, MN3
 BatWeb$Source[BatWeb$Sp %in% c('Myotis punicus')] <- 'GenBank: MN823619'
 
 BatWeb$Source[BatWeb$Sp %in% c('Rhinolophus shameli')] <- 'https://www.biorxiv.org/content/10.1101/2021.01.26.428212v1'
+
+BatWeb$Source[BatWeb$Sp %in% c('Rhinolophus acuminatus')] <- 'https://www.nature.com/articles/s41467-021-21240-1'
 
 # Compile and print out 
 
