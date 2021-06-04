@@ -82,13 +82,17 @@ verify <- c('Artibeus jamaicensis',
             'Myotis pequinius', 
             'Myotis punicus',
             'Nanonycteris veldkampii',
+            'Nycteris gambiensis',
             'Nycteris macrotis',
             'Pipistrellus coromandra',
             'Pipistrellus deserti',
             'Plecotus auritus',
+            'Pteronotus personatus',
             'Pteropus lylei', 
             'Rhinolophus acuminatus',
+            'Rhinolophus malayanus',
             'Rhinolophus shameli',
+            'Rhinolophus stheno',
             'Scotophilus heathii', 
             'Scotophilus kuhlii',
             'Tadarida teniotis'
@@ -177,6 +181,12 @@ BatWeb$Source[BatWeb$Sp %in% c('Myotis punicus')] <- 'GenBank: MN823619'
 BatWeb$Source[BatWeb$Sp %in% c('Rhinolophus shameli')] <- 'https://www.biorxiv.org/content/10.1101/2021.01.26.428212v1'
 
 BatWeb$Source[BatWeb$Sp %in% c('Rhinolophus acuminatus')] <- 'https://www.nature.com/articles/s41467-021-21240-1'
+
+BatWeb$Source[BatWeb$Sp %in% c('Nycteris gambiensis',
+                               'Pteronotus personatus')] <- 'https://journals.plos.org/plospathogens/article/authors?id=10.1371/journal.ppat.1008758'
+
+BatWeb$Source[BatWeb$Sp %in% c('Rhinolophus stheno',
+                               'Rhinolophus malayanus')] <- 'https://www.biorxiv.org/content/10.1101/2021.03.08.434390v1?rss=1'
 
 # Compile and print out 
 

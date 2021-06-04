@@ -57,7 +57,7 @@ Pipistrellus ceylonicus,Unreported,Unreported,Suspected,Suspected,Suspected,Susp
 Murina leucogaster,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
 Myotis altarium,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Scotophilus leucogaster,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,True +,
-Rhinolophus malayanus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
+Rhinolophus malayanus,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,https://www.biorxiv.org/content/10.1101/2021.03.08.434390v1?rss=1
 Hipposideros pratti,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,True +,
 Epomops franqueti,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,False -,True +,
 Rhinopoma hardwickii,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,False -,
@@ -103,7 +103,7 @@ Tadarida teniotis,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Unl
 Pipistrellus coromandra,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Unlikely,Unlikely,https://www.sciencedirect.com/science/article/abs/pii/S1567134816305135
 Rhinolophus rouxii,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,
 Myonycteris torquata,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Suspected,NA,Unlikely,Unlikely,Unlikely,
-Rhinolophus stheno,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Unlikely,Unlikely,
+Rhinolophus stheno,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Unlikely,Unlikely,https://www.biorxiv.org/content/10.1101/2021.03.08.434390v1?rss=1
 Scotophilus viridis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Hipposideros lylei,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Aselliscus stoliczkanus,Reported,Reported,False -,True +,True +,True +,True +,NA,False -,False -,False -,
@@ -338,7 +338,7 @@ Styloctenium wallacei,Unreported,Unreported,Suspected,Suspected,Suspected,Suspec
 Myotis bocagii,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Pteropus neohibernicus,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Unlikely,Unlikely,
 Cynopterus luzoniensis,Unreported,Unreported,Suspected,Unlikely,Suspected,Suspected,Suspected,NA,NA,NA,NA,
-Nycteris gambiensis,Unreported,Unreported,Unlikely,Unlikely,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
+Nycteris gambiensis,Unreported,New data,Unlikely,Unlikely,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,https://journals.plos.org/plospathogens/article/authors?id=10.1371/journal.ppat.1008758
 Nyctinomops macrotis,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,
 Harpyionycteris celebensis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Myotis lucifugus,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
@@ -631,7 +631,7 @@ Scotophilus borbonicus,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspecte
 Eptesicus platyops,Unreported,Unreported,Unlikely,Unlikely,Suspected,NA,Unlikely,NA,NA,NA,NA,
 Chaerephon johorensis,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,NA,NA,NA,NA,
 Phylloderma stenops,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,NA,NA,NA,NA,
-Pteronotus personatus,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,NA,NA,NA,NA,
+Pteronotus personatus,Unreported,New data,Unlikely,Suspected,Unlikely,Suspected,Unlikely,NA,NA,NA,NA,https://journals.plos.org/plospathogens/article/authors?id=10.1371/journal.ppat.1008758
 Neoromicia flavescens,Unreported,Unreported,Unlikely,Unlikely,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Laephotis botswanae,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,NA,NA,NA,NA,
 Nyctalus azoreum,Unreported,Unreported,Unlikely,Unlikely,Unlikely,NA,Unlikely,NA,NA,NA,NA,

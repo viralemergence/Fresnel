@@ -30,6 +30,7 @@ scores$category <- as.factor(score$category)
 library(awtools)
 
 scores %>% 
+  #filter(category == 'Ensemble') %>%
   ggplot(aes(x = pred.pos*100, y = correct*100, fill = category, label = factor(names))) + 
   geom_point(pch = 16, size = 2) + 
   xlab("Predicted positivity rate (%)") + 
@@ -48,7 +49,7 @@ scores %>%
         axis.title.y = element_text(vjust=3),
         legend.title = element_blank(),
         legend.position = 'n')  +
-  scale_fill_manual(values = c("indianred1", "#FECEA8", "lightskyblue", "#E84A5F"))  #+
+  scale_fill_manual(values = c("grey80", "plum2", "indianred1", "lightskyblue"))  #+
   #scale_color_manual(values = brewer.pal(4, "Spectral"))
 
 write.csv(scores, 'Scores.csv')
