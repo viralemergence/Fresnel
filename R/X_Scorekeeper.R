@@ -25,7 +25,7 @@ for (i in 1:nrow(scores)) {
 
 scores$category <- c('Ensemble','Trait','Trait','Trait','Hybrid','Network','Network','Network','Network')
 
-scores$category <- as.factor(score$category)
+scores$category <- as.factor(scores$category)
 
 library(awtools)
 

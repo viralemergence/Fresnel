@@ -70,7 +70,7 @@ Dyacopterus spadiceus,Reported,Reported,True +,True +,True +,True +,True +,NA,Fa
 Myotis nattereri,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
 Barbastella barbastellus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
 Taphozous melanopogon,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
-Chaerephon pumilus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
+Chaerephon pumilus,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,spillover.global / viralemergence.org/virion
 Taphozous perforatus,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,True +,
 Mops condylurus,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,True +,
 Vespertilio sinensis,Reported,Reported,True +,True +,True +,True +,True +,True +,True +,True +,False -,
@@ -94,7 +94,7 @@ Ia io,Reported,Reported,True +,True +,True +,True +,False -,NA,False -,False -,F
 Pipistrellus tenuis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Epomophorus minimus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Pipistrellus paterculus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
-Vespertilio murinus,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,
+Vespertilio murinus,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0252534
 Pipistrellus pygmaeus,Reported,Reported,True +,True +,True +,True +,True +,NA,False -,False -,False -,
 Rhinolophus coelophyllus,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Unlikely,Unlikely,
 Hypsugo pulveratus,Unreported,New data,Suspected,Suspected,Suspected,NA,Unlikely,NA,NA,NA,NA,"GenBank: MN312842, MN312848, MN312849, MN312852, MN312853, MN312854"
@@ -102,7 +102,7 @@ Myotis formosus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Un
 Tadarida teniotis,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,https://link.springer.com/content/pdf/10.1007/s11262-018-1614-8.pdf
 Pipistrellus coromandra,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Unlikely,Unlikely,https://www.sciencedirect.com/science/article/abs/pii/S1567134816305135
 Rhinolophus rouxii,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,
-Myonycteris torquata,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Suspected,NA,Unlikely,Unlikely,Unlikely,
+Myonycteris torquata,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Suspected,NA,Unlikely,Unlikely,Unlikely,spillover.global / viralemergence.org/virion
 Rhinolophus stheno,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Unlikely,Unlikely,https://www.biorxiv.org/content/10.1101/2021.03.08.434390v1?rss=1
 Scotophilus viridis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Hipposideros lylei,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
@@ -196,7 +196,7 @@ Rhinolophus sedulus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspecte
 Haplonycteris fischeri,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Taphozous longimanus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Hipposideros speoris,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,
-Neoromicia somalicus,Unreported,Unreported,Suspected,Suspected,Suspected,NA,Unlikely,NA,NA,NA,NA,
+Neoromicia somalicus,Unreported,New data,Suspected,Suspected,Suspected,NA,Unlikely,NA,NA,NA,NA,spillover.global / viralemergence.org/virion
 Coleura afra,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Eonycteris robusta,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Rousettus celebensis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
@@ -296,7 +296,7 @@ Tadarida latouchei,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected
 Harpiocephalus mordax,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Pteronotus davyi,Reported,Reported,True +,False -,False -,True +,False -,True +,True +,True +,True +,
 Nyctimene cephalotes,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
-Glauconycteris variegata,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
+Glauconycteris variegata,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,spillover.global / viralemergence.org/virion
 Myotis schaubi,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Megaerops kusnotoi,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Uroderma bilobatum,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
@@ -379,7 +379,7 @@ Pteropus seychellensis,Unreported,Unreported,Suspected,Suspected,Unlikely,Suspec
 Rhinolophus guineensis,Unreported,Unreported,Suspected,Unlikely,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Eumops perotis,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,
 Myotis volans,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
-Hipposideros fuliginosus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
+Hipposideros fuliginosus,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,spillover.global / viralemergence.org/virion
 Anoura geoffroyi,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,
 Platyrrhinus lineatus,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,
 Rhinolophus rufus,Unreported,Unreported,Suspected,Unlikely,Unlikely,Suspected,Suspected,NA,NA,NA,NA,
@@ -406,7 +406,7 @@ Scotoecus albigula,Unreported,Unreported,Suspected,Suspected,Suspected,NA,Unlike
 Nyctimene aello,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Myotis welwitschii,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Vespadelus regulus,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Unlikely,Unlikely,
-Hipposideros cervinus,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
+Hipposideros cervinus,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,spillover.global / viralemergence.org/virion
 Mimetillus moloneyi,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Eptesicus japonensis,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Suspected,NA,NA,NA,NA,
 Miniopterus australis,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Unlikely,Unlikely,

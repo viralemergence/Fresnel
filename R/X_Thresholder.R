@@ -95,7 +95,15 @@ verify <- c('Artibeus jamaicensis',
             'Rhinolophus stheno',
             'Scotophilus heathii', 
             'Scotophilus kuhlii',
-            'Tadarida teniotis'
+            'Tadarida teniotis',
+            'Vespertilio murinus',
+            # These need to be confirmed:
+            'Myonycteris torquata', 
+            'Hipposideros fuliginosus', 
+            'Hipposideros cervinus',
+            'Chaerephon pumilus', 
+            'Glauconycteris variegata', 
+            'Neoromicia somalicus'
             )
 
 BatModels2 %>% filter(Sp %in% verify) %>% View()
@@ -187,6 +195,15 @@ BatWeb$Source[BatWeb$Sp %in% c('Nycteris gambiensis',
 
 BatWeb$Source[BatWeb$Sp %in% c('Rhinolophus stheno',
                                'Rhinolophus malayanus')] <- 'https://www.biorxiv.org/content/10.1101/2021.03.08.434390v1?rss=1'
+
+BatWeb$Source[BatWeb$Sp %in% c('Vespertilio murinus')] <- 'https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0252534'
+
+BatWeb$Source[BatWeb$Sp %in% c('Myonycteris torquata', 
+                               'Hipposideros fuliginosus', 
+                               'Hipposideros cervinus',
+                               'Chaerephon pumilus', 
+                               'Glauconycteris variegata', 
+                               'Neoromicia somalicus')] <- 'spillover.global / viralemergence.org/virion'
 
 # Compile and print out 
 

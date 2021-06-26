@@ -123,7 +123,8 @@ Models %>%
   mutate(Betacov = replace_na(Betacov, 0)) ->
   Models
 
-Models %<>% select(-c(R.Stock2:R.Stock4))
+# Models %<>% select(-c(R.Stock2:R.Stock4))
+# ^ This throws an error when you source 
 
 # Generate proportional rankings
 
