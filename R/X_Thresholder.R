@@ -67,27 +67,37 @@ BatModels2 %>% write_csv("BinaryPredictions.csv")
 
 # WHO WON! WHO'S NEXT!
 
-verify <- c('Artibeus jamaicensis',
+verify <- c('Acerodon celebensis',
+            'Artibeus jamaicensis',
             'Carollia sowelli',
+            'Chaerephon pumilus', 
             'Desmodus rotundus',
+            'Epomops buettikoferi',
+            'Glauconycteris variegata', 
+            'Hipposideros cervinus',
+            'Hipposideros fuliginosus', 
             'Hipposideros gigas',
             'Hipposideros larvatus', 
             'Hipposideros lekaguli',
             'Hipposideros pomona', 
             'Hypsugo pulveratus',
             'Macroglossus minimus',
+            'Megaerops ecaudatus',
             'Megaerops kusnotoi',
             'Myonycteris angolensis',
+            'Myonycteris torquata', 
             'Myotis horsfieldii',
             'Myotis pequinius', 
             'Myotis punicus',
             'Nanonycteris veldkampii',
+            'Neoromicia somalicus',
             'Nycteris gambiensis',
             'Nycteris macrotis',
             'Pipistrellus coromandra',
             'Pipistrellus deserti',
             'Plecotus auritus',
             'Pteronotus personatus',
+            'Pteropus conspicillatus',
             'Pteropus lylei', 
             'Rhinolophus acuminatus',
             'Rhinolophus malayanus',
@@ -96,14 +106,7 @@ verify <- c('Artibeus jamaicensis',
             'Scotophilus heathii', 
             'Scotophilus kuhlii',
             'Tadarida teniotis',
-            'Vespertilio murinus',
-            # These need to be confirmed:
-            'Myonycteris torquata', 
-            'Hipposideros fuliginosus', 
-            'Hipposideros cervinus',
-            'Chaerephon pumilus', 
-            'Glauconycteris variegata', 
-            'Neoromicia somalicus'
+            'Vespertilio murinus'
             )
 
 BatModels2 %>% filter(Sp %in% verify) %>% View()
@@ -203,7 +206,11 @@ BatWeb$Source[BatWeb$Sp %in% c('Myonycteris torquata',
                                'Hipposideros cervinus',
                                'Chaerephon pumilus', 
                                'Glauconycteris variegata', 
-                               'Neoromicia somalicus')] <- 'spillover.global / viralemergence.org/virion'
+                               'Neoromicia somalicus',
+                               'Megaerops ecaudatus',
+                               'Epomops buettikoferi',
+                               'Acerodon celebensis',
+                               'Pteropus conspicillatus')] <- 'USAID PREDICT data - PREDICT_PCR_Tests.csv - June 28, 2021'
 
 # Compile and print out 
 
