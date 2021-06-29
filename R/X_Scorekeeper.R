@@ -49,9 +49,9 @@ scores %>%
         axis.title.y = element_text(vjust=3),
         legend.title = element_blank(),
         legend.position = 'n')  +
-  scale_fill_manual(values = c("grey80", "plum2", "indianred1", "lightskyblue"))  #+
+  scale_fill_manual(values = c("grey80", "plum2", "indianred1", "lightskyblue")) -> g1 #+
   #scale_color_manual(values = brewer.pal(4, "Spectral"))
 
-write.csv(scores, 'Scores.csv')
+# write.csv(scores, 'Scores.csv')
 
         

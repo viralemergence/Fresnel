@@ -1,7 +1,4 @@
 
-source("~/Github/Fresnel/R/01_Fresnel Import.R")
-source("~/Github/Fresnel/R/X_Thresholder.R")
-
 library(Bolstad2)
 
 BatModels %>%
@@ -80,17 +77,24 @@ d2 <- bind_rows(l2)
 d <- bind_rows(d, d2)
 
 d %>% 
-  # filter(Model %in% c("Trait.1", "Ensemble.2")) %>% 
-  ggplot(aes(x = PredPos, y = Acc, color = Model, group = Model)) + 
-  geom_abline(slope = 1, intercept = 0, lwd = 0.9, lty = 'dashed', col = 'dark gray') + 
-  geom_line(lwd = 0.9) + 
-  xlab("Predicted prevalence across all species (%)") + 
-  ylab("Correct prediction of new positives (%)") + 
-  theme_bw() + 
-  theme(legend.position = c(0.9, 0.2),
+  filter(!(Model %in% c("Ensemble.2"))) %>% 
+  mutate(Model = recode(Model, !!!c("Ensemble.1" = "Ensemble"))) %>% 
+  mutate(Model = factor(Model, levels = c("Network.1", "Network.2", "Network.3", "Network.4",
+                                          "Trait.1", "Trait.2", "Trait.3", "Hybrid.1",
+                                          "Ensemble"))) %>% 
+  ggplot(aes(x = PredPos, y = Acc, color = Model, group = Model, label = factor(Model))) + 
+  scale_color_manual(values = c("indianred",  "indianred1",  "darkred",  "red",
+                       "lightblue",  "lightskyblue",  "lightskyblue3", "plum3", "black")) + 
+  geom_abline(slope = 1, intercept = 0, col = 'grey70') + 
+  geom_line(lwd = 0.70, alpha = 0.7) + 
+  xlab("Predicted positivity rate (%)") + 
+  ylab("New hosts correctly identified (%)") + 
+  theme_bw(base_size = 15) + 
+  theme(legend.position = c(0.87, 0.25),
         plot.margin=unit(c(1,1,1.5,1.2),"cm"),
         axis.title.x = element_text(vjust = -3),
-        axis.title.y = element_text(vjust = 7)) 
+        axis.title.y = element_text(vjust = 7)) + 
+  guides(colour = guide_legend(override.aes = list(alpha = 1))) -> g2
 
 scores2 <- sapply(unique(d2$Model), function(j) {
   sintegral(d2 %>% filter(Model == j) %>% pull(PredPos),
