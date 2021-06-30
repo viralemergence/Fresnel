@@ -280,12 +280,12 @@ NonBatModels_IS %<>% arrange(PropRank)
 if(0){
   
   # dir_create("Cleaned Files")
-  
-  #BatModels_OS %>% write.csv("Cleaned Files/BatModels_OS.csv", row.names = F)
-  #BatModels_IS %>% write.csv("Cleaned Files/BatModels_IS.csv", row.names = F)
-  #NonBatModels_OS %>% write.csv("Cleaned Files/NonBatModels_OS.csv", row.names = F)
-  #NonBatModels_IS %>% write.csv("Cleaned Files/NonBatModels_IS.csv", row.names = F)
-  
+  # 
+  # BatModels_OS %>% write.csv("Cleaned Files/BatModels_OS.csv", row.names = F)
+  # BatModels_IS %>% write.csv("Cleaned Files/BatModels_IS.csv", row.names = F)
+  # NonBatModels_OS %>% write.csv("Cleaned Files/NonBatModels_OS.csv", row.names = F)
+  # NonBatModels_IS %>% write.csv("Cleaned Files/NonBatModels_IS.csv", row.names = F)
+
   
   
   batin %>% gather("Key", "Value", -c(Sp, Betacov, Rank, PropRank, InSample)) %>%
