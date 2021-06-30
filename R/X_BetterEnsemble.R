@@ -133,4 +133,8 @@ tvalues <- optimal.thresholds(threshdf[,c("Sp","Binary","Negative")],
                               na.rm = TRUE)
 
 threshdf %>% mutate(EnsembleBinary = (Ensemble.2 < (1 - tvalues$Negative))) %>%
-  write_csv("BinaryEnsemble2.csv")
+  select(-Negative) %>%
+  write_csv("WeightedEnsemble2020.csv")
+
+names(w1) <- scores$Model
+write_rds(w1, "EnsembleWeights.rds")
