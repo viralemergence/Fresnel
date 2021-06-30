@@ -115,3 +115,22 @@ th <- tdf$Thresh[which(tdf$Diff == max(tdf$Diff))]
 table(auc.df$Ensemble.2 < th)
 
 table(auc.df$`New data`, auc.df$Ensemble.2 < th)
+
+########## Threshold these with 90% sensitivity 
+
+auc.df %>% select(Sp, `New data`,
+                  Ensemble.2) %>%
+  mutate(Binary = recode(`New data`, !!!c("Reported" = 1,
+                                          "New data" = 1,
+                                          "Unreported" = 0))) %>%
+  mutate(Negative = 1 - Ensemble.2) %>%
+  select(Sp, Binary, Negative, Ensemble.2) -> threshdf
+
+tvalues <- optimal.thresholds(threshdf[,c("Sp","Binary","Negative")],
+                              threshold = 10001,
+                              opt.methods = 10,
+                              req.sens = 0.9,
+                              na.rm = TRUE)
+
+threshdf %>% mutate(EnsembleBinary = (Ensemble.2 < (1 - tvalues$Negative))) %>%
+  write_csv("BinaryEnsemble2.csv")
