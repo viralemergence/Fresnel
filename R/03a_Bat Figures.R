@@ -288,6 +288,33 @@ BatModels_IS %>%
   plot_annotation(tag_levels = "A") +
   ggsave("Figures/In_Out_ModelAgreement.jpeg", units = "mm", height = 250, width = 200)
 
+((TilePlot_IS + coord_fixed() + ggtitle("In-sample")|
+    TilePlot_OS + coord_fixed() + ggtitle("Out-of-sample")) +
+    
+    plot_layout(guides = "collect")) +
+  plot_annotation(tag_levels = "A") +
+  ggsave("Figures/TilePlots.jpeg", units = "mm", 
+         height = 120, width = 200)
+
+(BumpPlot_IS + 
+    theme(legend.position = "bottom") +
+    guides(colour = guide_legend(direction = "vertical",
+                                 ncol = 1,
+                                 nrow = 10))|
+    
+    
+    BumpPlot_OS + 
+    theme(legend.position = "bottom") +
+    labs(y = "") +
+    guides(colour = guide_legend(direction = "vertical",
+                                 ncol = 1,
+                                 nrow = 10))) +
+  
+  # plot_layout(heights = c(1, 1)) +
+  plot_annotation(tag_levels = "A") +
+  ggsave("Figures/BumpPlots.jpeg", units = "mm", 
+         height = 180, width = 200)
+
 
 # Auxiliary plots ####
 
