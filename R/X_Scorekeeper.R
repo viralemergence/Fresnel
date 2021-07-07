@@ -3,7 +3,7 @@ library(ggrepel)
 
 BatWeb %<>% as_tibble()
 
-BatWeb$Network.1[which(!is.na(BatWeb$Network.2) & is.na(BatWeb$Network.1))] <- 'Unlikely'
+#BatWeb$Network.1[which(!is.na(BatWeb$Network.2) & is.na(BatWeb$Network.1))] <- 'Unlikely'
 
 BatWeb %>% filter(`New data`=='New data') -> BatNew
 

@@ -21,13 +21,15 @@ models = c("Trait.1", "Trait.2", "Trait.3", "Hybrid.1",
 
 l <- lapply(c(1:8), function(x) {
 
-blankdf <- data.frame(Model = NA, Thresh = c(0:1000)/1000, PredPos = NA, Acc = NA)
+blankdf <- data.frame(Model = NA, Thresh = c(0:1001)/1000, PredPos = NA, Acc = NA)
+
 for (i in 1:nrow(blankdf)) {
   blankdf$Model <- models[x]
   blankdf$PredPos[i] <- sum(na.omit(auc.df[,models[x]]) < blankdf$Thresh[i]) # Less than because it's rank
   blankdf$Acc[i] <- sum(na.omit(auc.df[auc.df$`New data`=="New data",models[x]]) < blankdf$Thresh[i])
   print(i)
 }
+
 blankdf$PredPos <- blankdf$PredPos/max(blankdf$PredPos)
 blankdf$Acc <- blankdf$Acc/max(blankdf$Acc)
 

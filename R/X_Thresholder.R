@@ -25,14 +25,17 @@ auc(data.frame(BatModels2[,c('n','Betacov',"PropRank")]), na.rm = TRUE)
 
 ####### 
 
-tvalues <- optimal.thresholds(data.frame(BatModels2[,c('n','Betacov',RNames,PNames,'PropRank')]),
-                              threshold = 10001,
-                              opt.methods = 10,
-                              req.sens = 0.9,
-                              na.rm = TRUE)
+tvalues <- sapply(c(RNames,PNames,'PropRank'), function(x){
+  o <- optimal.thresholds(data.frame(BatModels2[,c('n','Betacov',x)]),
+                     threshold = 10001,
+                     opt.methods = 10,
+                     req.sens = 0.9,
+                     na.rm = TRUE)
+  return(o[,2])
+})
 
-for (name in RNames) {BatModels2[,name] <- as.vector(BatModels2[,name] > tvalues[1,name])}
-for (name in PNames) {BatModels2[,name] <- as.vector(BatModels2[,name] > tvalues[1,name])}
+for (name in RNames) {BatModels2[,name] <- as.vector(BatModels2[,name] > tvalues[name])}
+for (name in PNames) {BatModels2[,name] <- as.vector(BatModels2[,name] > tvalues[name])}
 
 colSums(BatModels2[BatModels2$Betacov==0,RNames], na.rm = TRUE)
 colSums(BatModels2[BatModels2$Betacov==0,PNames], na.rm = TRUE)
@@ -120,9 +123,9 @@ key2 <- c(`0` = "Unlikely", `1` = "Suspected",
 
 BatModels2 %>% mutate_at(vars(contains(".")), ~(as.numeric(.))) %>%
   mutate(Ensemble = as.numeric(Ensemble)) %>%
-  mutate(Betacov2 = Betacov*2) %>%
-  mutate_at(vars(contains(".")), ~(. + Betacov2)) %>% 
-  mutate(Ensemble = Ensemble + Betacov2) %>% 
+  mutate(Betacov2 = Betacov*2) %>% 
+  mutate_at(vars(contains(".")), ~(. + Betacov2)) %>%
+  mutate(Ensemble = Ensemble + Betacov2) %>%  
   mutate_at(vars(contains(".")), ~(recode(.,!!!key2))) %>% 
   mutate(Ensemble =  recode(Ensemble,!!!key2)) %>% 
   mutate(Betacov = recode(Betacov, !!!key1)) %>% 
