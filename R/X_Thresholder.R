@@ -42,7 +42,7 @@ colSums(BatModels2[BatModels2$Betacov==0,PNames], na.rm = TRUE)
 
 # TOTAL RANK
 
-BatModels2[,'PropRank'] <- as.vector(BatModels2[,'PropRank'] > tvalues[1,'PropRank'])
+BatModels2[,'PropRank'] <- as.vector(BatModels2[,'PropRank'] > tvalues['PropRank'])
 
 table(BatModels2[BatModels2$Betacov==0,'PropRank'])
 
