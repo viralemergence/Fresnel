@@ -1,10 +1,10 @@
-"","scale","sample","factor","taxa","tips","clade","other"
-"1","bats","in",1,"Yangochiroptera",160,0.550095570516611,0.392879447327595
-"2","bats","out",1,"Mystacinidae, Noctilionidae, Mormoopidae, Phyllostomidae",161,0.730406944498245,0.482785718855235
-"3","bats","out",2,"Rhinolophidae",73,0.294254283488992,0.537510016926929
-"4","bats","out",3,"Pteropodidae",173,0.379405410824919,0.548412776375427
-"5","bats","out",4,"Mosia, Emballonura, Coleura, Rhynchonycteris, Cyttarops, Diclidurus, Centronycteris, Cormura, Saccopteryx, Balantiopteryx, Peropteryx",31,0.754855533216206,0.513541935179437
-"6","bats","out",5,"Eonycteris, Macroglossus, Syconycteris, Notopteris, Melonycteris, Harpyionycteris, Aproteles, Dobsonia, Styloctenium, Neopteryx, Pteralopex, Acerodon, Pteropus",99,0.457843052653527,0.527163435084264
-"7","bats","out",6,"Thyropteridae, Furipteridae, Natalidae",12,0.818248697599656,0.517215557071941
-"8","bats","out",7,"Otomops, Promops, Molossus, Eumops",26,0.668540701450329,0.516901967911761
-"9","bats","out",8,"Lasiurus",15,0.716886537909288,0.517810290187329
+"","sample","factor","taxa","tips","clade","other"
+"1","raw",1,"Myzopodidae, Thyropteridae, Furipteridae, Natalidae, Mystacinidae, Noctilionidae, Mormoopidae, Phyllostomidae, Molossidae, Vespertilionidae",658,0.047112462006079,0.121518987341772
+"2","in",1,"Natalidae, Mystacinidae, Mormoopidae, Phyllostomidae, Molossidae, Vespertilionidae",160,0.550095570516611,0.392879447327595
+"3","out",1,"Noctilionidae, Mormoopidae, Phyllostomidae",117,0.765435858770831,0.489352528556375
+"4","out",2,"Rhinolophidae",48,0.264989998589655,0.546704261011094
+"5","out",3,"Emballonuridae, Craseonycteridae, Rhinopomatidae, Megadermatidae, Nycteridae, Hipposideridae, Hipposideridae, Myzopodidae, Thyropteridae, Furipteridae, Natalidae, Molossidae, Vespertilionidae",498,0.538704438301676,0.515015314542858
+"6","out",4,"Mosia, Emballonura, Coleura, Cyttarops, Diclidurus, Centronycteris, Cormura, Saccopteryx, Balantiopteryx, Peropteryx",29,0.753871608810306,0.521340445839138
+"7","out",5,"Eonycteris, Macroglossus, Syconycteris, Notopteris, Melonycteris, Harpyionycteris, NA, Dobsonia, Styloctenium, Neopteryx, Pteralopex, Acerodon, Pteropus",82,0.457964329236922,0.537993507606984
+"8","out",6,"Thyropteridae, Furipteridae, Natalidae",10,0.835568837250729,0.525904602761886
+"9","out",7,"Otomops, Promops, Molossus, Eumops",20,0.700440574570571,0.525398727163317
