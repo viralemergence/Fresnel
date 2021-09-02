@@ -182,9 +182,9 @@ BatWeb$Source[BatWeb$Sp %in% c('Pipistrellus coromandra')] <- 'https://www.scien
 
 BatWeb$Source[BatWeb$Sp %in% c('Hipposideros lekaguli')] <- 'https://www.sciencedirect.com/science/article/abs/pii/S1567134816305135'
 
-BatWeb$Source[BatWeb$Sp %in% c('Megaerops kusnotei')] <- 'https://link.springer.com/content/pdf/10.1007/s12250-016-3727-3.pdf'
+# BatWeb$Source[BatWeb$Sp %in% c('Megaerops kusnotei')] <- 'https://link.springer.com/content/pdf/10.1007/s12250-016-3727-3.pdf'
 
-BatWeb$Source[BatWeb$Sp %in% c('Hipposideros lekaguli')] <- 'https://www.sciencedirect.com/science/article/abs/pii/S1567134816305135'
+# BatWeb$Source[BatWeb$Sp %in% c('Hipposideros lekaguli')] <- 'https://www.sciencedirect.com/science/article/abs/pii/S1567134816305135'
 
 BatWeb$Source[BatWeb$Sp %in% c('Megaerops kusnotei')] <- 'https://link.springer.com/content/pdf/10.1007/s12250-016-3727-3.pdf'
 

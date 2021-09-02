@@ -47,6 +47,11 @@ unsampled.0[unsampled.0=='Hypsugo bodenheimeri'] <- 'Hypsugo ariel'
 unsampled.0[unsampled.0=='Murina silvatica'] <- 'Murina ussuriensis'
 unsampled.0[unsampled.0=='Scotoecus hindei'] <- 'Scotoecus hirundo'
 unsampled.0[unsampled.0=='Scotoecus albigula'] <- 'Scotoecus hirundo'
+unsampled.0[unsampled.0=='Murina grisea'] <- 'Harpiola grisea'
+unsampled.0[unsampled.0=='Myotis hosonoi'] <- 'Myotis ikonnikovi' 
+unsampled.0[unsampled.0=='Myotis yesoensis'] <- 'Myotis ikonnikovi' 
+unsampled.0[unsampled.0=='Myotis ozensis'] <- 'Myotis ikonnikovi' 
+unsampled.0[unsampled.0=='Eptesicus matroka'] <- 'Neoromicia matroka'
 ###
 
 # Pipistrellus tenuis is unmapped
@@ -79,6 +84,21 @@ length(unique(iucn.sub$binomial)) # How many of the species made it in?
 sampled.0[!(sampled.0 %in% iucn$binomial)] # Which names are bonked?
 
 sampled50.map <- fasterize(iucn.sub, r, fun="sum")
+
+######################################################## KNOWN BETACOV+
+BatModels %>% filter(Betacov == 1) %>% dplyr::pull(Sp)-> true.1
+### Some manual fixes
+true.1[true.1=='Myotis ricketti'] <- 'Myotis pilosus'
+true.1[true.1=='Artibeus phaeotis'] <- 'Dermanura phaeotis'
+true.1[true.1=='Hipposideros commersoni'] <- 'Macronycteris commersoni'
+true.1[true.1=='Rhinolophus monoceros'] <- 'Rhinolophus pusillus'
+true.1[true.1=='Rhinolophus cornutus'] <- 'Rhinolophus pusillus'
+
+###
+iucn.sub <- iucn[iucn$binomial %in% true.1,] # Subset IUCN maps to the right ones
+length(unique(iucn.sub$binomial)) # How many of the species made it in?
+true.1[!(true.1 %in% iucn$binomial)] # Which names are bonked?
+true1.map <- fasterize(iucn.sub, r, fun="sum")
 
 #outline <- rasterToPolygons(r, dissolve=TRUE)
 
