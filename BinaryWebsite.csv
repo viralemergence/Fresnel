@@ -91,7 +91,7 @@ Rousettus lanosus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,
 Pipistrellus hesperidus,Reported,Reported,True +,True +,True +,True +,True +,NA,True +,True +,True +,
 Pteropus vampyrus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
 Ia io,Reported,Reported,True +,True +,True +,True +,False -,NA,True +,True +,True +,
-Pipistrellus tenuis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
+Pipistrellus tenuis,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,https://journals.asm.org/doi/10.1128/JVI.00116-18?url_ver=Z39.88-2003&rfr_id=ori:rid:crossref.org&rfr_dat=cr_pub%20%200pubmed
 Epomophorus minimus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Pipistrellus paterculus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Vespertilio murinus,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0252534
@@ -161,7 +161,7 @@ Murina huttoni,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unl
 Myotis laniger,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Myonycteris relicta,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Neoromicia nanus,Unreported,Unreported,Unlikely,Suspected,Suspected,NA,Unlikely,Suspected,Unlikely,Suspected,Suspected,
-Nycteris thebaica,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
+Nycteris thebaica,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,https://www.nature.com/articles/s41598-020-63799-7
 Hipposideros bicolor,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,Suspected,Unlikely,Suspected,Suspected,
 Hesperoptenus tickelli,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Scotonycteris zenkeri,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
@@ -182,7 +182,7 @@ Rhinolophus philippinensis,Unreported,Unreported,Suspected,Suspected,Suspected,S
 Megaderma spasma,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Megaderma lyra,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Myotis montivagus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
-Rousettus madagascariensis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
+Rousettus madagascariensis,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,https://www.nature.com/articles/s41598-020-63799-7
 Myotis chinensis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Rhinolophus arcuatus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Rhinolophus darlingi,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
@@ -225,7 +225,7 @@ Saccolaimus saccolaimus,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspe
 Taphozous nudiventris,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Casinycteris argynnis,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Miniopterus pusillus,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
-Miniopterus magnater,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
+Miniopterus magnater,Unreported,New data,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,https://www.microbiologyresearch.org/content/journal/jgv/10.1099/vir.0.82203-0#tab2
 Otopteropus cartilagonodus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Suspected,NA,NA,NA,NA,
 Scotophilus nux,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
 Miniopterus inflatus,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,Suspected,Unlikely,Unlikely,Suspected,
@@ -382,7 +382,7 @@ Myotis volans,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikel
 Hipposideros fuliginosus,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,"USAID PREDICT data - PREDICT_PCR_Tests.csv - June 28, 2021"
 Anoura geoffroyi,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
 Platyrrhinus lineatus,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,
-Rhinolophus rufus,Unreported,Unreported,Suspected,Suspected,Unlikely,Suspected,Suspected,NA,NA,NA,NA,
+Rhinolophus rufus,Unreported,New data,Suspected,Suspected,Unlikely,Suspected,Suspected,NA,NA,NA,NA,https://link.springer.com/article/10.1007/s00705-012-1410-z
 Phyllostomus hastatus,Unreported,Unreported,Suspected,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,Suspected,Suspected,
 Dobsonia crenulata,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Dobsonia anderseni,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Unlikely,Suspected,
@@ -487,7 +487,7 @@ Hipposideros obscurus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspec
 Triaenops rufus,Unreported,Unreported,Suspected,Suspected,Unlikely,Unlikely,Suspected,NA,NA,NA,NA,
 Miniopterus fraterculus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Myotis adversus,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
-Emballonura alecto,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
+Emballonura alecto,Unreported,New data,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,https://link.springer.com/article/10.1007/s00705-012-1410-z
 Hipposideros durgadasi,Unreported,Unreported,Suspected,Suspected,Suspected,Unlikely,Suspected,NA,NA,NA,NA,
 Nyctimene robinsoni,Unreported,Unreported,Suspected,Suspected,Unlikely,Suspected,Suspected,NA,NA,NA,NA,
 Mops mops,Unreported,Unreported,Suspected,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
@@ -602,7 +602,7 @@ Hipposideros breviceps,Unreported,Unreported,Unlikely,Unlikely,Unlikely,NA,Suspe
 Triaenops furculus,Unreported,Unreported,Unlikely,Unlikely,Suspected,Unlikely,Suspected,NA,NA,NA,NA,
 Scotophilus robustus,Unreported,Unreported,Unlikely,Suspected,Unlikely,Suspected,Unlikely,NA,NA,NA,NA,
 Mops sarasinorum,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
-Neoromicia zuluensis,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,NA,NA,NA,NA,
+Neoromicia zuluensis,Unreported,New data,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,NA,NA,NA,NA,https://wwwnc.cdc.gov/eid/article/19/10/13-0946_article
 Murina suilla,Unreported,Unreported,Unlikely,Suspected,Suspected,Suspected,Unlikely,NA,NA,NA,NA,
 Macrotus californicus,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,Suspected,Suspected,
 Glossophaga longirostris,Unreported,Unreported,Unlikely,Unlikely,Unlikely,Suspected,Unlikely,Suspected,Unlikely,Suspected,Suspected,

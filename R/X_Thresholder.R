@@ -76,6 +76,7 @@ verify <- c('Acerodon celebensis',
             'Chaerephon pumilus', 
             'Desmodus rotundus',
             'Epomops buettikoferi',
+            'Emballonura alecto',
             'Glauconycteris variegata', 
             'Hipposideros cervinus',
             'Hipposideros fuliginosus', 
@@ -87,6 +88,7 @@ verify <- c('Acerodon celebensis',
             'Macroglossus minimus',
             'Megaerops ecaudatus',
             'Megaerops kusnotoi',
+            'Miniopterus magnater',
             'Myonycteris angolensis',
             'Myonycteris torquata', 
             'Myotis horsfieldii',
@@ -94,18 +96,23 @@ verify <- c('Acerodon celebensis',
             'Myotis punicus',
             'Nanonycteris veldkampii',
             'Neoromicia somalicus',
+            'Neoromicia zuluensis',
             'Nycteris gambiensis',
             'Nycteris macrotis',
+            'Nycteris thebaica',
             'Pipistrellus coromandra',
             'Pipistrellus deserti',
+            'Pipistrellus tenuis',
             'Plecotus auritus',
             'Pteronotus personatus',
             'Pteropus conspicillatus',
             'Pteropus lylei', 
             'Rhinolophus acuminatus',
             'Rhinolophus malayanus',
+            'Rhinolophus rufus',
             'Rhinolophus shameli',
             'Rhinolophus stheno',
+            'Rousettus madagascariensis',
             'Scotophilus heathii', 
             'Scotophilus kuhlii',
             'Tadarida teniotis',
@@ -214,6 +221,21 @@ BatWeb$Source[BatWeb$Sp %in% c('Myonycteris torquata',
                                'Epomops buettikoferi',
                                'Acerodon celebensis',
                                'Pteropus conspicillatus')] <- 'USAID PREDICT data - PREDICT_PCR_Tests.csv - June 28, 2021'
+
+BatWeb$Source[BatWeb$Sp %in% c('Emballonura alecto')] <- 'https://link.springer.com/article/10.1007/s00705-012-1410-z'
+
+BatWeb$Source[BatWeb$Sp %in% c('Miniopterus magnater')] <- 'https://www.microbiologyresearch.org/content/journal/jgv/10.1099/vir.0.82203-0#tab2'
+
+BatWeb$Source[BatWeb$Sp %in% c('Neoromicia zuluensis')] <- 'https://wwwnc.cdc.gov/eid/article/19/10/13-0946_article'
+
+BatWeb$Source[BatWeb$Sp %in% c('Nycteris thebaica',
+                               'Rousettus madagascariensis')] <- 'https://www.nature.com/articles/s41598-020-63799-7'
+
+BatWeb$Source[BatWeb$Sp %in% c('Pipistrellus tenuis')] <- 'https://journals.asm.org/doi/10.1128/JVI.00116-18?url_ver=Z39.88-2003&rfr_id=ori:rid:crossref.org&rfr_dat=cr_pub%20%200pubmed'
+
+BatWeb$Source[BatWeb$Sp %in% c('Rhinolophus rufus')] <- 'https://link.springer.com/article/10.1007/s00705-012-1410-z'
+
+
 
 # Compile and print out 
 
