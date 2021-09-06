@@ -274,13 +274,28 @@ png("Figures/Figure 2_raw.png",width=4,height=4,units="in",res=300)
 p1
 dev.off()
 
+## save as PDF
+pdf("Figures/Figure 2_raw.pdf",width=4,height=4)
+p1
+dev.off()
+
 ## save each as panels for manual input
 png("Figures/Figure 2_in.png",width=4,height=4,units="in",res=300)
 p2
 dev.off()
 
+## pdf
+pdf("Figures/Figure 2_in.pdf",width=4,height=4)
+p2
+dev.off()
+
 ## save each as panels for manual input
 png("Figures/Figure 2_out.png",width=4,height=4,units="in",res=300)
+p3
+dev.off()
+
+## pdf
+pdf("Figures/Figure 2_out.pdf",width=4,height=4)
 p3
 dev.off()
 
